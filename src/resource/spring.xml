@@ -33,7 +33,7 @@
 	</bean>
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations" value="classpath:com/dream/dao/mapper/*.xml" />
+		<property name="mapperLocations" value="classpath:com/moviezone/dao/mapper/*.xml" />
 		<property name="transactionFactory">
 		  <bean  class="org.mybatis.spring.transaction.SpringManagedTransactionFactory" />
 		</property>
@@ -43,9 +43,9 @@
 	</bean>
 	
 	<!-- spring mvc -->
-	<context:component-scan base-package="com.dream.controller"/>
+	<context:component-scan base-package="com.moviezone.controller"/>
 	<mvc:interceptors>
-		<bean id="baseInteceptor" class="com.dream.interceptor.BaseInterceptor"></bean>
+		<bean id="baseInteceptor" class="com.moviezone.interceptor.BaseInterceptor"></bean>
 	</mvc:interceptors>
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -57,14 +57,14 @@
 	</bean>
 	
 	<!-- redis -->
-	<bean id="cacheFactory" class="com.dream.cache.CacheFactory" init-method="init" destroy-method="destroy">
+	<bean id="cacheFactory" class="com.moviezone.cache.CacheFactory" init-method="init" destroy-method="destroy">
 		<property name="ip" value="${redis.ip}" />
 		<property name="port" value="${redis.port}" />
 		<property name="maxIdle" value="${redis.maxIdle}" />
 		<property name="maxActive" value="${redis.maxActive}" />
 		<property name="maxWait" value="${redis.maxWait}" />
 	</bean>
-	<bean id="cacheClient" class="com.dream.cache.CacheClient">
+	<bean id="cacheClient" class="com.moviezone.cache.CacheClient">
 		<constructor-arg index="0" ref="cacheFactory" />
 	</bean>
 	

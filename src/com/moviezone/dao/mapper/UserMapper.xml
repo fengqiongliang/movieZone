@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dream.dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.dream.domain.User" >
+<mapper namespace="com.moviezone.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.moviezone.domain.User" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
@@ -20,22 +20,22 @@
     id, nickname,email,mobile,password,plainpwd,realname,lastlogtime,createip,createtime,areacode,updatetime,emailcode
   </sql>
   
-  <select id="selectById" resultMap="BaseResultMap" parameterType="com.dream.domain.User" >
+  <select id="selectById" resultMap="BaseResultMap" parameterType="com.moviezone.domain.User" >
     select 'false' as QUERYID,
     <include refid="Base_Column_List" />
     from user where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectByNickName" resultMap="BaseResultMap" parameterType="com.dream.domain.User" >
+  <select id="selectByNickName" resultMap="BaseResultMap" parameterType="com.moviezone.domain.User" >
     select 'false' as QUERYID,
     <include refid="Base_Column_List" />
     from user where nickname = #{nickname,jdbcType=VARCHAR}
   </select>
-  <select id="selectByMobile" resultMap="BaseResultMap" parameterType="com.dream.domain.User" >
+  <select id="selectByMobile" resultMap="BaseResultMap" parameterType="com.moviezone.domain.User" >
     select 'false' as QUERYID,
     <include refid="Base_Column_List" />
     from user where mobile = #{mobile,jdbcType=BIGINT}
   </select>
-  <select id="selectByEmail" resultMap="BaseResultMap" parameterType="com.dream.domain.User" >
+  <select id="selectByEmail" resultMap="BaseResultMap" parameterType="com.moviezone.domain.User" >
     select 'false' as QUERYID,
     <include refid="Base_Column_List" />
     from user where email = #{email,jdbcType=VARCHAR}
@@ -53,7 +53,7 @@
   	select 'false' as QUERYID,max(id) as maxId from user
   </select>
 
-  <insert id="insertUser" parameterType="com.dream.domain.User" >
+  <insert id="insertUser" parameterType="com.moviezone.domain.User" >
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -129,7 +129,7 @@
     </trim>
   </insert>
   
-  <update id="updateUser" parameterType="com.dream.domain.User" >
+  <update id="updateUser" parameterType="com.moviezone.domain.User" >
     update user
     <set>
       <if test="nickname != null" >
@@ -163,7 +163,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <delete id="deleteUser" parameterType="com.dream.domain.User" >
+  <delete id="deleteUser" parameterType="com.moviezone.domain.User" >
     delete from user where id = #{id,jdbcType=BIGINT}
   </delete>
   
