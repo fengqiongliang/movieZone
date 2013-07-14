@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.moviezone.constant.HttpCode;
 
 @Controller
-public abstract class IndexController extends BaseController {
+public class IndexController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 	
 	
