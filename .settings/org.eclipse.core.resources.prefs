@@ -1,6 +1,8 @@
-#Sat Jul 13 11:43:16 CST 2013
+#Wed Jul 24 00:47:10 CST 2013
 eclipse.preferences.version=1
 encoding//WebRoot/css/all.css=UTF-8
-encoding//WebRoot/jsp/content.jsp=UTF-8
-encoding//WebRoot/jsp/index.jsp=UTF-8
+encoding//WebRoot/jsp/common/head.jsp=UTF-8
+encoding//WebRoot/jsp/content/conNav.jsp=UTF-8
+encoding//WebRoot/jsp/content/content.jsp=UTF-8
+encoding//WebRoot/jsp/index/index.jsp=UTF-8
 encoding/<project>=UTF-8

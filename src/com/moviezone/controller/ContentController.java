@@ -33,7 +33,7 @@ public class ContentController extends BaseController {
 						 		HttpServletResponse response,
 						 		HttpSession session)throws Exception{
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/content");
+		mv.setViewName("/content/content");
 		return mv;
 	}
 }
