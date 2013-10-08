@@ -27,10 +27,9 @@
 		</div>
 		<jsp:include page="detail.jsp" />
 		<div class="inputCont">
-			<div class="inputTitle">期待您精彩的评论哦~~^_^</div>
 			<div class="cmmtHead">
 					<p class="from">来自:海南</p>
-						<img src="../img/movie1.jpg" width="65px" height="65px"/>
+						<img src="img/movie1.jpg" width="65px" height="65px"/>
 					<p class="nickname">最美爱好者最美爱好者最美爱好者最美爱好者</p>
 			</div>
 			<div class="talkArrow talkArrowExt"></div>
@@ -40,7 +39,7 @@
 					<span id="fontCount" class="fontCount">0/250</span>
 				</div>
 				<div class="inputHelper">
-					<img src="../qqemotion/0.gif" onclick="showEmotion(this,event)" class="emotionImg"/>
+					<img src="img/qqemotion/0.gif" onclick="showEmotion(this,event)" class="emotionImg"/>
 					<button id="pubBtn" class="pubBtn" onclick="feedPub(this,event)">发布</button>
 				</div>
 			</div>

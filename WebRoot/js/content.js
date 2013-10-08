@@ -178,6 +178,11 @@ function hideLastDiv(source){
 	var last    = $(source).children().last();
 	if(last.css('display')!= 'none')last.hide();
 }
+function feedInput(source,event){
+	var me = $(source);
+	var fontCount = me.next();
+	fontCount.text(me.val.length+"/"+250);
+}
 function showReply(){
 	alert("回复");
 }

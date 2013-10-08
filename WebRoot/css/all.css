@@ -8,6 +8,7 @@ a,div,ul,li,input,table,tbody,td,tr,td,iframe,dl, dt, dd,ol,h1, h2, h3, h4, h5, 
 	overflow:hidden;
 	list-style:none;
 	outline:none;
+	position:relatvie;
 }
 body {overflow-y:auto;font-family:宋体,Tahoma,'Times New Roman','Microsoft Yahei';/*font-family:宋体,Arial Narrow,arial,serif;*/font-size:12px;color:#323232;background:#222222;margin:0;padding:0;}
 a    {cursor:pointer;text-decoration:none}
@@ -109,10 +110,11 @@ a:hover {text-decoration:underline;}
 .nickname     {font-size:13px;margin-top:6px;color:#626262}
 
 /* input */
-.inputCont {margin-top:100px}
-.areaCont  {float:left;width:555px;border-radius:5px 5px 5px 5px;border:5px solid #a3a3a3;}
-.textInput {margin-left:5px;width:550px;height:130px;line-height:15px;word-break:break-all;resize:none;overflow-y:auto;overflow-x: hidden;color:#515151;font-size:12px;}
-.inputHelper {clear:both;background:#D9E0F5;width:565px} 
+.inputCont {margin-top:100px;margin-bottom:50px}
+.areaCont  {float:left;width:555px;border-radius:5px 5px 5px 5px;border:5px solid #a3a3a3;text-align:right}
+.textInput {margin-left:5px;width:550px;height:80px;line-height:15px;word-break:break-all;resize:none;overflow-y:auto;overflow-x: hidden;color:#515151;font-size:12px;border:0;position:relative;z-index:1}
+.inputHelper {clear:both;background:#D9E0F5;width:565px}
+
 
 /* emotion */
 .emotion   {width:500px;margin:10px;position:absolute}
@@ -122,4 +124,4 @@ a:hover {text-decoration:underline;}
 .closeEmotion {float:left;font-size:18px;border-top:1px solid #D3E4F0;border-left:1px solid #D3E4F0;border-right:1px solid #D3E4F0;width:32px;height:32px;line-height:32px;background:#035cff;text-align:center;cursor:pointer;color:#ffffff;}
 .closeEmotion:hover {background:#fe0a04}
 .pubBtn     {float:right;margin:2px 5px 0 0;}
-.fontCount  {position:relative;float:right;margin:-19px 18px 0 0;z-index:1;font-size:15px}                          
+.fontCount  {margin:-19px 18px 0 0;z-index:2;font-size:15px;}                          
