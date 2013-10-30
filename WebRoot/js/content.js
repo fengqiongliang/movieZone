@@ -181,7 +181,8 @@ function hideLastDiv(source){
 function feedInput(source,event){
 	var me = $(source);
 	var fontCount = me.next();
-	fontCount.text(me.val.length+"/"+250);
+	me.val(me.val().substring(0,250));
+	fontCount.text(me.val().length+"/"+250);
 }
 function showReply(){
 	alert("回复");
@@ -191,17 +192,17 @@ function showMore(source){
 }
 function showEmotion(source,e){
 	var btn = $(source);
-	var clientX = e.pageX;
-	var clientY = e.pageY;
+	var clientX = e.x || e.pageX;
+	var clientY = e.y || e.pageY;
 	var emotion = $('#emotion');
 	if(emotion.length<1){
 		var html="<div id='emotion' class='emotion' style='display:none'>";
 		html   +=   "<div><span onclick='closeEmotion()' class='closeEmotion'>X</span></div>";
 		for(var i=0;i<=134;i++){
-			if(i==1)         html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border:1px solid #D3E4F0;'><img src='../qqemotion/"+i+".gif'></a>";
-			if(2<=i&&i<=15)  html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border-top:1px solid #D3E4F0;border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='../qqemotion/"+i+".gif'></a>";
-			if(i%15==0&&i>0) html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border-left:1px solid #D3E4F0;border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='../qqemotion/"+i+".gif'></a>";
-			if(i%15!=0&&i>15)html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='../qqemotion/"+i+".gif'></a>";
+			if(i==1)         html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif' style='outline:0'></a>";
+			if(2<=i&&i<=15)  html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border-top:1px solid #D3E4F0;border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif'></a>";
+			if(i%15==0&&i>0) html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border-left:1px solid #D3E4F0;border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif'></a>";
+			if(i%15!=0&&i>15)html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif'></a>";
 		}
 		html += "</div>";	
 		emotion = $(html);
@@ -210,7 +211,6 @@ function showEmotion(source,e){
 	emotion.css('left',clientX);
 	emotion.css('top',clientY);
 	emotion.fadeIn();
-	emotion.show();
 }
 function selEmotion(source,i){
 	var commentInput = $('#commentInput');

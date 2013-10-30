@@ -1,14 +1,18 @@
 div {color:#222222;}
 
 /* default */
-a,div,ul,li,input,table,tbody,td,tr,td,iframe,dl, dt, dd,ol,h1, h2, h3, h4, h5, h6, form, p,textarea img{ 
+a,div,ul,li,input,table,tbody,td,tr,td,iframe,dl, dt, dd,ol,h1, h2, h3, h4, h5, h6, form, p,textarea img { 
 	margin:0;
 	padding:0;
 	border:0;
+	border-width:0;
 	overflow:hidden;
 	list-style:none;
-	outline:none;
+	outline:0;
 	position:relatvie;
+}
+a img {
+	border:0;
 }
 body {overflow-y:auto;font-family:宋体,Tahoma,'Times New Roman','Microsoft Yahei';/*font-family:宋体,Arial Narrow,arial,serif;*/font-size:12px;color:#323232;background:#222222;margin:0;padding:0;}
 a    {cursor:pointer;text-decoration:none}
