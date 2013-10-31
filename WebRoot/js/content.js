@@ -197,12 +197,11 @@ function showEmotion(source,e){
 	var emotion = $('#emotion');
 	if(emotion.length<1){
 		var html="<div id='emotion' class='emotion' style='display:none'>";
-		html   +=   "<div><span onclick='closeEmotion()' class='closeEmotion'>X</span></div>";
+		html   +=   "<span href='javascript:void(0)' onclick='closeEmotion()' class='closeEmotion'>X</span>";
 		for(var i=0;i<=134;i++){
-			if(i==1)         html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif' style='outline:0'></a>";
-			if(2<=i&&i<=15)  html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border-top:1px solid #D3E4F0;border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif'></a>";
-			if(i%15==0&&i>0) html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border-left:1px solid #D3E4F0;border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif'></a>";
-			if(i%15!=0&&i>15)html += "<a href='javascript:void()' onclick='selEmotion(this,"+i+")' style='border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif'></a>";
+			if(i<=15)        html += "<a href='javascript:void(0)' onclick='selEmotion(this,"+i+")' style='border-top:1px solid #D3E4F0;border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif'></a>";
+			if(i%15==0&&i>0) html += "<a href='javascript:void(0)' onclick='selEmotion(this,"+i+")' style='border-left:1px solid #D3E4F0;border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif'></a>";
+			if(i%15!=0&&i>15)html += "<a href='javascript:void(0)' onclick='selEmotion(this,"+i+")' style='border-right:1px solid #D3E4F0;border-bottom:1px solid #D3E4F0;'><img src='/moviezone/img/qqemotion/"+i+".gif'></a>";
 		}
 		html += "</div>";	
 		emotion = $(html);
@@ -214,10 +213,47 @@ function showEmotion(source,e){
 }
 function selEmotion(source,i){
 	var commentInput = $('#commentInput');
-	var val      = commentInput.val();
-	commentInput.val(val+"{emotion:"+i+"}");
-	closeEmotion();
+	var fontCount = commentInput.next();
+	var comment = commentInput[0];
+	var txt = "{emotion:"+i+"}";
+	var val = commentInput.val();
+	if((val+txt).length>250){
+		closeEmotion();
+		return;
+	}
+	//插入文本 （IE）
+    if (document.selection) {
+    	comment.focus();
+        var sel = document.selection.createRange();
+        sel.text = txt;
+        sel.select();
+        fontCount.text(commentInput.val().length+"/"+250);
+        closeEmotion();
+        return;
+    }
+    //插入文本 （MOZILLA/NETSCAPE）  
+    if (comment.selectionStart || comment.selectionStart == '0') {
+        var startPos = comment.selectionStart;
+        var endPos   = comment.selectionEnd;
+        // save scrollTop before insert  
+        var restoreTop = comment.scrollTop;
+        comment.value = comment.value.substring(0, startPos) + txt + comment.value.substring(endPos, comment.value.length);
+        if (restoreTop > 0) {
+            // restore previous scrollTop  
+        	comment.scrollTop = restoreTop;
+        }
+        comment.focus();
+        comment.selectionStart = startPos + txt.length;
+        comment.selectionEnd = startPos + txt.length;
+        fontCount.text(commentInput.val().length+"/"+250);
+        closeEmotion();
+        return;
+    }
+    comment.value += txt;
+    comment.focus();
+    closeEmotion();
 }
+
 function closeEmotion(){
 	$('#emotion').fadeOut();
 	$('#emotion').hide();

@@ -125,7 +125,7 @@ a:hover {text-decoration:underline;}
 .emotion a {display:inline-block;width:30px;height:30px;padding:4px 0 0 2px;background:#F6FBFE;}
 .emotion a:hover{background:#035cff}
 .emotionImg {float:left;cursor:pointer;margin:2px 0 0 3px;}
-.closeEmotion {float:left;font-size:18px;border-top:1px solid #D3E4F0;border-left:1px solid #D3E4F0;border-right:1px solid #D3E4F0;width:32px;height:32px;line-height:32px;background:#035cff;text-align:center;cursor:pointer;color:#ffffff;}
+.closeEmotion {float:left;display:inline-block;font-size:18px;border-top:1px solid #D3E4F0;border-left:1px solid #D3E4F0;border-right:1px solid #D3E4F0;width:32px;height:32px;line-height:32px;background:#035cff;text-align:center;cursor:pointer;color:#ffffff;}
 .closeEmotion:hover {background:#fe0a04}
 .pubBtn     {float:right;margin:2px 5px 0 0;}
 .fontCount  {margin:-19px 18px 0 0;z-index:2;font-size:15px;}                          
