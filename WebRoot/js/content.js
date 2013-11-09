@@ -185,15 +185,29 @@ function feedInput(source,event){
 	fontCount.text(me.val().length+"/"+250);
 }
 function showReply(){
-	alert("回复");
+	var width  = $(document).width();
+	var height = $(document.body).height();
+	$('#coverDiv').width(width);
+	$('#coverDiv').height(height);
+	$('#coverDiv').show();
+	$('#coverContent').append($('#inputCont'));
+	var left =  ($(window).width() - $('#coverContent').width())/2;
+	var top  =  ($(window).height()- $('#coverContent').height())/2;
+	$('#coverContent').css('left',left+'px');
+	$('#coverContent').css('top',top+'px');
+	$('#coverContent').css('_top','expression(documentElement.scrollTop +'+191+ ')'); //ie6支持兼容
+	$('#coverContent').show();
+}
+function hideReply(){
+	$('#coverDiv').hide();
 }
 function showMore(source){
 	alert("获得更多");
 }
 function showEmotion(source,e){
 	var btn = $(source);
-	var clientX = e.x || e.pageX;
-	var clientY = e.y || e.pageY;
+	var clientX = btn.offset().left;
+	var clientY = btn.offset().top;
 	var emotion = $('#emotion');
 	if(emotion.length<1){
 		var html="<div id='emotion' class='emotion' style='display:none'>";

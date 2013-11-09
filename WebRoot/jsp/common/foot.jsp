@@ -47,5 +47,7 @@
 	</div>
 </div>
 </div>
+<div id="coverDiv" style="background:#222222;opacity:0.5;position:fixed;_position:absolute;left:0;top:0;z-index:1;display:none;filter:alpha(opacity=65); BACKGROUND-COLOR: #000"></div>
+<div id="coverContent" style="background:#ffffff;position:fixed;_position:absolute;z-index:2;display:none"></div>
 </body>
 </html>

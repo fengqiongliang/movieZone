@@ -26,7 +26,7 @@
 			<p class="des" style="margin:0 0 0 10px">忠烈杨家将</p>
 		</div>
 		<jsp:include page="detail.jsp" />
-		<div class="inputCont">
+		<div class="inputCont" id="inputCont">
 			<div class="cmmtHead">
 					<p class="from">来自:海南</p>
 						<img src="img/movie1.jpg" width="65px" height="65px"/>
