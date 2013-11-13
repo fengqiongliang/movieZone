@@ -114,7 +114,6 @@ a:hover {text-decoration:underline;}
 .nickname     {font-size:13px;margin-top:6px;color:#626262}
 
 /* input */
-.inputCont {margin-top:100px;margin-bottom:50px}
 .areaCont  {float:left;width:555px;border-radius:5px 5px 5px 5px;border:5px solid #a3a3a3;text-align:right}
 .textInput {margin-left:5px;width:550px;height:80px;line-height:15px;word-break:break-all;resize:none;overflow-y:auto;overflow-x: hidden;color:#515151;font-size:12px;border:0;}
 .inputHelper {clear:both;background:#D9E0F5;width:565px}
@@ -128,4 +127,8 @@ a:hover {text-decoration:underline;}
 .closeEmotion {float:left;display:inline-block;font-size:18px;border-top:1px solid #D3E4F0;border-left:1px solid #D3E4F0;border-right:1px solid #D3E4F0;width:32px;height:32px;line-height:32px;background:#035cff;text-align:center;cursor:pointer;color:#ffffff;}
 .closeEmotion:hover {background:#fe0a04}
 .pubBtn     {float:right;margin:2px 5px 0 0;}
-.fontCount  {margin:-19px 18px 0 0;z-index:2;font-size:15px;}                          
+.fontCount  {margin:-19px 18px 0 0;z-index:2;font-size:15px;}
+
+.coverDiv {background:#222222;opacity:0.5;position:fixed;_position:absolute;left:0;top:0;z-index:1;display:none;filter:alpha(opacity=65);}
+.coverContent {background:#ffffff;position:fixed;_position:absolute;z-index:2;display:none}
+.closeComm ｛display:block;height:40px;width:40px;background:url(../img/all.png) -1px -477px;height:25px;width:30px;)｝
