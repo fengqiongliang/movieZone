@@ -130,5 +130,6 @@ a:hover {text-decoration:underline;}
 .fontCount  {margin:-19px 18px 0 0;z-index:2;font-size:15px;}
 
 .coverDiv {background:#222222;opacity:0.5;position:fixed;_position:absolute;left:0;top:0;z-index:1;display:none;filter:alpha(opacity=65);}
-.coverContent {background:#ffffff;position:fixed;_position:absolute;z-index:2;display:none}
-.closeComm ｛display:block;height:40px;width:40px;background:url(../img/all.png) -1px -477px;height:25px;width:30px;)｝
+.coverContent {background:#ffffff;position:fixed;_position:absolute;z-index:2;display:none;overflow:visible}
+.closeComm {display:block;background:url(../img/all.png) -1px -477px;height:25px;width:30px;position:absolute;right:0;top:0;margin:-10px -10px 0 0;}
+.closeComm:hover {background:url(../img/all.png) -1px -505px}
