@@ -1,0 +1,127 @@
+<div class="actionMovie">
+	<h1 class="actMvTitle">基本属性</h1>
+	<div class="actMvTr">
+		<span class="actMvColumn">名称：</span>
+		<input name="name" type="text" value="大闹天宫" class="mvColInput" focusClass="inputF"/>
+	</div>
+	<div class="actMvTr">
+		<span class="actMvColumn">类型：</span>
+		<input name="type" type="radio" value="movie" checked="checked"/> 电影 <input name="type" type="radio" value="tv"/> 电视剧 
+	</div>
+	<div class="actMvTr">
+		<span class="actMvColumn">精短简介：</span>
+		<input name="shortDesc" type="text" value="超级英雄在天朝的'苦逼'岁月" class="mvColInput" focusClass="inputF"/><span class="mvColInputTip">示例：超级英雄在天朝的'苦逼'岁月</span>
+	</div>
+	<div class="actMvTr">
+		<span class="actMvColumn" style="float:left">详细简介：</span> 
+		<textarea name="fullDesc" class="mvTextareaInput" focusClass="inputF" style="float:left;margin:6px 0 10px 3px">  电影讲述孙悟空（甄子丹 饰）曾跟菩提祖师修成七十二变，决心要成为神仙，但因青梅竹马的好友九尾 狐（夏梓桐 饰）被杀害及误交牛魔王（郭富城 饰）而视天庭为敌。牛魔王为了让他深爱的妻子铁扇公主（陈乔恩 饰）和怀了三百年的爱子红孩儿重返天界，煽动孙悟空联手大闹天庭，最终迫使玉帝（周润发 饰）率领二郎神（何润东 饰）等众仙迎战，展开连场仙魔大战。自盘古开天辟地以来，神魔两族为争夺统领三界的权利而争夺不休。一次旷日持久的战役中，玉皇大帝统领的神界再次击退了牛魔王率领的魔族，女娲（张梓琳 饰）为避免再生战事化身晶石筑起南天门保卫天庭，而其中一块晶石陨落凡间聚天地之灵气幻化成为一灵猴——孙悟空。孙悟空拜入菩提祖师门下，很快天赋异禀却不受束缚的他被逐出师门，闹龙宫豪取金箍棒后立足花果山占山为王。另一面牛魔王假意放弃争斗来安抚玉帝之妹铁扇公主，背地里密谋对天庭更具毁灭性的攻势。 　　孙悟空为救九尾狐（夏梓桐 饰）而与天庭结缘，魔王看重孙悟空本领假意称兄道弟却暗自利用九尾狐设计蒙骗孙悟空与天庭开战，一场惊天阴谋与爱恨交织的大战一触即发。</textarea>
+	</div>
+	<div class="actMvTr">
+		<span class="actMvColumn">附加属性：</span>
+		评分-<input name="score" type="text" value="6.0" class="mvExtraInput" focusClass="inputF" maxlength="3"/> 赞数-<input name="good" type="text" value="0" class="mvExtraInput" focusClass="inputF" maxlength="10"/> 收藏-<input name="favorite" type="text" value="0" class="mvExtraInput" focusClass="inputF" maxlength="10"/> 下载-<input name="download" type="text" value="0" class="mvExtraInput" focusClass="inputF" maxlength="10"/> 浏览-<input name="browse" type="text" value="0" class="mvExtraInput" focusClass="inputF" maxlength="10"/>
+	</div>
+	<div class="actMvTr">
+		<span class="actMvColumn">发布时间：</span>
+		<input name="publishDate" type="text" value="2014-01-02 01:01" class="mvColInput" focusClass="inputF" readonly="readonly" />
+	</div>
+	<div class="actMvTr">
+		<span class="actMvColumn">附件管理：</span>
+		<input id="attachUrl"  type="text" value="http://www.baidu.com/1.rar" class="mvColInput" focusClass="inputF"/><input id="attachName" type="text" value="百度网盘" class="mvColInput" focusClass="inputF" />
+		<input type="button" onclick="addAttach(this)" value="添加" hoverclass="adminBtnHover" class="adminBtn" />
+		<span class="mvUpContainer">
+			<input type="button" value="上传" hoverclass="adminBtnHover" class="adminBtn" />
+			<div class="mvUploader"><span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1024GB" types="*.*" desc="请选择附件" upsuccess="upMovieSuccess" uperror="upMovieError"></span></div>
+		</span>
+		<ul class="attachContainer">
+			<li><a name="attach" href="./zip/a.xlsx" value="./zip/a.xlsx_大闹天宫" class="attachItem">大闹天宫.rar</a><a href="javascript:void(0)" onclick="$(this).parent().remove()" style="color:#f41c54">删除</a></li>
+			<li><a name="attach" href="./zip/a.xlsx" value="./zip/a.xlsx_大闹天宫" class="attachItem">大闹天宫.rar</a><a href="javascript:void(0)" onclick="$(this).parent().remove()" style="color:#f41c54">删除</a></li>
+			<li><a name="attach" href="./zip/a.xlsx" value="./zip/a.xlsx_大闹天宫" class="attachItem">大闹天宫.rar</a><a href="javascript:void(0)" onclick="$(this).parent().remove()" style="color:#f41c54">删除</a></li>
+		</ul>
+	</div>
+	<div class="actMvTr" style="margin-bottom:10px">
+		<span class="actMvColumn" style="float:left">发布版块：</span>
+		<ul style="float:left;line-height:15px;margin:6px 0 0 0;">
+			<li><input name="modules" type="checkbox" value="index-show"/> 首页-展示区 </li>
+			<li><input name="modules" type="checkbox" value="index-carrousel"/> 首页-论播区 </li>
+			<li><input name="modules" type="checkbox" value="index-siter"/> 首页-站长区 </li>
+			<li><input name="modules" type="checkbox" value="index-movie-480p"/> 首页-电影-480p </li>
+			<li><input name="modules" type="checkbox" value="index-movie-720p"/> 首页-电影-720p </li>
+			<li><input name="modules" type="checkbox" value="index-movie-1080p"/> 首页-电影-1080p </li>
+			<li><input name="modules" type="checkbox" value="index-movie-other"/> 首页-电影-其它 </li>
+			<li><input name="modules" type="checkbox" value="index-movie-rank"/> 首页-电影-排行榜 </li>
+			<li><input name="modules" type="checkbox" value="index-tv-america"/> 首页-电视剧-英美 </li>
+			<li><input name="modules" type="checkbox" value="index-tv-japan"/> 首页-电视剧-日韩 </li>
+			<li><input name="modules" type="checkbox" value="index-tv-hongkong"/> 首页-电视剧-港台 </li>
+			<li><input name="modules" type="checkbox" value="index-tv-china"/> 首页-电视剧-内地 </li>
+			<li><input name="modules" type="checkbox" value="index-tv-rank"/> 首页-电视剧-排行榜 </li>
+		</ul>
+		<ul style="float:left;line-height:15px;margin:6px 0 0 10px;">
+			<li><input name="modules" type="checkbox" value="movie-show"/> 电影-展示区 </li>
+			<li><input name="modules" type="checkbox" value="movie-480p"/> 电影-480p </li>
+			<li><input name="modules" type="checkbox" value="movie-720p"/> 电影-720p </li>
+			<li><input name="modules" type="checkbox" value="movie-1080p"/> 电影-1080p </li>
+			<li><input name="modules" type="checkbox" value="movie-other"/> 电影-其它 </li>
+		</ul>
+		<ul style="float:left;line-height:15px;;margin:6px 0 0 30px;">
+			<li><input name="modules" type="checkbox" value="tv-show"/> 电视剧-展示区 </li>
+			<li><input name="modules" type="checkbox" value="tv-america"/> 电视剧-英美 </li>
+			<li><input name="modules" type="checkbox" value="tv-japan"/> 电视剧-日韩 </li>
+			<li><input name="modules" type="checkbox" value="tv-hongkong"/> 电视剧-港台 </li>
+			<li><input name="modules" type="checkbox" value="tv-china"/> 电视剧-内地 </li>
+		</ul>
+	</div>
+	<h1 class="actMvTitle">基本图片</h1>
+	<ul class="baseMvImgContainer">
+		<li class="baseImgItem">
+			<p>650x500（展示区图）</p>
+			<img name="baseImgs" src="./img/blank650x500.gif"/>
+			<div>
+				<input type="button" value="上传" hoverclass="adminBtnHover" class="adminBtn" />
+				<div class="mvUploader"><span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1024GB" types="*.*" desc="请选择附件" upsuccess="upImgSuccess" uperror="upMovieError"></span></div>
+			</div>
+		</li>
+		<li class="baseImgItem">
+			<p>220x169（轮播区图、搜索页）</p>
+			<img name="baseImgs" src="./img/blank220x169.gif"/>
+			<div>
+				<input type="button" value="上传" hoverclass="adminBtnHover" class="adminBtn" />
+				<div class="mvUploader"><span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1024GB" types="*.*" desc="请选择附件" upsuccess="upImgSuccess" uperror="upMovieError"></span></div>
+			</div>
+		</li>
+		<li class="baseImgItem">
+			<p>150x220（站长、电影、电视）</p>
+			<img name="baseImgs" src="./img/blank150x220.gif"/>
+			<div>
+				<input type="button" value="上传" hoverclass="adminBtnHover" class="adminBtn" />
+				<div class="mvUploader"><span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1024GB" types="*.*" desc="请选择附件" upsuccess="upImgSuccess" uperror="upMovieError"></span></div>
+			</div>
+		</li>
+		<li class="baseImgItem">
+			<p>80x80（排行榜）</p>
+			<img name="baseImgs" src="./img/blank80x80.gif"/>
+			<div>
+				<input type="button" value="上传" hoverclass="adminBtnHover" class="adminBtn" />
+				<div class="mvUploader"><span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1024GB" types="*.*" desc="请选择附件" upsuccess="upImgSuccess" uperror="upMovieError"></span></div>
+			</div>
+		</li>
+		<li style="clear:both"></li>
+	</ul>
+	<div style="height:10px"></div>
+	<h1 class="actMvTitle">影视截图</h1>
+	<ul class="baseMvImgContainer">
+		<li style="text-align:right;margin-top:10px;">
+			<div>
+				<input type="button" value="上传" hoverclass="adminBtnHover" class="adminBtn" />
+				<div class="mvUploader"><span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1024GB" types="*.*" desc="请选择附件" upsuccess="mvPreviewImg" uperror="upMovieError"></span></div>
+			</div>
+		</li>
+		<li class="baseImgItem"><img name="mvImgs" src="./img/blank400x308.gif" /></li>
+		<li class="baseImgItem"><img name="mvImgs" src="./img/blank400x308.gif" /></li>
+		<li class="baseImgItem"><img name="mvImgs" src="./img/blank400x308.gif" /></li>
+		<li style="clear:both"></li>
+	</ul>
+	<div style="text-align:right;margin-bottom:20px;">
+		<img src="./img/loading.gif" class="addMvLoad"/>
+		<input type="button" value="提交" hoverclass="adminBtnHover" class="adminBtn" onclick="addMovie(this)"/>
+	</div>
+</div>

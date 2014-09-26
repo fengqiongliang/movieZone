@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link type="image/x-icon" href="./img/favicon.ico" rel="shortcut icon">
+	<link type="text/css" rel="stylesheet" href="./css/jquery-ui-1.10.4.min.css"></link>
+	<link type="text/css" rel="stylesheet" href="./css/moviezone.css"></link>
+	<script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="./js/jquery-ui-1.10.4.min.js"></script>
+	<script type="text/javascript" src="./js/jquery.roundabout.min.js"></script>
+	<script type="text/javascript" src="./js/jquery.flot.min.js"></script>
+	<script type="text/javascript" src="./js/swfupload.js"></script>
+	<script type="text/javascript" src="./js/moviezone.js"></script>
+	<title>影集网</title>
+</head>
+<body>
+<div class="layer"></div>
+<div class="regWindow">
+	<a class="closeReg" hoverClass="closeRegHover" href="javascript:closeReg();"></a>
+	<span class="regText" hoverClass="regLoginHover" onclick="tabReg(1,this)">注册</span><span class="loginText" hoverClass="regLoginHover" onclick="tabReg(2,this)">登录</span>
+	<ul class="regUl">
+		<li style="text-align:left"><span class="errorTip"></span></li>
+		<li><i class="redStar">*</i>用户名：<input class="regInput" focusClass="regInputFocus" type="text" onblur="checkUName(this)" onclick="clickFeild(this)" maxlength="20"></input><img class="loadImg" src="./img/loading.gif" /><span class="iTip">长度大于6，小于20</span><span class="iError"></span><span class="iSuccess">√</span></li>
+		<li><i class="redStar">*</i>密&nbsp&nbsp&nbsp码：<input class="regInput" focusClass="regInputFocus" type="password" onblur="checkPWD(this)" onclick="clickFeild(this)" maxlength="20"></input><span class="iTip">长度大于6，小于20</span><span class="iError"></span><span class="iSuccess">√</span></li>
+		<li><i class="redStar">*</i>验证码：<input class="regCode" focusClass="regInputFocus" type="text" onblur="checkCode(this)" maxlength="4" onclick="clickFeild(this)"></input><img id="validateCode" class="codeImg" title="单击换一换" alt="验证码加载失败" src="http://weibo.com/signup/v5/pincode/pincode.php?lang=zh&sinaId=5a7bb5c5930b3d6e00e0dd972c9c5b6a&r=1403229441" onclick="this.src = this.src+'&1=1'"/><em style="cursor:pointer;color:blue;" onclick="$('#validateCode').attr('src',$('#validateCode').attr('src')+'&1=1');">换一换</em><span class="iTip">请输入四位验证码</span><span class="iError"></span><span class="iSuccess"></span></li>
+	</ul>
+	<a class="regBut" hoverClass="regButHover" onclick="regOrLogin()">立即注册</a>
+	<img class="loadImg" src="./img/loading.gif" />
+</div>
+<div class="top">
+	<div class="topL"><a class="logo" href="index.html"></a><a class="nav" href="index.html">影集网</a><a class="nav" href="movie.html">电影</a><a href="tv.html" class="nav">电视剧</a><a href="javascript:void(0)" class="nav searchT" style="background:#055078" title="搜索：大电影变形金刚">搜索：变形金刚...</a></div>
+	<div class="topR"><span class="nick" style="display:inline"><input class="nickField" type="text" value="梦的翅膀膀膀膀膀膀膀膀膀" onblur="modifyNick()" onkeyup="adjustWidth()" maxlength="12" maxWidth="150"></input><a href="javascript:logout();" class="logout">退出</a></span><a class="reg" href="javascript:goReg();" style="display:none">注册/登录</a><input class="search" type="text" searchHover="searchF" onkey></input><a class="searchIcon" href="javascript:goSearch();"></a><span class='searchE'></span></div>
+	<div class="face" title="可单击修改"><img class="myFace" src="./img/blank92x71.gif"/><img class="loadFace" src="./img/loading.gif" /><div class="uploadContainer"><span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upStart" upsuccess="upSuccess" uperror="upError"></span></div></div>
+	<div class="clear"></div>
+</div>
+
+<div class="searchWrap">
+	<div class="searchLeft">
+		<a href="javascript:deepSearch('480p')"     class="searchLeftA searchLeftAClick">480p<span class="matchCount">(100)</span></a>
+		<a href="javascript:deepSearch('720p')"     class="searchLeftA">720p<span class="matchCount">(50)</span></a>
+		<a href="javascript:deepSearch('1080p')"    class="searchLeftA">1080p<span class="matchCount">(200)</span></a>
+		<a href="javascript:deepSearch('other')"    class="searchLeftA">其它<span class="matchCount">(10)</span></a>
+		<a href="javascript:deepSearch('america')"  class="searchLeftA">英美<span class="matchCount">(20)</span></a>
+		<a href="javascript:deepSearch('japan')"    class="searchLeftA">日韩<span class="matchCount">(80)</span></a>
+		<a href="javascript:deepSearch('hongkong')" class="searchLeftA">港台<span class="matchCount">(70)</span></a>
+		<a href="javascript:deepSearch('china')"    class="searchLeftA">内地<span class="matchCount">(65)</span></a>
+		<div class="clear"></div>
+	</div>
+
+	<div class="searchRight" search="驯龙高手" searchType="480p" pageNo="1" >
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchItem">
+			<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+			<ul class="searchUl">
+				<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+				<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+				<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+				<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+			<ul>
+			<div class="clear"></div>
+		</div>
+		<div class="searchBtns" style="clear:both">
+			<a onclick="deepPage(this)" href="javascript:void(0)" class="mvAction">&lt; 上一页</a>
+			<a onclick="deepPage(this)" href="javascript:void(0)" class="mvAction">下一页 &gt;</a>
+		</div>
+	</div>
+</div>
+
+<div class="bottom">影集网@版权归 末日黎明 所有 联系QQ：49163653</div>
+</body>
+</html>

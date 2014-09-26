@@ -1,0 +1,46 @@
+<div id="cmmt3" class="cmmtDiv">
+	<div class="cmmtHead">
+		<p class="nickname">最美爱好者</p>
+		<img class="cmmtImg" src="./img/blank92x71.gif">
+		<p class="from">来自:海南</p>
+	</div>
+	<div class="cmntCont">
+		<span class="cmntArrow">◀</span>
+		<p class="cmmtText" title="感谢这电影让我学会了如何" onmouseover="replyShow(this)" onmouseout="replyHide(this,event)">感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生</p>
+		<div class="replyTxt" onclick="reply(this)" onmouseout="replyHide(this,event)">回 复</div>
+	</div>
+	<div class="reply">
+		<span class="leftArrow">←</span>
+		<ul class="replyCont" onmouseover="moreShow(this)" onmouseout="moreHide(this,event)">
+			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+		</ul>
+		<div class="moreTxt" onclick="getMoreReply(this)" onmouseout="moreHide(this,event)" commentId="1"><img class="moreReplyLoading" src="./img/loading.gif" />获 得 更 多</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<div id="cmmt4" class="cmmtDiv">
+	<div class="cmmtHead">
+		<p class="nickname">最美爱好者</p>
+		<img class="cmmtImg" src="./img/blank92x71.gif">
+		<p class="from">来自:海南</p>
+	</div>
+	<div class="cmntCont">
+		<span class="cmntArrow">◀</span>
+		<p class="cmmtText" title="感谢这电影让我学会了如何" onmouseover="replyShow(this)" onmouseout="replyHide(this,event)">感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生</p>
+		<div class="replyTxt" onclick="reply(this)" onmouseout="replyHide(this,event)">回 复</div>
+	</div>
+	<div class="reply">
+		<span class="leftArrow">←</span>
+		<ul class="replyCont" onmouseover="moreShow(this)" onmouseout="moreHide(this,event)">
+			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+		</ul>
+		<div class="moreTxt" onclick="getMoreReply(this)" onmouseout="moreHide(this,event)" commentId="1"><img class="moreReplyLoading" src="./img/loading.gif" />获 得 更 多</div>
+	</div>
+	<div class="clear"></div>
+</div>

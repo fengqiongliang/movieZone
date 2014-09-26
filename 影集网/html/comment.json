@@ -1,0 +1,16 @@
+<!--
+<div class="error">验证码错误</div>
+-->
+<div id="cmmt2" class="cmmtDiv">
+	<div class="cmmtHead">
+		<p class="nickname">最美爱好者</p>
+		<img class="cmmtImg" src="./img/blank92x71.gif">
+		<p class="from">来自:海南</p>
+	</div>
+	<div class="cmntCont">
+		<span class="cmntArrow">◀</span>
+		<p class="cmmtText" title="感谢这电影让我学会了如何" onmouseover="replyShow(this)" onmouseout="replyHide(this,event)">感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生</p>
+		<div class="replyTxt" onclick="reply(this)" onmouseout="replyHide(this,event)">回 复</div>
+	</div>
+	<div class="clear"></div>
+</div>

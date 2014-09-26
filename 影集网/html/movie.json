@@ -1,0 +1,20 @@
+<ul class="mvItems">
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li class="mvItem" title="《变形金刚》"><span class="rankScore">7.4</span><a href="content.html?id=1" class="mvItemDes"><img src="./img/blank150x220.gif" width="120px" height="176" />《变形金刚》</a></li>
+	<li style="clear:both"></li>
+</ul>
+<div class="mvPageNav">
+	<a class="mvAction" href="javascript:void(0)" onclick="pageMtv(this)">&lt; 上一页</a>
+	<a class="mvAction" href="javascript:void(0)" onclick="pageMtv(this)">下一页 &gt;</a>
+</div>

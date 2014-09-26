@@ -1,0 +1,14 @@
+<div class="searchItem">
+	<a href="content.html?id=3"><img class="searchImg" src="./img/blank220x169.gif" /></a>
+	<ul class="searchUl">
+		<li class="searchli">【推荐】：<span class="starFull"></span><span class="starFull"></span><span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore" style="font-size:15px">9.0</span></li>
+		<li class="searchli">【类型】：<span class="liDes" style="font-size:13px">中国 480p/720p/其它</span></li>
+		<li class="searchli">【名称】：<span class="liDes"><a href="content.html?id=1" style="font-size:13px">大闹天闹天宫大闹天宫闹天</a></span></li>
+		<li class="searchli">【附件】：<a href="./zip/a.xlsx" style="font-size:13px"><span class="zip"></span>大闹天宫.torrent</a></li>
+	<ul>
+	<div class="clear"></div>
+</div>
+<div class="searchBtns" style="clear:both">
+	<a onclick="deepPage(this)" href="javascript:void(0)" class="mvAction">&lt; 上一页</a>
+	<a onclick="deepPage(this)" href="javascript:void(0)" class="mvAction">下一页 &gt;</a>
+</div>

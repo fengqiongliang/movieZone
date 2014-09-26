@@ -1,0 +1,15 @@
+<!--
+<div class="error">验证码错误</div>
+-->
+<div class="reply">
+	<span class="leftArrow">←</span>
+	<ul class="replyCont" onmouseover="moreShow(this)" onmouseout="moreHide(this,event)">
+		<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是短的标题</li>
+		<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是短的标题</li>
+		<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是短的标题</li>
+		<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是短的标题</li>
+	</ul>
+	<div class="moreTxt" onclick="getMoreReply(this)" onmouseout="moreHide(this,event)" commentId="1"><img class="moreReplyLoading" src="./img/loading.gif" />获 得 更 多</div>
+</div>
+
+

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link type="image/x-icon" href="./img/favicon.ico" rel="shortcut icon">
+	<link type="text/css" rel="stylesheet" href="./css/jquery-ui-1.10.4.min.css"></link>
+	<link type="text/css" rel="stylesheet" href="./css/moviezone.css"></link>
+	<script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="./js/jquery-ui-1.10.4.min.js"></script>
+	<script type="text/javascript" src="./js/jquery.roundabout.min.js"></script>
+	<script type="text/javascript" src="./js/jquery.flot.min.js"></script>
+	<script type="text/javascript" src="./js/swfupload.js"></script>
+	<script type="text/javascript" src="./js/moviezone.js"></script>
+	<title>影集网</title>
+</head>
+<body>
+<div class="layer"></div>
+<div class="regWindow">
+	<a class="closeReg" hoverClass="closeRegHover" href="javascript:closeReg();"></a>
+	<span class="regText" hoverClass="regLoginHover" onclick="tabReg(1,this)">注册</span><span class="loginText" hoverClass="regLoginHover" onclick="tabReg(2,this)">登录</span>
+	<ul class="regUl">
+		<li style="text-align:left"><span class="errorTip"></span></li>
+		<li><i class="redStar">*</i>用户名：<input class="regInput" focusClass="regInputFocus" type="text" onblur="checkUName(this)" onclick="clickFeild(this)" maxlength="20"></input><img class="loadImg" src="./img/loading.gif" /><span class="iTip">长度大于6，小于20</span><span class="iError"></span><span class="iSuccess">√</span></li>
+		<li><i class="redStar">*</i>密&nbsp&nbsp&nbsp码：<input class="regInput" focusClass="regInputFocus" type="password" onblur="checkPWD(this)" onclick="clickFeild(this)" maxlength="20"></input><span class="iTip">长度大于6，小于20</span><span class="iError"></span><span class="iSuccess">√</span></li>
+		<li><i class="redStar">*</i>验证码：<input class="regCode" focusClass="regInputFocus" type="text" onblur="checkCode(this)" maxlength="4" onclick="clickFeild(this)"></input><img id="validateCode" class="codeImg" title="单击换一换" alt="验证码加载失败" src="http://weibo.com/signup/v5/pincode/pincode.php?lang=zh&sinaId=5a7bb5c5930b3d6e00e0dd972c9c5b6a&r=1403229441" onclick="$('#validateCode').attr('src',$('#validateCode').attr('src')+'&1=1');"/><em style="cursor:pointer;color:blue;" onclick="$('#validateCode').attr('src',$('#validateCode').attr('src')+'&1=1');">换一换</em><span class="iTip">请输入四位验证码</span><span class="iError"></span><span class="iSuccess"></span></li>
+	</ul>
+	<a class="regBut" hoverClass="regButHover" onclick="regOrLogin()">立即注册</a>
+	<img class="loadImg" src="./img/loading.gif" />
+</div>
+<div class="top">
+	<div class="topL"><a class="logo" href="index.html"></a><a class="nav" href="index.html">影集网</a><a class="nav" href="movie.html">电影</a><a href="tv.html" class="nav">电视剧</a><a href="javascript:void(0)" class="nav" style="background:#055078" title="大电影大闹天宫">影大闹天宫...</a></div>
+	<div class="topR"><span class="nick" style="display:inline"><input class="nickField" type="text" value="梦的翅膀" onblur="modifyNick()" onkeyup="adjustWidth()" maxlength="12" maxWidth="150"></input><a href="javascript:logout();" class="logout">退出</a></span><a class="reg" href="javascript:goReg();" style="display:none">注册/登录</a><input class="search" type="text" searchHover="searchF" onkey></input><a class="searchIcon" href="javascript:goSearch();"></a><span class='searchE'></span></div>
+	<div class="face" title="可单击修改"><img class="myFace" src="./img/blank92x71.gif"/><img class="loadFace" src="./img/loading.gif" /><div class="uploadContainer"><span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upStart" upsuccess="upSuccess" uperror="upError"></span></div></div>
+	<div class="clear"></div>
+</div>
+
+
+
+<div class="contentH">
+	 <img class="cntImg" src="./img/blank400x308.gif" />
+	 <ul class="cntR">
+		<li class="cntRli">【推荐】：<span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore">9.0</span></li>
+		<li class="cntRli">【类型】：<span class="liDes">中国 480p/720p/其它</span></li>
+		<li class="cntRli">【名称】：<span class="liDes">大闹天宫</span></li>
+		<li class="cntRli">【附件】：<a href="./zip/a.xlsx"><span class="zip"></span>大闹天宫.torrent</a></li>
+	 </ul>
+	 <p class="contentDes">在不久的将来，一名年轻的网络黑客（基奴李维斯）发现看似正常的现实世界实际上是由一个名为“矩阵”的计算机人工智能系统控制的，人们就象他放牧的动物一样。李维斯便在网络上查找关于“矩阵”的一切。后来在一名神秘女郎（嘉丽安莫斯）的引导下见到了黑客组织的首领（劳伦斯费许本），三人一起走上了抗争“矩阵”的征途。
+	“尼奥，你曾经作过这样的梦吗，你如此肯定的东西是真的吗？你是否能从那样的梦中醒来？你能分辨出梦境与现实世界的区别吗？”
+	尼奥不顾一切地想追寻“矩阵”的真相－他在梦中总是听到关于它的耳语，这是一种神秘的不可知的东西，他能够肯定地感觉到它不祥地控制着他。</p>
+</div>
+
+<div class="cntImgs">
+	<h1 class="cntImgH">影视截图</h1>
+	<img class="cntShowImg" src="./img/blank400x308.gif" />
+	<img class="cntShowImg" src="./img/blank400x308.gif" />
+	<img class="cntShowImg" src="./img/blank400x308.gif" />
+	<img class="cntShowImg" src="./img/blank400x308.gif" />
+</div>
+
+<div class="cntImgs" id="cmmts">
+	<h1 class="cntImgH">影视评论</h1>
+	<div id="cmmt1" class="cmmtDiv">
+		<div class="cmmtHead">
+			<p class="nickname">最美爱好者</p>
+			<img class="cmmtImg" src="./img/blank92x71.gif">
+			<p class="from">来自:海南</p>
+		</div>
+		<div class="cmntCont">
+			<span class="cmntArrow">◀</span>
+			<p class="cmmtText" title="感谢这电影让我学会了如何" onmouseover="replyShow(this)" onmouseout="replyHide(this,event)">感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生感谢这电影让我学会了如何去面对人生</p>
+			<div class="replyTxt" onclick="reply(this)" onmouseout="replyHide(this,event)">回 复</div>
+		</div>
+		<div class="reply">
+			<span class="leftArrow">←</span>
+			<ul class="replyCont" onmouseover="moreShow(this)" onmouseout="moreHide(this,event)">
+				<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+				<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+				<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+				<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
+			</ul>
+			<div class="moreTxt" onclick="getMoreReply(this)" onmouseout="moreHide(this,event)" commentId="1"><img class="moreReplyLoading" src="./img/loading.gif" />获 得 更 多</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="moreComment" hoverClass="moreCmmtHover" contentId="1" onclick="getMoreCmmt(this)"><img class="moreCmmtLoading" src="./img/loading.gif" />加载更多</div>
+	<div class="cmmtSubmit">
+		<div class="cmmtHead">
+			<input class="nickInput" value="最美爱好者" type="text" maxLength="10"></input>
+			<img class="cmmtImg" src="./img/blank92x71.gif"/>
+			<img class="nickImgLoading" src="./img/loading.gif" />
+			<div class="nickImgUploader">
+				<span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upNickStart" upsuccess="upNickSuccess" uperror="upNickError"></span>
+			</div>
+			<p class="imgModifyTip">单击图片修改</p>
+		</div>
+		<div class="cmntCont">
+			<span class="cmntArrow" style="color:#ffffff">◀</span>
+			<textarea class="submitText" maxlength="250" onkeyup="statWords()" onclick="closeEmotion();closeSubSure();"></textarea>
+			<div class="subInfo subFailure">你的输入不正确~~~~~</div>
+			<div class="subTip">
+				<span class="tipStat">0/250</span>
+				<img  class="tipImg" src="./img/qqemotion/0.gif" onclick="showEmotion()"/>
+				<a class="tipBtn" hoverClass="tipBtnHover" href="javascript:showSubSure()">提交</a>
+			</div>
+			<div class="emotion"></div>
+			<div class="subSure">
+				<img class="sureImg" src="http://weibo.com/signup/v5/pincode/pincode.php?lang=zh&sinaId=5a7bb5c5930b3d6e00e0dd972c9c5b6a&r=1403229441" onclick="this.src = this.src+'&1=1'"/>
+				<input class="sureInput" type="text" maxLength="4" focusClass="inputF"></input>
+				<a class="tipBtn" hoverClass="tipBtnHover" href="javascript:submitCmmt()">确定</a>
+				<img class="loadCmmt" src="./img/loading.gif" />
+				<span class="subPointer">▼</span>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+
+<div class="centerCmmt">
+	<a href="javascript:closeReply();" hoverclass="closeRegHover" class="closeReg" style="right:-14px;top:10px;z-index:1;"></a>
+</div>
+
+<div class="bottom">影集网@版权归 末日黎明 所有 联系QQ：49163653</div>
+</body>
+</html>
