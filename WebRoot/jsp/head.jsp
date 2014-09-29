@@ -41,11 +41,21 @@
 	<img class="loadImg" src="./img/loading.gif" />
 </div>
 <div class="top">
-	<div class="topL"><a class="logo" href="index.html"></a><a class="nav" href="index.html" style="background:#055078">影集网</a><a class="nav" href="movie.html">电影</a><a href="tv.html" class="nav">电视剧</a></div>
-	<div class="topR"><span class="nick" style="display:inline"><input class="nickField" type="text" value="梦的翅膀" onblur="modifyNick()" onkeyup="adjustWidth()" maxlength="12" maxWidth="150"></input><a href="javascript:logout();" class="logout">退出</a></span><a class="reg" href="javascript:goReg();" style="display:none">注册/登录</a><input class="search" type="text" searchHover="searchF" onkey></input><a class="searchIcon" href="javascript:goSearch();"></a><span class='searchE'></span></div>
+	<div class="topL">
+		<a class="logo"  href="${base}/index.do" ></a>
+		<a class="nav"   href="${base}/index.do"   ${focusIndex==1?"style='background:#055078'":""} >影集网</a>
+		<a class="nav"   href="${base}/movie.do"  ${focusIndex==2?"style='background:#055078'":""} >电影</a>
+		<a class="nav"   href="${base}/tv.do"        ${focusIndex==3?"style='background:#055078'":""} >电视剧</a>
+		<c:if test='${user.role =="admin" && empty searchTitle && empty movie}'><a class="nav"   href="${base}/admin_movie.do"  ${focusIndex==4?"style='background:#055078'":""} >管理后台</a></c:if>
+		<c:if test='${!empty searchTitle}'><a class="nav searchT" href="#"  title="搜：${search}" style='background:#055078'>搜：${searchTitle}</a></c:if>
+		<c:if test='${!empty movie}'><a class="nav searchT"  href="#" style="background:#055078" title="${movie.name}">${fn:substring(movie.name,0,7)}${fn:length(movie.name)>7?"...":""}</a></c:if>
+	</div>
+	<div class="topR"><span class="nick" style="display:inline"><input class="nickField" type="text" value="梦的翅膀膀膀膀膀膀膀膀膀" onblur="modifyNick()" onkeyup="adjustWidth()" maxlength="12" maxWidth="150"></input><a href="javascript:logout();" class="logout">退出</a></span><a class="reg" href="javascript:goReg();" style="display:none">注册/登录</a><input class="search" type="text" searchHover="searchF"  value="${search}"></input><a class="searchIcon" href="javascript:goSearch();"></a><span class='searchE'></span></div>
 	<div class="face" title="可单击修改"><img class="myFace" src="./img/blank92x71.gif"/><img class="loadFace" src="./img/loading.gif" /><div class="uploadContainer"><span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upStart" upsuccess="upSuccess" uperror="upError"></span></div></div>
 	<div class="clear"></div>
 </div>
+
+<c:if test="${!empty sceneMovies && !empty sceneCmmts}">
 <div class="show">
 	<div class="showLeft">
 		<a href="content.html?id=1" class="bigImg" title="变形金刚，今年最火的电影" onmouseover="imgOver(this)" onmouseout="moveImg(this)"><img src="./img/blank650x500.gif" width="100%" height="100%"/></a>
@@ -103,3 +113,4 @@
 	</div>
 	<div class="clear"></div>
 </div>
+</c:if>

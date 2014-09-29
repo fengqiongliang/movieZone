@@ -29,7 +29,7 @@ public class MyFilter implements Filter{
 			             FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest)arg0;
 		HttpServletResponse response = (HttpServletResponse)arg1;
-		logger.info("=============doFilter========");
+		//logger.info("=============doFilter========");
 		chain.doFilter(request, response);
 	}
 

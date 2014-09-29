@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -23,23 +22,36 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.HttpCode;
-import com.moviezone.domain.Movie;
 
 @Controller
-public class ContentController extends BaseController {
-	private static final Logger logger = LoggerFactory.getLogger(ContentController.class);
+public class AdminController extends BaseController {
+	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 	
 	
-	@RequestMapping(value="/content.do",method=RequestMethod.GET)
-	public ModelAndView content(ModelAndView mv,
-													HttpServletRequest request,
-													HttpServletResponse response,
-													HttpSession session)throws Exception{
-		Movie movie = new Movie();
-		movie.setId(123456);
-		movie.setName("你这我的最爱你这我的最爱你这我的最爱你这我的最爱你这我的最爱你这我的最爱你这我的最爱");
-		mv.addObject("movie", movie);
-		mv.setViewName("/content");
+	@RequestMapping(value="/admin_movie.do",method=RequestMethod.GET)
+	public ModelAndView movieView(ModelAndView mv,
+														 HttpServletRequest request,
+														 HttpServletResponse response,
+														 HttpSession session)throws Exception{
+		mv.setViewName("/admin_movie");
+		return mv;
+	}
+	
+	@RequestMapping(value="/admin_module.do",method=RequestMethod.GET)
+	public ModelAndView moduleView(ModelAndView mv,
+														   HttpServletRequest request,
+														   HttpServletResponse response,
+														   HttpSession session)throws Exception{
+		mv.setViewName("/admin_module");
+		return mv;
+	}
+	
+	@RequestMapping(value="/admin_user.do",method=RequestMethod.GET)
+	public ModelAndView userView(ModelAndView mv,
+													  HttpServletRequest request,
+													  HttpServletResponse response,
+													  HttpSession session)throws Exception{
+		mv.setViewName("/admin_user");
 		return mv;
 	}
 }

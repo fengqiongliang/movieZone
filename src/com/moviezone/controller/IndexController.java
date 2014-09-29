@@ -1,10 +1,18 @@
 package com.moviezone.controller;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
+
+
+import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +37,26 @@ public class IndexController extends BaseController {
 	
 	
 	@RequestMapping(value="/index.do",method=RequestMethod.GET)
-	public ModelAndView helloDo(HttpServletRequest request,
-						 		HttpServletResponse response,
-						 		HttpSession session)throws Exception{
-		ModelAndView mv = new ModelAndView();
+	public ModelAndView index(ModelAndView mv,
+												 HttpServletRequest request,
+												 HttpServletResponse response,
+												 HttpSession session)throws Exception{
+		List<Object> sceneMovies = new ArrayList<Object>();
+		List<Object> sceneCmmts  = new ArrayList<Object>();
+		sceneMovies.add(new Object());
+		sceneCmmts.add(new Object());
+		mv.addObject("sceneMovies", sceneMovies);
+		mv.addObject("sceneCmmts", sceneCmmts);
 		mv.setViewName("/index");
 		return mv; 
+	}
+	
+	@RequestMapping(value="/index.json",method=RequestMethod.GET)
+	public void test(HttpServletRequest request,
+							   HttpServletResponse response,
+							   HttpSession session)throws Exception{
+		Object user = request.getAttribute("user");
+		JSONObject o = new JSONObject();
+		response.getWriter().write(o.toString());
 	}
 }

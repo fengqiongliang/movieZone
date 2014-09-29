@@ -68,7 +68,7 @@ function goSearch(){
 		setTimeout(function(){$(".searchE").hide().attr('isHiding','false');},2000);
 		return;
 	}
-	location.href = 'search.html?search='+sText;
+	location.href = 'search.do?search='+sText;
 }
 
 

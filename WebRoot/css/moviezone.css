@@ -58,7 +58,7 @@ a:hover{text-decoration:underline;}
 .search {background:#FFFFFF;border:0;color:#808080;font-family:'黑体';font-size:14px;height:25px;line-height:25px;margin:2px 2px 0 20px;padding:0 25px 0 5px;width: 240px;float:left;z-index:1;}
 .searchF{box-shadow:0 0 1px #91BBD9, 1px 1px 2px #E5E5E5 inset;border:2px solid #FFB941;margin:0 0 0 18px;}
 .searchE{color:red;margin-top:5px;display:none;float:left;}
-.searchT {font-size:14px;line-height:24px;}
+.searchT {font-size:12px;line-height:24px;}
 .myFace {width:70px;height:54px;}
 .loadFace {height: 40px;left: 6px;position: absolute;top: 6px;width: 40px;z-index: 2;display:none;}
 .uploadContainer {width:70px;height:54px;margin-top:-60px;z-index:3;}

@@ -7,6 +7,7 @@ public class User implements Serializable{
 	private static final long serialVersionUID = -2311831316980842512L;
 	private long id;
 	private String nickname;
+	private String role;
 	private String email;
 	private long mobile;
 	private String password;
@@ -95,6 +96,12 @@ public class User implements Serializable{
 	}
 	public void setEmailcode(String emailcode) {
 		this.emailcode = emailcode;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 }
