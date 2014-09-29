@@ -297,13 +297,9 @@ function centerWnd(myWindow){
 function logout(){
 	$.ajax({
         type:'POST',
-        url:'logout.json',
-		dataType:'json'
+        url:'logout.json'
     }).done(function(data){
-		//操作失败
-		if(Number(data.resultCode)!=0)alert("退出失败");
-		//操作成功
-		if(Number(data.resultCode)==0)location.reload();
+		location.reload();
     }).fail(function(){
 		alert("退出失败");
     });

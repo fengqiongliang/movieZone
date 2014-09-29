@@ -16,7 +16,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 public class ImageUtil {
 	
 	
-	public boolean scaleImg(int newWidth,int newHeight,InputStream imgIn,OutputStream imgOut){
+	public static boolean scaleImg(int newWidth,int newHeight,InputStream imgIn,OutputStream imgOut){
 		if(newWidth  <= 0)return false;
 		if(newHeight <= 0)return false;
 		if(imgIn  == null)return false;

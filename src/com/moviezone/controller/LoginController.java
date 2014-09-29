@@ -45,14 +45,11 @@ public class LoginController extends BaseController {
 		return mv;
 	}
 	
-	@RequestMapping(value="/logout.do",method=RequestMethod.GET)
-	public ModelAndView logout(ModelAndView mv,
-												  HttpServletRequest request,
-												  HttpServletResponse response,
-												  HttpSession session)throws Exception{
+	@RequestMapping(value="/logout.json",method=RequestMethod.POST)
+	public void logout(HttpServletRequest request,
+								   HttpServletResponse response,
+								   HttpSession session)throws Exception{
 		HttpUtil.clearCookie(request, Constants.USERID);
-		mv.setViewName("/admin_module");
-		return mv;
 	}
 	
 }

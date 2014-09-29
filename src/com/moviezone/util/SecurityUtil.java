@@ -19,6 +19,19 @@ public class SecurityUtil {
 	 * @param content
 	 * @return 返回长度一制的加密字符串,或是""
 	 */
+	public static String encryptMD5(byte[] content){
+		try {
+			byte[] input = content;
+			MessageDigest algorithm = MessageDigest.getInstance("MD5");
+			algorithm.reset();
+			algorithm.update(input);
+			return toHex(algorithm.digest());
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		return "";
+	}
+	
 	public static String encryptMD5(String content){
 		try {
 			byte[] input = content.getBytes("UTF-8");
