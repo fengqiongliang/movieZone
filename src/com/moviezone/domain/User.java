@@ -5,9 +5,10 @@ import java.util.Date;
 
 public class User implements Serializable{
 	private static final long serialVersionUID = -2311831316980842512L;
-	private long id;
-	private String nickname;
-	private String role;
+	private long id;                   
+	private String nickname;   //昵称
+	private String role;            //角色，user、admin
+	private String faceurl;       //头像
 	private String email;
 	private long mobile;
 	private String password;
@@ -102,6 +103,12 @@ public class User implements Serializable{
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+	public String getFaceurl() {
+		return faceurl;
+	}
+	public void setFaceurl(String faceurl) {
+		this.faceurl = faceurl;
 	}
 	
 }

@@ -34,8 +34,17 @@ public class BaseInterceptor implements HandlerInterceptor {
 		beforeController = System.currentTimeMillis();
 		response.setContentType("text/html; charset=utf-8");
 		
-		String userid = HttpUtil.getCookie(request,Constants.USERID);
-		if(StringUtils.isNotBlank(userid))request.setAttribute(Constants.USER, new User());
+		String userid     = HttpUtil.getCookie(request,Constants.USERID);
+		String randnum = HttpUtil.getCookie(request,Constants.RADNNUM);
+		//查询数据库select * from user t1,user_cookie t2 where t1.userid = t2.userid and t2.userid = {userid} and t2.randnum = {randnum}
+		if(StringUtils.isNotBlank(userid) && 1==1){
+			User user = new User();
+			user.setId(123456);
+			user.setNickname("精灵旅社");
+			user.setRole("admin");
+			user.setFaceurl("/img/blank92x71.gif");
+			request.setAttribute(Constants.USER, user);
+		}
 		return true; 
 	}
 	
