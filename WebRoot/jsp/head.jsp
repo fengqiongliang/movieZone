@@ -51,11 +51,11 @@
 		<c:if test='${!empty movie}'><a class="nav searchT"  href="#" style="background:#055078" title="${movie.name}">${fn:substring(movie.name,0,7)}${fn:length(movie.name)>7?"...":""}</a></c:if>
 	</div>
 	<div class="topR">
-		<span class="nick" style="display:inline"><input class="nickField" type="text" value="梦的翅膀膀膀膀膀膀膀膀膀" onblur="modifyNick()" onkeyup="adjustWidth()" maxlength="12" maxWidth="150"></input><a href="javascript:logout();" class="logout">退出</a></span>
-		<a class="reg" href="javascript:goReg();" style="display:none">注册/登录</a>
+		<c:if test='${!empty user}'><span class="nick" style="display:inline"><input class="nickField" type="text" value="梦的翅膀膀膀膀膀膀膀膀膀"  oldValue="梦的翅膀膀膀膀膀膀膀膀膀"  onblur="modifyNick(this)" onkeyup="adjustWidth()" maxlength="12" maxWidth="150"  autocomplete="off" ></input><a href="javascript:logout();" class="logout">退出</a></span></c:if>
+		<c:if test='${empty user}'><a class="reg" href="javascript:goReg();" >注册/登录</a></c:if>
 		<input class="search" type="text" searchHover="searchF"  value="${search}"></input><a class="searchIcon" href="javascript:goSearch();"></a><span class='searchE'></span>
 	</div>
-	<div class="face" title="可单击修改"><img class="myFace" src="${base}/img/blank92x71.gif"/><img class="loadFace" src="${base}/img/loading.gif" /><div class="uploadContainer"><span uploadUrl="${base}/upUserPic.json" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upStart" upsuccess="upSuccess" uperror="upError"></span></div></div>
+	<c:if test='${!empty user}'><div class="face" title="可单击修改"><img class="myFace" src="${base}/img/blank92x71.gif"/><img class="loadFace" src="${base}/img/loading.gif" /><div class="uploadContainer"><span uploadUrl="${base}/upUserPic.json" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upStart" upsuccess="upSuccess" uperror="upError"></span></div></div></c:if>
 	<div class="clear"></div>
 </div>
 

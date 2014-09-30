@@ -50,7 +50,7 @@ a:hover{text-decoration:underline;}
 .topL{float:left;margin:20px 0 0 20px;}
 .topR{float:right;margin:25px 24px 0 0;}
 .nav{float:left;padding:6px;display:block;font-size:20px;font-weight:bold;color:#ffffff;text-shadow:1px 1px 1px #333;}
-.reg{font-size:14px;font-weight:bold;color:#ffffff;float:left;margin-top:5px;}
+.reg{font-size:12px;font-weight:bold;color:#ffffff;float:left;margin-top:8px;}
 .nick{font-size:14px;font-weight:bold;color:#ffffff;float:left;margin-top:5px;}
 .nickField{background:transparent;color:#ffffff;line-height:12px;width:55px;height:12px;padding-top:2px;padding-right:2px;}
 .face{float:right;margin:12px 10px 0 0;cursor:pointer;position:relative;}

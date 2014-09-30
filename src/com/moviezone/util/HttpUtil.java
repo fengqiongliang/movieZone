@@ -57,12 +57,15 @@ public class HttpUtil {
 		response.addCookie(cookie);
 	}
 	
-	public static void clearCookie(HttpServletRequest request,String name){
+	public static void clearCookie(HttpServletRequest request,HttpServletResponse response,String name){
 		if(request == null || name == null || "".equals(name))return;
 		Cookie[] cookies = request.getCookies();
 		if(cookies == null)return;
 		for(Cookie cookie:cookies){
-			if(name.equals(cookie.getName()))cookie.setMaxAge(0);
+			if(!name.equals(cookie.getName()))continue;
+			cookie.setPath("/");
+			cookie.setMaxAge(0);
+			response.addCookie(cookie);
 		}
 	}
 	

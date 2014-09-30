@@ -12,8 +12,10 @@ import javax.servlet.http.HttpSession;
 
 
 
+
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -51,12 +53,15 @@ public class IndexController extends BaseController {
 		return mv; 
 	}
 	
-	@RequestMapping(value="/index.json",method=RequestMethod.GET)
-	public void test(HttpServletRequest request,
-							   HttpServletResponse response,
-							   HttpSession session)throws Exception{
-		Object user = request.getAttribute("user");
-		JSONObject o = new JSONObject();
-		response.getWriter().write(o.toString());
+	@RequestMapping(value="/modifyNick.json",method=RequestMethod.POST)
+	public void modifyNick(HttpServletRequest request,
+										   HttpServletResponse response,
+										   HttpSession session,
+										   @RequestParam(value="nickname") String nickname)throws Exception{
+		if(nickname == null || StringUtils.isBlank(nickname.trim())){
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+		//保存至数据库中
 	}
 }

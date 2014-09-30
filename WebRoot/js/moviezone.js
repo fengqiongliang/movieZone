@@ -133,7 +133,7 @@ function checkUName(source){
 	}
 	//发送ajax请求验证
 	$.ajax({
-        type:'GET',
+        type:'POST',
         url:'checkUName.json',
         data:{username:val},
 		dataType:'json',
@@ -306,7 +306,20 @@ function logout(){
 }
 
 /* 上部 */
-function modifyNick(){
+function modifyNick(source){
+	var oldValue   = $.trim($(source).attr("oldValue"));
+	var nowValue =  $.trim($(source).val());
+	if(oldValue == nowValue) return;
+	$.ajax({
+        type:'POST',
+        url:'modifyNick.json',
+        data:{"nickname":nowValue}
+    }).done(function(data){
+    	$(source).attr("oldValue",nowValue);
+    	$(source).val(nowValue);
+    }).fail(function(){
+    	$(source).val(oldValue);
+    });
 }
 function adjustWidth(){
 	var maxWidth = $('.nickField').attr('maxWidth');
@@ -315,7 +328,7 @@ function adjustWidth(){
 }
 function strlen(str) {
 	var len = 0;
-	for (var i = 0; i < str.length; i++) {
+	for (var i = 0; i < str && str.length; i++) {
 		var c = str.charCodeAt(i);
 		//单字节加1 
 		if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {

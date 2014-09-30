@@ -2,6 +2,7 @@ package com.moviezone.controller;
 
 
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -9,6 +10,7 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 
 
 
@@ -57,14 +59,20 @@ public class UploadController extends BaseController{
 		String finalName      = "/upload/"+name;
 		File     jpgFile            = new File(realpath+finalName);
 		
-		
 		//切成92x71的jpg图片保存至/upload目录中
 		boolean writeSuccess = true;
-		InputStream is             = file.getInputStream();
-		FileOutputStream fos  = new FileOutputStream(jpgFile);
-		if(jpgFile.length()<1)writeSuccess = ImageUtil.scaleImg(92, 71, is, fos);
-		is.close();
-		fos.close();
+		if( jpgFile.length()<1){
+			InputStream is             = file.getInputStream();
+			FileOutputStream fos  = new FileOutputStream(jpgFile);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			long before = System.currentTimeMillis();
+			writeSuccess = ImageUtil.scaleImg(92, 71, is, bos);
+			long after    = System.currentTimeMillis();
+			logger.info((writeSuccess?"成功":"失败")+" 花费 "+(after-before)+"ms 将文件【"+file.getOriginalFilename()+"】 --> 【"+finalName+"】 写入磁盘  "+jpgFile);
+			is.close(); 
+			bos.close();
+		}
+		
 		if(writeSuccess){
 			JSONObject json = new JSONObject();
 			json.put("faceImgUrl", webPath+finalName);
