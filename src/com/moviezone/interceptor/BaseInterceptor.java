@@ -35,7 +35,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 		response.setContentType("text/html; charset=utf-8");
 		
 		String userid     = HttpUtil.getCookie(request,Constants.USERID);
-		String randnum = HttpUtil.getCookie(request,Constants.RADNNUM);
+		String randnum = HttpUtil.getCookie(request,Constants.COOKIEID);
 		//查询数据库select * from user t1,user_cookie t2 where t1.userid = t2.userid and t2.userid = {userid} and t2.randnum = {randnum}
 		if(StringUtils.isNotBlank(userid) && 1==1){
 			User user = new User();

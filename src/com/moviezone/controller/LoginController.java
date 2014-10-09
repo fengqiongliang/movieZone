@@ -117,7 +117,7 @@ public class LoginController extends BaseController {
 		String userid      = "123456";
 		String randNum =  ""+rand.nextInt(1000);
 		HttpUtil.setCookie(response, Constants.USERID, userid);
-		HttpUtil.setCookie(response, Constants.RADNNUM, randNum);
+		HttpUtil.setCookie(response, Constants.COOKIEID, randNum);
 		
 		
 		json.put("resultCode", 0);
@@ -130,7 +130,7 @@ public class LoginController extends BaseController {
 								   HttpServletResponse response,
 								   HttpSession session)throws Exception{
 		HttpUtil.clearCookie(request, response,Constants.USERID);
-		HttpUtil.clearCookie(request, response,Constants.RADNNUM);
+		HttpUtil.clearCookie(request, response,Constants.COOKIEID);
 	}
 	
 }
