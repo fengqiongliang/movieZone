@@ -33,6 +33,7 @@ public class UserCache {
 		return client.getObject(mobileKey, User.class);
 	}
 	public void putUser(User user){
+		/*
 		if(user==null||user.getId()<1)return;
 		long id = user.getId();
 		String nickname = user.getNickname();
@@ -47,8 +48,10 @@ public class UserCache {
 		if(NickNameKey!=null)client.putObject(NickNameKey, user);
 		if(emailKey!=null)client.putObject(emailKey, user);
 		if(mobileKey!=null)client.putObject(mobileKey, user);
+		*/
 	}
 	public void delUser(User user){
+		/*
 		if(user==null||user.getId()<1)return;
 		long id = user.getId();
 		String nickname = user.getNickname();
@@ -63,6 +66,7 @@ public class UserCache {
 		if(NickNameKey!=null)client.remove(NickNameKey);
 		if(emailKey!=null)client.remove(emailKey);
 		if(mobileKey!=null)client.remove(mobileKey);
+		*/
 	}
 
 	public void setClient(CacheClient client) {

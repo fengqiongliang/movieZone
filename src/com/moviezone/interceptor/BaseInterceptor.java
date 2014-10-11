@@ -1,5 +1,7 @@
 package com.moviezone.interceptor;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpUtils;
@@ -20,7 +22,7 @@ import com.moviezone.util.HttpUtil;
 									 
 public class BaseInterceptor implements HandlerInterceptor {
 	@Autowired
-	private UserService userUser;
+	private UserService userService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(BaseInterceptor.class);
 	
@@ -34,16 +36,16 @@ public class BaseInterceptor implements HandlerInterceptor {
 		beforeController = System.currentTimeMillis();
 		response.setContentType("text/html; charset=utf-8");
 		
-		String userid     = HttpUtil.getCookie(request,Constants.USERID);
-		String randnum = HttpUtil.getCookie(request,Constants.COOKIEID);
-		//查询数据库select * from user t1,user_cookie t2 where t1.userid = t2.userid and t2.userid = {userid} and t2.randnum = {randnum}
-		if(StringUtils.isNotBlank(userid) && 1==1){
+		String strUserid     = HttpUtil.getCookie(request,Constants.USERID);
+		String strCookieid  = HttpUtil.getCookie(request,Constants.COOKIEID);
+		long   userid          = 0;
+		try{userid = Long.parseLong(strUserid);}catch(Exception ex){}
+		if(userid > 0 && StringUtils.isNotBlank(strCookieid)){
 			User user = new User();
-			user.setId(123456);
-			user.setNickname("精灵旅社");
-			user.setRole("admin");
-			user.setFaceurl("/img/blank92x71.gif");
-			request.setAttribute(Constants.USER, user);
+			user.setUserid(userid);
+			user.setCookie_id(strCookieid);
+			List<User> users = userService.select(user);
+			if(users.size()>0)request.setAttribute(Constants.USER, users.get(0));
 		}
 		return true; 
 	}

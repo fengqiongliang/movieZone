@@ -2,169 +2,87 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.moviezone.dao.UserMapper" >
   <resultMap id="BaseResultMap" type="com.moviezone.domain.User" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="mobile" property="mobile" jdbcType="BIGINT" />
+    <id column="userid" property="userid" jdbcType="BIGINT" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="plainpwd" property="plainpwd" jdbcType="VARCHAR" />
-    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="faceurl" property="faceurl" jdbcType="VARCHAR" />
+    <result column="cookie_id" property="cookie_id" jdbcType="VARCHAR" />
+    <result column="role" property="role" jdbcType="VARCHAR" />
     <result column="lastlogtime" property="lastlogtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="createip" property="createip" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
-    <result column="areacode" property="areacode" jdbcType="VARCHAR" />
-    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
-    <result column="emailcode" property="emailcode" jdbcType="VARCHAR" />
+    <result column="createarea" property="createarea" jdbcType="VARCHAR" />
+    <result column="nextnick" property="nextnick" jdbcType="VARCHAR" />
+    <result column="nextface" property="nextface" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, nickname,email,mobile,password,plainpwd,realname,lastlogtime,createip,createtime,areacode,updatetime,emailcode
+    userid, username,password,nickname,faceurl,cookie_id,role,lastlogtime,updatetime,createip,createtime,createarea,nextnick,nextface
   </sql>
   
-  <select id="selectById" resultMap="BaseResultMap" parameterType="com.moviezone.domain.User" >
-    select 'false' as QUERYID,
-    <include refid="Base_Column_List" />
-    from user where id = #{id,jdbcType=BIGINT}
-  </select>
-  <select id="selectByNickName" resultMap="BaseResultMap" parameterType="com.moviezone.domain.User" >
-    select 'false' as QUERYID,
-    <include refid="Base_Column_List" />
-    from user where nickname = #{nickname,jdbcType=VARCHAR}
-  </select>
-  <select id="selectByMobile" resultMap="BaseResultMap" parameterType="com.moviezone.domain.User" >
-    select 'false' as QUERYID,
-    <include refid="Base_Column_List" />
-    from user where mobile = #{mobile,jdbcType=BIGINT}
-  </select>
-  <select id="selectByEmail" resultMap="BaseResultMap" parameterType="com.moviezone.domain.User" >
-    select 'false' as QUERYID,
-    <include refid="Base_Column_List" />
-    from user where email = #{email,jdbcType=VARCHAR}
-  </select>
-  <select id="contain" resultMap="BaseResultMap" parameterType="map">
-  	select 'false' as QUERYID,
-  	<include refid="Base_Column_List" />
-  	from user 
-  	where nickname = #{nickname,jdbcType=VARCHAR} 
-  	or    mobile   = #{mobile,jdbcType=BIGINT} 
-  	or    email    = #{email,jdbcType=VARCHAR}
+  <select id="selectUser" resultMap="BaseResultMap" parameterType="map" >
+    select 'false' as QUERYID, 
+    <include refid="Base_Column_List" /> 
+    from user where 1=1 
+    <if test="userid >0">  and userid = #{userid,jdbcType=BIGINT} </if>
+    <if test="username != null">  and username = #{username,jdbcType=VARCHAR} </if>
+    <if test="password != null">  and password = #{password,jdbcType=VARCHAR} </if>
+    <if test="nickname != null"> and nickname = #{nickname,jdbcType=VARCHAR} </if>
+    <if test="faceurl != null"> and faceurl = #{faceurl,jdbcType=VARCHAR} </if>
+    <if test="cookie_id != null"> and cookie_id = #{cookie_id,jdbcType=VARCHAR} </if>
+    <if test="role != null"> and role = #{role,jdbcType=VARCHAR} </if>
+    <if test="createip != null"> and createip = #{createip,jdbcType=VARCHAR} </if>
+    <if test="createarea != null"> and createarea = #{createarea,jdbcType=VARCHAR} </if>
+    <if test="nextnick != null"> and nextnick = #{nextnick,jdbcType=VARCHAR} </if>
+    <if test="nextface != null"> and nextface = #{nextface,jdbcType=VARCHAR} </if>
   </select>
   
-  <select id="selectMaxId" resultType="map">
-  	select 'false' as QUERYID,max(id) as maxId from user
-  </select>
-
   <insert id="insertUser" parameterType="com.moviezone.domain.User" >
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="nickname != null" >
-        nickname,
-      </if>
-      <if test="email != null" >
-        email,
-      </if>
-      <if test="mobile != null" >
-        mobile,
-      </if>
-      <if test="password != null" >
-        password,
-      </if>
-      <if test="plainpwd != null" >
-        plainpwd,
-      </if>
-      <if test="realname != null" >
-        realname,
-      </if>
-      <if test="lastlogtime != null" >
-        lastlogtime,
-      </if>
-      <if test="createip != null" >
-        createip,
-      </if>
-      <if test="areacode != null" >
-        areacode,
-      </if>
-      <if test="emailcode != null" >
-        emailcode,
-      </if>
-      	 createtime
+      <if test="userid != null" >userid,</if>
+      <if test="username != null" >username,</if>
+      <if test="password != null" >password,</if>
+      <if test="nickname != null" >nickname,</if>
+      <if test="faceurl != null">faceurl,</if>
+      <if test="cookie_id != null" >cookie_id,</if>
+      <if test="role != null" >role,</if>
+      <if test="createip != null" >createip,</if>
+      <if test="createarea != null" >createarea,</if>
+      lastlogtime,updatetime,createtime
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="nickname != null" >
-        #{nickname,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null" >
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null" >
-        #{mobile,jdbcType=BIGINT},
-      </if>
-      <if test="password != null" >
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="plainpwd != null" >
-        #{plainpwd,jdbcType=VARCHAR},
-      </if>
-      <if test="realname != null" >
-        #{realname,jdbcType=VARCHAR},
-      </if>
-      <if test="lastlogtime != null" >
-        #{lastlogtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createip != null" >
-        #{createip,jdbcType=VARCHAR},
-      </if>
-      <if test="areacode != null" >
-        #{areacode,jdbcType=VARCHAR},
-      </if>
-      <if test="emailcode != null" >
-        #{emailcode,jdbcType=VARCHAR},
-      </if>
-      sysdate()
+      <if test="userid != null" >#{userid,jdbcType=BIGINT},</if>
+      <if test="username != null" >#{username,jdbcType=VARCHAR},</if>
+      <if test="password != null" >#{password,jdbcType=VARCHAR},</if>
+      <if test="nickname != null" >#{nickname,jdbcType=VARCHAR},</if>
+      <if test="faceurl != null">#{faceurl,jdbcType=VARCHAR},</if>
+      <if test="cookie_id != null" >#{cookie_id,jdbcType=VARCHAR},</if>
+      <if test="role != null" >#{role,jdbcType=VARCHAR},</if>
+      <if test="createip != null" >#{createip,jdbcType=VARCHAR},</if>
+      <if test="createarea != null" >#{createarea,jdbcType=VARCHAR},</if>
+      sysdate(),sysdate(),sysdate()
     </trim>
   </insert>
   
   <update id="updateUser" parameterType="com.moviezone.domain.User" >
     update user
     <set>
-      <if test="nickname != null" >
-        nickname = #{nickname,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null" >
-        email = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null" >
-        mobile = #{mobile,jdbcType=BIGINT},
-      </if>
-      <if test="password != null" >
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="plainpwd != null" >
-        plainpwd = #{plainpwd,jdbcType=VARCHAR},
-      </if>
-      <if test="realname != null" >
-        realname = #{realname,jdbcType=VARCHAR},
-      </if>
-      <if test="lastlogtime != null" >
-        lastlogtime = #{lastlogtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="areacode != null" >
-        areacode = #{areacode,jdbcType=VARCHAR},
-      </if>
-      <if test="emailcode != null" >
-        emailcode = #{emailcode,jdbcType=VARCHAR},
-      </if>	
+      <if test="password != null" >password = #{password,jdbcType=VARCHAR},</if>
+      <if test="nickname != null" >nickname = #{nickname,jdbcType=VARCHAR},</if>
+      <if test="cookie_id != null" >cookie_id = #{cookie_id,jdbcType=VARCHAR},</if>
+      <if test="role != null" >role = #{role,jdbcType=VARCHAR},</if>
+      <if test="lastlogtime != null" >lastlogtime = #{lastlogtime,jdbcType=TIMESTAMP},</if>
+      <if test="nextnick != null" >nextnick = #{nextnick,jdbcType=VARCHAR},</if>
+      <if test="nextface != null" >nextface = #{nextface,jdbcType=VARCHAR},</if>
+      updatetime = sysdate()
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where userid = #{userid,jdbcType=BIGINT}
   </update>
   
   <delete id="deleteUser" parameterType="com.moviezone.domain.User" >
-    delete from user where id = #{id,jdbcType=BIGINT}
+    delete from user where userid = #{userid,jdbcType=BIGINT}
   </delete>
   
 </mapper>

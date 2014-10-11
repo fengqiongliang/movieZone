@@ -5,44 +5,31 @@ import java.util.Date;
 
 public class User implements Serializable{
 	private static final long serialVersionUID = -2311831316980842512L;
-	private long id;                   
-	private String nickname;   //昵称
-	private String role;            //角色，user、admin
-	private String faceurl;       //头像
-	private String email;
-	private long mobile;
-	private String password;
-	private String plainpwd;
-	private String realname;
+	private long userid;                   
+	private String username;   
+	private String password;            
+	private String nickname; 
+	private String faceurl;
+	private String cookie_id;
+	private String role;
 	private Date lastlogtime;
+	private Date updatetime;
 	private String createip;
 	private Date createtime;
-	private String areacode;
-	private Date updatetime;
-	private String emailcode;
-	public long getId() {
-		return id;
+	private String createarea;
+	private String nextnick;
+	private String nextface;
+	public long getUserid() {
+		return userid;
 	}
-	public void setId(long id) {
-		this.id = id;
+	public void setUserid(long userid) {
+		this.userid = userid;
 	}
-	public String getNickname() {
-		return nickname;
+	public String getUsername() {
+		return username;
 	}
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public long getMobile() {
-		return mobile;
-	}
-	public void setMobile(long mobile) {
-		this.mobile = mobile;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public String getPassword() {
 		return password;
@@ -50,23 +37,41 @@ public class User implements Serializable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getPlainpwd() {
-		return plainpwd;
+	public String getNickname() {
+		return nickname;
 	}
-	public void setPlainpwd(String plainpwd) {
-		this.plainpwd = plainpwd;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
-	public String getRealname() {
-		return realname;
+	public String getFaceurl() {
+		return faceurl;
 	}
-	public void setRealname(String realname) {
-		this.realname = realname;
+	public void setFaceurl(String faceurl) {
+		this.faceurl = faceurl;
+	}
+	public String getCookie_id() {
+		return cookie_id;
+	}
+	public void setCookie_id(String cookie_id) {
+		this.cookie_id = cookie_id;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 	public Date getLastlogtime() {
 		return lastlogtime;
 	}
 	public void setLastlogtime(Date lastlogtime) {
 		this.lastlogtime = lastlogtime;
+	}
+	public Date getUpdatetime() {
+		return updatetime;
+	}
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
 	}
 	public String getCreateip() {
 		return createip;
@@ -80,35 +85,22 @@ public class User implements Serializable{
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
-	public String getAreacode() {
-		return areacode;
+	public String getCreatearea() {
+		return createarea;
 	}
-	public void setAreacode(String areacode) {
-		this.areacode = areacode;
+	public void setCreatearea(String createarea) {
+		this.createarea = createarea;
 	}
-	public Date getUpdatetime() {
-		return updatetime;
+	public String getNextnick() {
+		return nextnick;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setNextnick(String nextnick) {
+		this.nextnick = nextnick;
 	}
-	public String getEmailcode() {
-		return emailcode;
+	public String getNextface() {
+		return nextface;
 	}
-	public void setEmailcode(String emailcode) {
-		this.emailcode = emailcode;
+	public void setNextface(String nextface) {
+		this.nextface = nextface;
 	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
-	public String getFaceurl() {
-		return faceurl;
-	}
-	public void setFaceurl(String faceurl) {
-		this.faceurl = faceurl;
-	}
-	
 }
