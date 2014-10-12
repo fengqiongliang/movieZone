@@ -18,6 +18,8 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,7 +33,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.Constants;
+import com.moviezone.domain.Page;
 import com.moviezone.domain.User;
+import com.moviezone.service.KeyService;
 import com.moviezone.service.UserService;
 import com.moviezone.util.HttpUtil;
 
@@ -39,6 +43,8 @@ import com.moviezone.util.HttpUtil;
 public class LoginController extends BaseController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private KeyService keyService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
@@ -57,12 +63,15 @@ public class LoginController extends BaseController {
 			response.getWriter().write(json.toString());
 			return;
 		}
-		if(1==2){
+		User user = new User();
+		user.setUsername(username);
+		if(userService.select(user).size()>0){
 			json.put("resultCode", -1);
 			json.put("resultInfo", "用户名已经被占用");
 			response.getWriter().write(json.toString());
 			return;
 		}
+		
 		//保存至数据库中
 		json.put("resultCode", 0);
 		json.put("resultInfo", "用户名可以正常使用");
@@ -119,9 +128,12 @@ public class LoginController extends BaseController {
 				response.getWriter().write(json.toString());
 				return;
 			}
-			
+			long userid = keyService.getUserid();
+			long attachid = keyService.getAttachid();
+			long commid = keyService.getCommentid();
+			user.setUserid(keyService.getUserid());                                         //生成id
 			user.setNickname(nicknames[rand.nextInt(nicknames.length)]);   //设置随机昵称
-			user.setFaceurl("/img/92x71/"+(rand.nextInt(50)+5)+".gif");                //设置随机头像
+			user.setFaceurl("/img/92x71/"+(rand.nextInt(50)+5)+".gif");      //设置随机头像
 			user.setRole("user");                                                                    //设置一般的用户角色
 			user.setCreateip(request.getRemoteAddr());                                //设置注册ip
 			user.setCreatearea("海口");                                                         //设置注册地址
@@ -160,12 +172,5 @@ public class LoginController extends BaseController {
 		logger.debug("用户【"+username+"】成功登陆【"+password+"】 ");
 	}
 	
-	@RequestMapping(value="/logout.json",method=RequestMethod.POST)
-	public void logout(HttpServletRequest request,
-								   HttpServletResponse response,
-								   HttpSession session)throws Exception{
-		HttpUtil.clearCookie(request, response,Constants.USERID);
-		HttpUtil.clearCookie(request, response,Constants.COOKIEID);
-	}
 	
 }

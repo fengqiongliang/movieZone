@@ -20,6 +20,9 @@
 	<bean id="userService" class="com.moviezone.service.support.UserServiceImpl">
 		<property name="userDao" ref="userDao" />
 	</bean>
+	<bean id="keyService" class="com.moviezone.service.support.KeyServiceImpl">
+		<property name="increDao" ref="incrementDao" />
+	</bean>
 	
 	
 	

@@ -22,4 +22,10 @@
 		<property name="session" ref="sqlSession" />
 	</bean>
 	
+	<bean id="incrementDao" class="com.moviezone.dao.support.IncrementDaoImpl">
+		<property name="userCache" ref="userCache" />
+		<property name="session" ref="sqlSession" />
+	</bean>
+	
+	
 </beans>

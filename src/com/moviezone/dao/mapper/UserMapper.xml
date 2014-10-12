@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.moviezone.dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.moviezone.domain.User" >
+<mapper namespace="com.moviezone.dao.UserDao" >
+  <resultMap id="UserResultMap" type="com.moviezone.domain.User" >
     <id column="userid" property="userid" jdbcType="BIGINT" />
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
@@ -17,15 +17,13 @@
     <result column="nextnick" property="nextnick" jdbcType="VARCHAR" />
     <result column="nextface" property="nextface" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List" >
+  
+  
+  <sql id="UserColumns" >
     userid, username,password,nickname,faceurl,cookie_id,role,lastlogtime,updatetime,createip,createtime,createarea,nextnick,nextface
   </sql>
-  
-  <select id="selectUser" resultMap="BaseResultMap" parameterType="map" >
-    select 'false' as QUERYID, 
-    <include refid="Base_Column_List" /> 
-    from user where 1=1 
-    <if test="userid >0">  and userid = #{userid,jdbcType=BIGINT} </if>
+  <sql id="userIFColumns">
+  	<if test="userid >0">  and userid = #{userid,jdbcType=BIGINT} </if>
     <if test="username != null">  and username = #{username,jdbcType=VARCHAR} </if>
     <if test="password != null">  and password = #{password,jdbcType=VARCHAR} </if>
     <if test="nickname != null"> and nickname = #{nickname,jdbcType=VARCHAR} </if>
@@ -36,6 +34,21 @@
     <if test="createarea != null"> and createarea = #{createarea,jdbcType=VARCHAR} </if>
     <if test="nextnick != null"> and nextnick = #{nextnick,jdbcType=VARCHAR} </if>
     <if test="nextface != null"> and nextface = #{nextface,jdbcType=VARCHAR} </if>
+  </sql>
+  
+  <select id="selectUserCount" resultType="map" parameterType="map"  >
+    select 'false' as QUERYID, 
+    count(*) as total
+    from user where 1=1 
+    <include refid="userIFColumns" />
+  </select>
+  
+  <select id="selectUser" resultMap="UserResultMap" parameterType="map"  >
+    select 'false' as QUERYID, 
+    <include refid="UserColumns" /> 
+    from user where 1=1 
+    <include refid="userIFColumns" />
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
   <insert id="insertUser" parameterType="com.moviezone.domain.User" >

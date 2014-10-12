@@ -2,12 +2,16 @@ package com.moviezone.service.support;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.moviezone.dao.UserDao;
+import com.moviezone.domain.Page;
 import com.moviezone.domain.User;
 import com.moviezone.service.UserService;
 
 public class UserServiceImpl implements UserService{
-	
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	private UserDao userDao;
 	
 	@Override
@@ -44,7 +48,23 @@ public class UserServiceImpl implements UserService{
 	public List<User> select(User user) {
 		return userDao.select(user);
 	}
+	
+	@Override
+	public List<User> select(User user, int pageNo, int pageSize) {
+		return userDao.select(user, pageNo, pageSize);
+	}
 
+
+	@Override
+	public Page<User> selectPage(User user) {
+		return userDao.selectPage(user);
+	}
+
+
+	@Override
+	public Page<User> selectPage(User user, int pageNo, int pageSize) {
+		return userDao.selectPage(user, pageNo, pageSize);
+	}
 
 	@Override
 	public long insert(User user) {
@@ -68,5 +88,8 @@ public class UserServiceImpl implements UserService{
 	public boolean delete(long userid) {
 		return userDao.delete(userid);
 	}
+
+
+	
 	
 }

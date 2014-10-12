@@ -293,16 +293,14 @@ function centerWnd(myWindow){
 }
 
 
-/* 昵称/退出窗口 */
+/* 昵称/退出窗口,清除所有cookie */
 function logout(){
-	$.ajax({
-        type:'POST',
-        url:'logout.json'
-    }).done(function(data){
-		location.reload();
-    }).fail(function(){
-		alert("退出失败");
-    });
+	var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+	for (var i = 0; keys && i < keys.length; i++){
+		if(keys[i]=="JSESSIONID")continue;
+		document.cookie=keys[i]+'=0;expires=' + new Date( 0).toUTCString()+";path=/";
+	}
+	location.reload();
 }
 
 /* 上部 */

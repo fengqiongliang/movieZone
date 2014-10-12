@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moviezone.dao.IncrementDao" >
+
+  <resultMap id="IncreResultMap" type="com.moviezone.domain.Increment" >
+    <id column="field" property="field" jdbcType="VARCHAR" />
+    <result column="start" property="username" jdbcType="BIGINT" />
+    <result column="end" property="password" jdbcType="BIGINT" />
+    
+  </resultMap>
+  
+  <select id="selectIncre" resultMap="IncreResultMap">
+    select 'false' as QUERYID, field,start,end from increment t limit 0,1000
+  </select>
+  
+  <update id="updateIncre" parameterType="com.moviezone.domain.Increment" >
+    update increment set start = #{start,jdbcType=BIGINT}, end = #{end,jdbcType=BIGINT} where field = #{field,jdbcType=VARCHAR} 
+  </update>
+  
+</mapper>
