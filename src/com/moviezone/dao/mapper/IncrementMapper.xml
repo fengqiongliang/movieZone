@@ -4,8 +4,8 @@
 
   <resultMap id="IncreResultMap" type="com.moviezone.domain.Increment" >
     <id column="field" property="field" jdbcType="VARCHAR" />
-    <result column="start" property="username" jdbcType="BIGINT" />
-    <result column="end" property="password" jdbcType="BIGINT" />
+    <result column="start" property="start" jdbcType="BIGINT" />
+    <result column="end" property="end" jdbcType="BIGINT" />
     
   </resultMap>
   
