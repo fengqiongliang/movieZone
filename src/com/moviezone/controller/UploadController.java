@@ -18,10 +18,14 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -31,6 +35,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.moviezone.constant.Constants;
+import com.moviezone.domain.User;
+import com.moviezone.service.UserService;
 import com.moviezone.util.ImageUtil;
 import com.moviezone.util.SecurityUtil;
 
@@ -38,12 +45,20 @@ import com.moviezone.util.SecurityUtil;
 @Controller
 public class UploadController extends BaseController{
 	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(value="/upUserPic.json",method=RequestMethod.POST)
 	public void upUserPic(HttpServletRequest request,
 						 	  			HttpServletResponse response,
 						 	  			HttpSession session,
 						 	  			@RequestParam(value="upFile",required=false) MultipartFile file)throws Exception{
+		User user = (User)request.getAttribute(Constants.USER);
+		if(user == null ){
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+		
 		//错误判断
 		if(file == null)return;
 		if(file.getBytes().length<1)return;
@@ -77,7 +92,10 @@ public class UploadController extends BaseController{
 			JSONObject json = new JSONObject();
 			json.put("faceImgUrl", webPath+finalName);
 			response.getWriter().write(json.toString());
-			//保存到数据库中去
+			//保存至数据库中
+			user.setNextface(finalName);;
+			userService.update(user);
+			logger.debug("头像更新 "+user.getUserid()+".【"+user.getUsername()+"】  ---> "+finalName+"  ");
 		}
 		
 	}

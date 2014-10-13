@@ -5,10 +5,10 @@
 
 <div class="adminWrap">
 	<div class="adminLeft">
-		<a href="admin_movie.html"  class="adminLeftA">影片管理</a>
-		<a href="admin_module.html" class="adminLeftA">版块管理</a>
-		<a href="admin_user.html"   class="adminLeftA adminLeftAClick">用户管理</a>
-		<a href="admin_data.html"   class="adminLeftA">数据分析</a>
+		<a href="${base}/admin_movie.do"  class="adminLeftA">影片管理</a>
+		<a href="${base}/admin_module.do" class="adminLeftA">版块管理</a>
+		<a href="${base}/admin_user.do"   class="adminLeftA adminLeftAClick">用户管理</a>
+		<a href="${base}/admin_data.do"   class="adminLeftA">数据分析</a>
 		<div class="clear"></div>
 	</div>
 	

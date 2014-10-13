@@ -4,10 +4,10 @@
 
 <div class="adminWrap">
 	<div class="adminLeft" style="height:12710px;_height:12900px">
-		<a href="admin_movie.html"  class="adminLeftA">影片管理</a>
-		<a href="admin_module.html" class="adminLeftA adminLeftAClick">版块管理</a>
-		<a href="admin_user.html"   class="adminLeftA">用户管理</a>
-		<a href="admin_data.html"   class="adminLeftA">数据分析</a>
+		<a href="${base}/admin_movie.do"  class="adminLeftA">影片管理</a>
+		<a href="${base}/admin_module.do" class="adminLeftA adminLeftAClick">版块管理</a>
+		<a href="${base}/admin_user.do"   class="adminLeftA">用户管理</a>
+		<a href="${base}/admin_data.do"   class="adminLeftA">数据分析</a>
 		<div class="clear"></div>
 	</div>
 	

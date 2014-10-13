@@ -52,16 +52,4 @@ public class IndexController extends BaseController {
 		mv.setViewName("/index");
 		return mv; 
 	}
-	
-	@RequestMapping(value="/modifyNick.json",method=RequestMethod.POST)
-	public void modifyNick(HttpServletRequest request,
-										   HttpServletResponse response,
-										   HttpSession session,
-										   @RequestParam(value="nickname") String nickname)throws Exception{
-		if(nickname == null || StringUtils.isBlank(nickname.trim())){
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			return;
-		}
-		//保存至数据库中
-	}
 }

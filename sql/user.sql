@@ -7,16 +7,15 @@ DROP TABLE IF EXISTS `increment`;
 CREATE TABLE `increment` (
   `field` varchar(10) NOT NULL       COMMENT '列名' ,
   `start` bigint NOT NULL                 COMMENT '开始',
-  `end` bigint NOT NULL                 COMMENT '结束',
   PRIMARY KEY  (`field`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `increment` VALUES ('userid',10000,11000);     -- 用户id
-INSERT INTO `increment` VALUES ('movieid',1,1000);            -- 电影/电视id
-INSERT INTO `increment` VALUES ('modmvid',1,1000);          -- 模块_电影/电视关联id 
-INSERT INTO `increment` VALUES ('attachid',1,1000);            -- 电影/电视附件id
-INSERT INTO `increment` VALUES ('commentid',1,1000);       -- 留言id
-INSERT INTO `increment` VALUES ('favoriteid',1,1000);          -- 收藏id
+INSERT INTO `increment` VALUES ('userid',10000);       -- 用户id
+INSERT INTO `increment` VALUES ('movieid',1);            -- 电影/电视id
+INSERT INTO `increment` VALUES ('modmvid',1);          -- 模块_电影/电视关联id 
+INSERT INTO `increment` VALUES ('attachid',1);            -- 电影/电视附件id
+INSERT INTO `increment` VALUES ('commentid',1);       -- 留言id
+INSERT INTO `increment` VALUES ('favoriteid',1);          -- 收藏id
 
 -- ----------------------------
 -- 用户表

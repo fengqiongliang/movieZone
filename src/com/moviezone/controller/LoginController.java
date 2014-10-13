@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 
 
+
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -78,6 +79,20 @@ public class LoginController extends BaseController {
 		response.getWriter().write(json.toString());
 	}
 	
+	@RequestMapping(value="/modifyNick.json",method=RequestMethod.POST)
+	public void modifyNick(HttpServletRequest request,
+										   HttpServletResponse response,
+										   HttpSession session,
+										   @RequestParam(value="nickname") String nickname)throws Exception{
+		User user = (User)request.getAttribute(Constants.USER);
+		if(user == null || StringUtils.isBlank(nickname)){
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+		user.setNextnick(nickname.trim());
+		userService.update(user);
+	}
+	
 	@RequestMapping(value="/regOrlog.json",method=RequestMethod.POST)
 	public void regOrlog(ModelAndView mv,
 									  HttpServletRequest request,
@@ -128,9 +143,6 @@ public class LoginController extends BaseController {
 				response.getWriter().write(json.toString());
 				return;
 			}
-			long userid = keyService.getUserid();
-			long attachid = keyService.getAttachid();
-			long commid = keyService.getCommentid();
 			user.setUserid(keyService.getUserid());                                         //生成id
 			user.setNickname(nicknames[rand.nextInt(nicknames.length)]);   //设置随机昵称
 			user.setFaceurl("/img/92x71/"+(rand.nextInt(50)+5)+".gif");      //设置随机头像

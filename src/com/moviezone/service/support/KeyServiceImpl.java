@@ -14,7 +14,6 @@ import com.moviezone.service.KeyService;
 public class KeyServiceImpl implements KeyService{
 	private static final Logger logger = LoggerFactory.getLogger(KeyServiceImpl.class);
 	private IncrementDao increDao;
-	private int addInterval = 10000;    //一次增加多少;
 	private Map<String,Increment>  keys = new HashMap<String,Increment>();
 	
 	@Override
@@ -48,25 +47,15 @@ public class KeyServiceImpl implements KeyService{
 	
 	private long getNext(String field){
 		Increment key = keys.get(field);
-		if(key != null && key.getStart() <= key.getEnd()){
-			long start = key.getStart();
-			key.setStart(start+1);
-			return start;
-		}
+		if(key != null && key.getStart() < key.getEnd())return key.getNextStart();
 		for(Increment incr:increDao.select()){
 			if(keys.get(incr.getField()) == null || incr.getField().equals(field)){
 				keys.put(incr.getField(), incr);
-				Increment newIncre = new Increment();
-				newIncre.setField(incr.getField());
-				newIncre.setStart(newIncre.getStart()+addInterval);
-				newIncre.setEnd(newIncre.getEnd()+addInterval);
-				increDao.update(newIncre);
+				increDao.update(incr);
 			}
 		}
 		key = keys.get(field);
-		long start = key.getStart();
-		key.setStart(start+1);
-		return start;
+		return key.getNextStart();
 	}
 	
 }

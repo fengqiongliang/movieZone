@@ -45,7 +45,11 @@ public class BaseInterceptor implements HandlerInterceptor {
 			user.setUserid(userid);
 			user.setCookie_id(strCookieid);
 			List<User> users = userService.select(user);
-			if(users.size()>0)request.setAttribute(Constants.USER, users.get(0));
+			if(users.size()>0){
+				User dbUser = users.get(0);
+				logger.debug("用户登陆【"+dbUser.getUsername()+"】登陆，【"+(dbUser.getRole().endsWith("admin")?"管理员":"非管理员")+"】");
+				request.setAttribute(Constants.USER, dbUser);
+			}
 		}
 		return true; 
 	}

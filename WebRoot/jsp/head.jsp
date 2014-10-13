@@ -54,11 +54,11 @@
 		<c:if test='${!empty movie}'><a class="nav searchT"  href="#" style="background:#055078" title="${movie.name}">${fn:substring(movie.name,0,7)}${fn:length(movie.name)>7?"...":""}</a></c:if>
 	</div>
 	<div class="topR">
-		<c:if test='${!empty user}'><span class="nick" style="display:inline"><input class="nickField" type="text" value="${user.nickname}"  oldValue="${user.nickname}"  onblur="modifyNick(this)" onkeyup="adjustWidth()" maxlength="12" maxWidth="150"  autocomplete="off" ></input><a href="javascript:logout();" class="logout">退出</a></span></c:if>
+		<c:if test='${!empty user}'><span class="nick" style="display:inline"><input class="nickField" type="text" value="${user.nextnick!=null?user.nextnick:user.nickname}"  oldValue="${user.nextnick!=null?user.nextnick:user.nickname}"  onblur="modifyNick(this)" onkeyup="adjustWidth()" maxlength="12" maxWidth="150"  autocomplete="off" ></input><a href="javascript:logout();" class="logout">退出</a></span></c:if>
 		<c:if test='${empty user}'><a class="reg" href="javascript:goReg();" >注册/登录</a></c:if>
 		<input class="search" type="text" searchHover="searchF"  value="${search}"></input><a class="searchIcon" href="javascript:goSearch();"></a><span class='searchE'></span>
 	</div>
-	<c:if test='${!empty user}'><div class="face" title="可单击修改"><img class="myFace" src="${static}${user.faceurl}"/><img class="loadFace" src="${static}/img/loading.gif" /><div class="uploadContainer"><span uploadUrl="${base}/upUserPic.json" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upStart" upsuccess="upSuccess" uperror="upError"></span></div></div></c:if>
+	<c:if test='${!empty user}'><div class="face" title="可单击修改"><img class="myFace" src="${static}${user.nextface != null?user.nextface:user.faceurl}"/><img class="loadFace" src="${static}/img/loading.gif" /><div class="uploadContainer"><span uploadUrl="${base}/upUserPic.json" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upStart" upsuccess="upSuccess" uperror="upError"></span></div></div></c:if>
 	<div class="clear"></div>
 </div>
 <c:forEach var="mv" items="1..6" begin="2" end="5" varStatus="status">

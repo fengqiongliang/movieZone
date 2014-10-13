@@ -6,15 +6,14 @@
     <id column="field" property="field" jdbcType="VARCHAR" />
     <result column="start" property="start" jdbcType="BIGINT" />
     <result column="end" property="end" jdbcType="BIGINT" />
-    
   </resultMap>
   
   <select id="selectIncre" resultMap="IncreResultMap">
-    select 'false' as QUERYID, field,start,end from increment t limit 0,1000
+    select 'false' as QUERYID, field,start,start+3000 as end from increment t limit 0,1000;
   </select>
   
   <update id="updateIncre" parameterType="com.moviezone.domain.Increment" >
-    update increment set start = #{start,jdbcType=BIGINT}, end = #{end,jdbcType=BIGINT} where field = #{field,jdbcType=VARCHAR} 
+    update increment set start = start+3000 where field = #{field,jdbcType=VARCHAR} 
   </update>
   
 </mapper>
