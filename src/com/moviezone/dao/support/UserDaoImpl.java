@@ -25,6 +25,10 @@ public class UserDaoImpl implements UserDao{
 	public long insert(User user) {
 		return session.insert("insertUser", user)>0?user.getUserid():0;
 	}
+	@Override
+	public long insertForbit(User user) {
+		return session.insert("insertForbitUser", user)>0?user.getUserid():0;
+	}
 
 	@Override
 	public User select(long userid) {
@@ -55,9 +59,36 @@ public class UserDaoImpl implements UserDao{
 		parameter.put("createarea", user.getCreatearea());
 		parameter.put("nextnick", user.getNextnick());
 		parameter.put("nextface", user.getNextface());
+		parameter.put("isForbit", user.getIsForbit());
 		parameter.put("start", (pageNo-1)*pageSize);
 		parameter.put("size", pageSize);
 		return session.selectList("selectUser", parameter);
+	}
+	
+	@Override
+	public List<User> selectForbit(User user, int pageNo, int pageSize) {
+		if(user == null)return new ArrayList<User>();
+		Map<String,Object> parameter = new  HashMap<String,Object>();
+		parameter.put("userid", user.getUserid());
+		parameter.put("nickname", user.getNickname());
+		parameter.put("createip", user.getCreateip());
+		parameter.put("createarea", user.getCreatearea());
+		parameter.put("start", (pageNo-1)*pageSize);
+		parameter.put("size", pageSize);
+		return session.selectList("selectForbitUser", parameter);
+	}
+	
+	@Override
+	public List<User> selectSystemForbit(User user, int pageNo, int pageSize) {
+		if(user == null)return new ArrayList<User>();
+		Map<String,Object> parameter = new  HashMap<String,Object>();
+		parameter.put("userid", user.getUserid());
+		parameter.put("nickname", user.getNickname());
+		parameter.put("createip", user.getCreateip());
+		parameter.put("createarea", user.getCreatearea());
+		parameter.put("start", (pageNo-1)*pageSize);
+		parameter.put("size", pageSize);
+		return session.selectList("selectSystemForbit", parameter);
 	}
 	
 	@Override
@@ -78,9 +109,27 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	@Override
+	public Page<User> selectForbitPage(User user, int pageNo, int pageSize) {
+		Page<User> page = new Page<User>();
+		if(user == null)return page;
+		Map<String,Object>  result = session.selectOne("selectForbitUserCount",user);
+		page.setTotal((Long)result.get("total"));
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setData(selectForbit(user,pageNo,pageSize));
+		
+		return page;
+	}
+	
+	@Override
 	public boolean update(User user) {
 		if(user.getUserid()<1)return false;
 		return session.update("updateUser", user)>0;
+	}
+	@Override
+	public boolean updateNickOrFace(User user) {
+		if(user.getUserid()<1)return false;
+		return session.update("updateNickOrFace", user)>0;
 	}
 
 	@Override
@@ -97,6 +146,12 @@ public class UserDaoImpl implements UserDao{
 		return delete(user);
 	}
 	
+	@Override
+	public boolean delForbit(User user) {
+		if(user==null || user.getUserid() <1)return false;
+		return session.delete("deleteForbitUser", user)>0;
+	}
+	
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
@@ -104,6 +159,11 @@ public class UserDaoImpl implements UserDao{
 	public void setUserCache(UserCache userCache) {
 		this.userCache = userCache;
 	}
+
+
+	
+
+	
 
 	
 

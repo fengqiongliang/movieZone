@@ -2,17 +2,20 @@ package com.moviezone.service.support;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.moviezone.dao.UserDao;
 import com.moviezone.domain.Page;
 import com.moviezone.domain.User;
+import com.moviezone.service.KeyService;
 import com.moviezone.service.UserService;
 
 public class UserServiceImpl implements UserService{
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	private UserDao userDao;
+	private KeyService keyService;
 	
 	@Override
 	public void testTransaction() throws Exception{
@@ -90,6 +93,100 @@ public class UserServiceImpl implements UserService{
 	}
 
 
+	
+
+
+	@Override
+	public List<User> selectForbit(User user, int pageNo, int pageSize) {
+		return userDao.selectForbit(user, pageNo, pageSize);
+	}
+
+
+	@Override
+	public Page<User> selectForbitPage(User user, int pageNo, int pageSize) {
+		return userDao.selectForbitPage(user, pageNo, pageSize);
+	}
+
+
+	@Override
+	public Page<User> selectForbitUser(String userid, String nickname,String createarea, String createip, int pageNo) {
+		User user = new User();
+		user.setRole("user");
+		if(StringUtils.isNotBlank(userid))user.setUserid(Long.parseLong(userid));
+		if(StringUtils.isNotBlank(nickname))user.setNickname(nickname);
+		if(StringUtils.isNotBlank(createarea))user.setCreatearea(createarea);
+		if(StringUtils.isNotBlank(createip))user.setCreateip(createip);
+		return selectForbitPage(user, pageNo, 25);
+	}
+
+
+	@Override
+	public Page<User> selectNormalUser(String userid, String nickname,String createarea, String createip, int pageNo) {
+			User user = new User();
+			user.setRole("user");
+			user.setIsForbit("false");
+			if(StringUtils.isNotBlank(userid))user.setUserid(Long.parseLong(userid));
+			if(StringUtils.isNotBlank(nickname))user.setNickname(nickname);
+			if(StringUtils.isNotBlank(createarea))user.setCreatearea(createarea);
+			if(StringUtils.isNotBlank(createip))user.setCreateip(createip);
+			return selectPage(user, pageNo, 25);
+	}
+
+	@Override
+	public boolean delForbit(long userid) {
+		User user = select(userid);
+		if(user != null){
+			user.setIsForbit("false");
+			return update(user);
+		}
+		user = new User();
+		user.setUserid(userid);
+		return userDao.delForbit(user);
+	}
+
+
+	@Override
+	public void permitModify(long userid) {
+		User user = select(userid);
+		if(user==null)return;
+		userDao.updateNickOrFace(user);
+	}
+
+
+	@Override
+	public void addNormalForbit(long userid) {
+		User user = select(userid);
+		if(user==null)return;
+		user.setIsForbit("true");
+		update(user);
+	}
+
+
+	@Override
+	public void addSystemForbit(String createip) {
+		User user = new User();
+		user.setUserid(keyService.getUserid());
+		user.setNickname("系统禁用ip-"+user.getUserid());
+		user.setCreateip(createip);
+		user.setCreatearea("未知");
+		userDao.insertForbit(user);
+	}
+
+	public KeyService getKeyService() {
+		return keyService;
+	}
+
+	public void setKeyService(KeyService keyService) {
+		this.keyService = keyService;
+	}
+
+
+	@Override
+	public boolean isForbitIp(String ip) {
+		User param = new User();
+		param.setCreateip(ip);
+		return userDao.selectSystemForbit(param, 1, 1).size()>0;
+	}
 	
 	
 }

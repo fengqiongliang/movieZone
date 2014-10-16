@@ -16,11 +16,12 @@
     <result column="createarea" property="createarea" jdbcType="VARCHAR" />
     <result column="nextnick" property="nextnick" jdbcType="VARCHAR" />
     <result column="nextface" property="nextface" jdbcType="VARCHAR" />
+    <result column="isForbit" property="isForbit" jdbcType="VARCHAR" />
   </resultMap>
   
   
   <sql id="UserColumns" >
-    userid, username,password,nickname,faceurl,cookie_id,role,lastlogtime,updatetime,createip,createtime,createarea,nextnick,nextface
+    userid, username,password,nickname,faceurl,cookie_id,role,lastlogtime,updatetime,createip,createtime,createarea,nextnick,nextface,isForbit
   </sql>
   <sql id="userIFColumns">
   	<if test="userid >0">  and userid = #{userid,jdbcType=BIGINT} </if>
@@ -34,11 +35,18 @@
     <if test="createarea != null"> and createarea = #{createarea,jdbcType=VARCHAR} </if>
     <if test="nextnick != null"> and nextnick = #{nextnick,jdbcType=VARCHAR} </if>
     <if test="nextface != null"> and nextface = #{nextface,jdbcType=VARCHAR} </if>
+    <if test="isForbit != null"> and isForbit = #{isForbit,jdbcType=VARCHAR} </if>
+  </sql>
+  <sql id="forbitUserIFColumns">
+  	<if test="userid >0">  and userid = #{userid,jdbcType=BIGINT} </if>
+    <if test="nickname != null"> and nickname = #{nickname,jdbcType=VARCHAR} </if>
+    <if test="createip != null"> and createip = #{createip,jdbcType=VARCHAR} </if>
+    <if test="createarea != null"> and createarea = #{createarea,jdbcType=VARCHAR} </if>
   </sql>
   
   <select id="selectUserCount" resultType="map" parameterType="map"  >
     select 'false' as QUERYID, 
-    count(*) as total
+    count(userid) as total
     from user where 1=1 
     <include refid="userIFColumns" />
   </select>
@@ -49,6 +57,33 @@
     from user where 1=1 
     <include refid="userIFColumns" />
     limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectForbitUserCount" resultType="map" parameterType="map"  >
+    select 'false' as QUERYID, count(1) as total from (
+		select userid,nickname,createip,createarea from forbituser where 1 = 1
+		<include refid="forbitUserIFColumns" />
+		union all
+		select userid,nickname,createip,createarea from user where isForbit = 'true'
+		<include refid="forbitUserIFColumns" />
+	) t 
+  </select>
+  
+  <select id="selectForbitUser" resultMap="UserResultMap" parameterType="map"  >
+    select 'false' as QUERYID, t.* from (
+		select userid,nickname,createip,createarea from forbituser where 1 = 1
+		<include refid="forbitUserIFColumns" />
+		union all
+		select userid,nickname,createip,createarea from user where isForbit = 'true'
+		<include refid="forbitUserIFColumns" />
+	) t 
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectSystemForbit" resultMap="UserResultMap" parameterType="map"  >
+		select userid,nickname,createip,createarea from forbituser where 1 =1 
+		<include refid="forbitUserIFColumns" />
+		 limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
   <insert id="insertUser" parameterType="com.moviezone.domain.User" >
@@ -79,6 +114,11 @@
     </trim>
   </insert>
   
+  <insert id="insertForbitUser" parameterType="com.moviezone.domain.User" >
+    insert into forbituser (userid,nickname,createip,createarea) 
+    values(#{userid,jdbcType=BIGINT},#{nickname,jdbcType=VARCHAR},#{createip,jdbcType=VARCHAR},#{createarea,jdbcType=VARCHAR})
+  </insert>
+  
   <update id="updateUser" parameterType="com.moviezone.domain.User" >
     update user
     <set>
@@ -89,6 +129,19 @@
       <if test="lastlogtime != null" >lastlogtime = #{lastlogtime,jdbcType=TIMESTAMP},</if>
       <if test="nextnick != null" >nextnick = #{nextnick,jdbcType=VARCHAR},</if>
       <if test="nextface != null" >nextface = #{nextface,jdbcType=VARCHAR},</if>
+      <if test="isForbit != null" >isForbit = #{isForbit,jdbcType=VARCHAR},</if>
+      updatetime = sysdate()
+    </set>
+    where userid = #{userid,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateNickOrFace" parameterType="com.moviezone.domain.User" >
+    update user
+    <set>
+      <if test="nextface != null" >faceurl = nextface,</if>
+      <if test="nextnick != null" >nickname = nextnick,</if>
+      nextnick = null,
+      nextface = null,
       updatetime = sysdate()
     </set>
     where userid = #{userid,jdbcType=BIGINT}
@@ -96,6 +149,10 @@
   
   <delete id="deleteUser" parameterType="com.moviezone.domain.User" >
     delete from user where userid = #{userid,jdbcType=BIGINT}
+  </delete>
+  
+  <delete id="deleteForbitUser" parameterType="com.moviezone.domain.User" >
+    delete from forbituser where userid = #{userid,jdbcType=BIGINT}
   </delete>
   
 </mapper>

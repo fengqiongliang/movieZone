@@ -1012,15 +1012,21 @@ function adminQuery(source,action){
 	var table    = tableQuery.next();
 	var nameDoms = $('[name]',tableQuery);
 	var pageNo   = tableQuery.attr('pageNo')||1;
+	var nextPageNo = 1;
+	if('up'==action)nextPageNo=Number(pageNo)-1;
+	if('down'==action)nextPageNo=Number(pageNo)+1;
 	var params   = {};
 	if(tableQuery.attr('isRunning')=='true')return;
 	nameDoms.each(function(){
 		var nameVal = $(this).attr('name');
 		var val     = $(this).val();
-		if(val == undefined || "" == val)return true;
+		if(val == undefined || "" == val.replace(/\s/g,''))return true;
+		val = val.replace(/\s/g,'');
+		$(this).val(val);
 		params[nameVal] = val;
 	});
-	params.pageNo = pageNo;
+	
+	params.pageNo = nextPageNo;
 	$.ajax({
         type:'GET',
         url:tableQuery.attr('url'),
@@ -1032,7 +1038,7 @@ function adminQuery(source,action){
         }
     }).done(function(data){
 		tableQuery.attr('isRunning','false');
-		tableQuery.attr('pageNo',Number(pageNo)+1);
+		tableQuery.attr('pageNo',nextPageNo);
 		$('tbody',table).empty().append(data);
 		initAdminTable();
     }).fail(function(){
@@ -1157,18 +1163,70 @@ function delModuleMv(source,id){
 		$(source).parent().parent().remove();
     }).fail(function(){alert('删除失败');});
 }
-function delForbidUser(source,id){
+function delForbidUser(source,userid){
 	if($(source).attr('isRunning')=='true')return;
 	$(source).attr('isRunning','true');
 	$.ajax({
         type:'GET',
-        url:'delForbidUser.json',
-		dataType:'json'
+        url:'delForbidUser.json?userid='+userid,
+		dataType:'html'
     }).done(function(data){
 		$(source).attr('isRunning','false');
 		$(source).parent().parent().remove();
     }).fail(function(){alert('删除失败');});
 }
+function delNormalUser(source,userid){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'GET',
+        url:'delNormalUser.json?userid='+userid,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$(source).parent().parent().remove();
+    }).fail(function(){alert('删除失败');});
+}
+function permitModify(source,userid){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'GET',
+        url:'permitModify.json?userid='+userid,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$('td:eq(4)',$(source).parent().parent()).empty();
+		$('td:eq(5)',$(source).parent().parent()).empty();
+    }).fail(function(){alert('删除失败');});
+}
+function addNormalForbit(source,userid){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'GET',
+        url:'addNormalForbit.json?userid='+userid,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$(source).parent().parent().remove();
+    }).fail(function(){alert('删除失败');});
+}
+function addSystemForbit(source){
+	var createip = $('#forbitIp').val().replace(/\s/g,'');
+	if(createip=="")return;
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'GET',
+        url:'addSystemForbit.json?createip='+createip,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		location.reload();
+    }).fail(function(){alert('添加失败');});
+}
+
 
 
 

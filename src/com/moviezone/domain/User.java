@@ -19,6 +19,7 @@ public class User implements Serializable{
 	private String createarea;
 	private String nextnick;
 	private String nextface;
+	private String isForbit;
 	public long getUserid() {
 		return userid;
 	}
@@ -103,4 +104,16 @@ public class User implements Serializable{
 	public void setNextface(String nextface) {
 		this.nextface = nextface;
 	}
+	public String getIsForbit() {
+		return isForbit;
+	}
+	public void setIsForbit(String isForbit) {
+		this.isForbit = isForbit;
+	}
+	public boolean getForbit() {
+		try{
+			return Boolean.parseBoolean(isForbit);
+		}catch(Exception ex){return false;}
+	}
+	
 }

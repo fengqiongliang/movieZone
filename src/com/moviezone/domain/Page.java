@@ -40,10 +40,19 @@ public class Page<T> implements Serializable{
 		int pages = (int)(total+pageSize-1)/pageSize;
 		return pages==0?1:pages;
 	}
-	public boolean isFirstPage() {
+	public boolean getIsfirstPage() {
 		return pageNo == 1;
 	}
-	public boolean isLastPage() {
+	public boolean getIslastPage() {
 		return pageNo == getPageTotal();
 	}
+	public int getPrevPage() {
+		return pageNo>1?pageNo-1:1;
+	}
+	public int getNextPage() {
+		int totalPage = getPageTotal();
+		return pageNo<totalPage?pageNo+1:totalPage;
+	}
+	
+	
 }

@@ -35,22 +35,40 @@ public class BaseInterceptor implements HandlerInterceptor {
 							 				   Object controller) throws Exception {
 		beforeController = System.currentTimeMillis();
 		response.setContentType("text/html; charset=utf-8");
+		//确定ip是否被禁用
+		if(userService.isForbitIp(request.getRemoteAddr())){
+			logger.debug("发现禁用ip【"+request.getRemoteAddr()+"】登陆 ");
+			response.getWriter().write("您的Ip已经被禁用");
+			return false;
+		}
 		
 		String strUserid     = HttpUtil.getCookie(request,Constants.USERID);
 		String strCookieid  = HttpUtil.getCookie(request,Constants.COOKIEID);
 		long   userid          = 0;
 		try{userid = Long.parseLong(strUserid);}catch(Exception ex){}
 		if(userid > 0 && StringUtils.isNotBlank(strCookieid)){
-			User user = new User();
-			user.setUserid(userid);
-			user.setCookie_id(strCookieid);
-			List<User> users = userService.select(user);
-			if(users.size()>0){
-				User dbUser = users.get(0);
+			//查找用户并且设置request
+			User param = new User();
+			param.setUserid(userid);
+			param.setCookie_id(strCookieid);
+			List<User> users = userService.select(param);
+			User dbUser = users.size()>0?users.get(0):null;
+			//禁用用户
+			if(dbUser != null && dbUser.getForbit()){
+				logger.debug("发现禁用用户【"+dbUser.getUsername()+"】登陆，【"+(dbUser.getRole().endsWith("admin")?"管理员":"非管理员")+"】");
+				response.getWriter().write("您的用户已经被禁用");
+				HttpUtil.clearCookie(request, response, Constants.USERID);
+				HttpUtil.clearCookie(request, response, Constants.COOKIEID);
+				return false;
+			}
+			//正常用户
+			if(dbUser != null && !dbUser.getForbit()){
 				logger.debug("用户登陆【"+dbUser.getUsername()+"】登陆，【"+(dbUser.getRole().endsWith("admin")?"管理员":"非管理员")+"】");
 				request.setAttribute(Constants.USER, dbUser);
+				return true;
 			}
 		}
+		
 		return true; 
 	}
 	

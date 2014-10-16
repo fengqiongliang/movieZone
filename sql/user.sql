@@ -36,33 +36,34 @@ CREATE TABLE `user` (
   `createarea` varchar(15) default NULL  COMMENT '创建地区：北京、上海、广州等',
   `nextnick` varchar(35) default NULL     COMMENT '修改后的昵称',
   `nextface` varchar(90) default NULL     COMMENT '修改后的头像',
+  `isForbit` enum('false','true') default 'false'   COMMENT 'false-不禁用 true禁用',
   PRIMARY KEY  (`userid`),
   UNIQUE KEY `username_UNIQUE` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `user` VALUES ('1', 'ahone', '123456', '末日黎明', '/img/92x71/1.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('2', 'admin', '123456', '影集站主', '/img/92x71/2.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('3', 'ahone550', '123456', '黑山老妖', '/img/92x71/3.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('4', 'ahone220', '123456', '高清王子', '/img/92x71/4.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('5', 'ahone110', '123456', '影视公主', '/img/92x71/5.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('6', 'root', '123456', '东邪西毒', '/img/92x71/6.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('7', '49163653', '123456', '和你一样的坚强', '/img/92x71/7.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('8', '49163653@qq.com', '123456', '那片红海', '/img/92x71/8.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('9', 'fengqiongliang', '123456', '精灵旅社', '/img/92x71/9.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('10', 'doudou', '123456', '天空翱翔', '/img/92x71/10.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null);
-INSERT INTO `user` VALUES ('11', 'user1', '123456', '堕落天使', '/img/92x71/10.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '北京','天安门','/img/92x71/20.gif');
-INSERT INTO `user` VALUES ('12', 'user2', '123456', '吹不散的思念', '/img/92x71/11.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '北京',null,null);
-INSERT INTO `user` VALUES ('13', 'user3', '123456', '思念是一种病', '/img/92x71/12.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '上海','失败是成功的妈妈','/img/92x71/15.gif');
-INSERT INTO `user` VALUES ('14', 'user4', '123456', '小苹果', '/img/92x71/13.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '天津',null,null);
-INSERT INTO `user` VALUES ('15', 'user5', '123456', '算命先生', '/img/92x71/14.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '广州','忠心护主','/img/92x71/16.gif');
-INSERT INTO `user` VALUES ('16', 'user6', '123456', '走在相间路上', '/img/92x71/15.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '黑龙江',null,null);
-INSERT INTO `user` VALUES ('17', 'user7', '123456', '一米阳光', '/img/92x71/16.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '沈阳','走在寒风中','/img/92x71/29.gif');
-INSERT INTO `user` VALUES ('18', 'user8', '123456', '牙齿好痛', '/img/92x71/17.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '吉林','习近平去死',null);
-INSERT INTO `user` VALUES ('19', 'user9', '123456', '驯龙小子', '/img/92x71/18.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '新疆',null,'/img/92x71/20.gif');
-INSERT INTO `user` VALUES ('20', 'user10', '123456', '人鱼公主', '/img/92x71/19.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '西藏','干到你逼烂','/img/92x71/2.gif');
-INSERT INTO `user` VALUES ('21', 'user11', '123456', '你在远方', '/img/92x71/20.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '东方','我是小小新','/img/92x71/1.gif');
-INSERT INTO `user` VALUES ('22', 'user12', '123456', '看穿你的心', '/img/92x71/21.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '南京','我爱操逼','/img/92x71/3.gif');
-INSERT INTO `user` VALUES ('23', 'user13', '123456', '找不到男朋友', '/img/92x71/21.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '广西','Serena','/img/92x71/4.gif');
+INSERT INTO `user` VALUES ('1', 'ahone', '123456', '末日黎明', '/img/92x71/1.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('2', 'admin', '123456', '影集站主', '/img/92x71/2.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('3', 'ahone550', '123456', '黑山老妖', '/img/92x71/3.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('4', 'ahone220', '123456', '高清王子', '/img/92x71/4.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('5', 'ahone110', '123456', '影视公主', '/img/92x71/5.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('6', 'root', '123456', '东邪西毒', '/img/92x71/6.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('7', '49163653', '123456', '和你一样的坚强', '/img/92x71/7.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('8', '49163653@qq.com', '123456', '那片红海', '/img/92x71/8.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('9', 'fengqiongliang', '123456', '精灵旅社', '/img/92x71/9.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('10', 'doudou', '123456', '天空翱翔', '/img/92x71/10.gif', null, 'admin', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '海口',null,null,'false');
+INSERT INTO `user` VALUES ('11', 'user1', '123456', '堕落天使', '/img/92x71/10.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '北京','天安门','/img/92x71/20.gif','false');
+INSERT INTO `user` VALUES ('12', 'user2', '123456', '吹不散的思念', '/img/92x71/11.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '北京',null,null,'false');
+INSERT INTO `user` VALUES ('13', 'user3', '123456', '思念是一种病', '/img/92x71/12.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '上海','失败是成功的妈妈','/img/92x71/15.gif','false');
+INSERT INTO `user` VALUES ('14', 'user4', '123456', '小苹果', '/img/92x71/13.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '天津',null,null,'false');
+INSERT INTO `user` VALUES ('15', 'user5', '123456', '算命先生', '/img/92x71/14.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '广州','忠心护主','/img/92x71/16.gif','false');
+INSERT INTO `user` VALUES ('16', 'user6', '123456', '走在相间路上', '/img/92x71/15.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '黑龙江',null,null,'false');
+INSERT INTO `user` VALUES ('17', 'user7', '123456', '一米阳光', '/img/92x71/16.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '沈阳','走在寒风中','/img/92x71/29.gif','false');
+INSERT INTO `user` VALUES ('18', 'user8', '123456', '牙齿好痛', '/img/92x71/17.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '吉林','习近平去死',null,'false');
+INSERT INTO `user` VALUES ('19', 'user9', '123456', '驯龙小子', '/img/92x71/18.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '新疆',null,'/img/92x71/20.gif','false');
+INSERT INTO `user` VALUES ('20', 'user10', '123456', '人鱼公主', '/img/92x71/19.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '西藏','干到你逼烂','/img/92x71/2.gif','false');
+INSERT INTO `user` VALUES ('21', 'user11', '123456', '你在远方', '/img/92x71/20.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '东方','我是小小新','/img/92x71/1.gif','false');
+INSERT INTO `user` VALUES ('22', 'user12', '123456', '看穿你的心', '/img/92x71/21.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '南京','我爱操逼','/img/92x71/3.gif','false');
+INSERT INTO `user` VALUES ('23', 'user13', '123456', '找不到男朋友', '/img/92x71/21.gif', null, 'user', '2012-10-21 22:18:56', '2012-10-21 22:18:56', '127.0.0.1','2012-10-21 22:18:56', '广西','Serena','/img/92x71/4.gif','false');
 
 -- ----------------------------
 -- 电影表
@@ -444,5 +445,24 @@ INSERT INTO `favorite` VALUES ('13', '3','3','2012-10-21 22:18:56');
 INSERT INTO `favorite` VALUES ('14', '1','3','2012-10-21 22:18:56');
 INSERT INTO `favorite` VALUES ('15', '4','4','2012-10-21 22:18:56');
 INSERT INTO `favorite` VALUES ('16', '1','5','2012-10-21 22:18:56');
+
+-- ----------------------------
+-- 系统禁用用户表（ip)表
+-- ----------------------------
+DROP TABLE IF EXISTS `forbitUser`;
+CREATE TABLE `forbitUser` (
+  `userid` bigint NOT NULL                       COMMENT '用户id',
+  `nickname` varchar(35) NOT NULL        COMMENT '昵称',
+  `createip` varchar(15) NOT NULL          COMMENT '创建ip',
+  `createarea` varchar(15) default NULL  COMMENT '创建地区：北京、上海、广州等',
+  PRIMARY KEY  (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `forbitUser` VALUES ('55', '系统禁用ip', '192.168.1.55', '海口');
+INSERT INTO `forbitUser` VALUES ('56', '系统禁用ip', '192.168.1.56', '海口');
+INSERT INTO `forbitUser` VALUES ('57', '系统禁用ip', '192.168.1.57', '海口');
+INSERT INTO `forbitUser` VALUES ('58', '系统禁用ip', '192.168.1.58', '海口');
+INSERT INTO `forbitUser` VALUES ('59', '系统禁用ip', '192.168.1.59', '海口');
+INSERT INTO `forbitUser` VALUES ('60', '系统禁用ip', '192.168.1.60', '海口');
 
 SET FOREIGN_KEY_CHECKS=1;
