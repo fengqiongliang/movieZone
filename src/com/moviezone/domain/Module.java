@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class Movie implements Serializable{
-	private static final long serialVersionUID = -7962170272791783042L;
+public class Module implements Serializable{
+	private static final long serialVersionUID = -326032264857354685L;
 	private long movieid;
 	private String name;
 	private String type;
@@ -24,7 +24,7 @@ public class Movie implements Serializable{
 	private int broswer;
 	private Date createtime;
 	private Date publishtime;
-	private List<Attach> attachs;
+	private List<Map<String,String>> attachs;
 	public long getMovieid() {
 		return movieid;
 	}
@@ -127,11 +127,12 @@ public class Movie implements Serializable{
 	public void setPublishtime(Date publishtime) {
 		this.publishtime = publishtime;
 	}
-	public List<Attach> getAttachs() {
+	public List<Map<String, String>> getAttachs() {
 		return attachs;
 	}
-	public void setAttachs(List<Attach> attachs) {
+	public void setAttachs(List<Map<String, String>> attachs) {
 		this.attachs = attachs;
-	}	
+	}
+	
 	
 }

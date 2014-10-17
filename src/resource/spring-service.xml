@@ -27,6 +27,11 @@
 		<property name="keyService" ref="keyService" />
 	</bean>
 	
+	<bean id="movieService" class="com.moviezone.service.support.MovieServiceImpl">
+		<property name="movieDao" ref="movieDao" />
+		<property name="keyService" ref="keyService" />
+	</bean>
+	
 	
 	<tx:advice id="txAdvice" transaction-manager="txManager">
 		<tx:attributes>

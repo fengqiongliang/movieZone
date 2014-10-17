@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Increment implements Serializable{
-	private static final long serialVersionUID = -2463361750584994143L;
+	private static final long serialVersionUID = 5169994106617001250L;
 	private String field;                   
 	private long start;   
 	private long end;

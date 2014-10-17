@@ -13,12 +13,17 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
+
+
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -32,17 +37,23 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.HttpCode;
+import com.moviezone.domain.Attach;
+import com.moviezone.domain.Movie;
+import com.moviezone.service.MovieService;
+import com.moviezone.service.UserService;
 
 @Controller
 public class IndexController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
-	
+	@Autowired
+	private MovieService movieService;
 	
 	@RequestMapping(value="/index.do",method=RequestMethod.GET)
 	public ModelAndView index(ModelAndView mv,
 												 HttpServletRequest request,
 												 HttpServletResponse response,
 												 HttpSession session)throws Exception{
+		
 		List<Object> sceneMovies = new ArrayList<Object>();
 		List<Object> sceneCmmts  = new ArrayList<Object>();
 		sceneMovies.add(new Object());

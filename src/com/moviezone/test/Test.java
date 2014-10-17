@@ -3,6 +3,8 @@ package com.moviezone.test;
 
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,6 +40,7 @@ import com.moviezone.dao.UserDao;
 import com.moviezone.domain.User;
 import com.moviezone.service.UserService;
 import com.moviezone.util.ObjectUtil;
+import com.moviezone.util.SecurityUtil;
 
 public class Test {
 
@@ -47,25 +50,30 @@ public class Test {
 	 */
 	public static void main(String[] args) throws Exception {
 		Test test = new Test();
-		File dir  = new File("C:\\Documents and Settings\\sand\\桌面\\vsProject\\Gloox\\Gloox\\gloox\\");
-		for(File file:dir.listFiles()){
-			String fileName = file.getName();
-			if(fileName.contains("stdafx.h"))continue;
-			if(fileName.contains("targetver.h"))continue;
-			if(fileName.contains("config.h.win"))continue;
-			if(!fileName.endsWith(".h")&&!fileName.endsWith(".cpp"))continue;
-			StringBuilder builder = new StringBuilder();
-			String contents = test.readFile(file);
-			int flag = 0;
-			for(String line:contents.split("\n")){
-				if(line.contains("#include"))flag++;
-				if(flag==1&&line.contains("#include")&&!line.contains("stdafx.h")){
-					builder.append("\n#include \"stdafx.h\"\n");
-					flag++;
-				}
-				builder.append(line+"\n");
+		File inDir  = new File("C:/Users/ahone-outer/Desktop/l图片/output");
+		File outDir = new File("C:/Users/ahone-outer/Desktop/l图片/output/fileout");
+		for(File file:inDir.listFiles()){
+			if(file.isDirectory())continue;
+			//
+			
+			FileInputStream fis    = new FileInputStream(file);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			byte[] b = new byte[1024];
+			while(true){
+				int size = fis.read(b);
+				if(size<1)break;
+				baos.write(b, 0, size);
 			}
-			test.writeFile(file,builder.toString());
+			byte[] buf = baos.toByteArray();
+			String name = SecurityUtil.encryptMD5(buf);
+			File outFile = new File(outDir,name+".jpg");
+			FileOutputStream fos = new FileOutputStream(outFile);
+			fos.write(buf);
+			
+			fis.close();
+			fos.close();
+			baos.close();
+			System.out.println(file.getName());
 		}
 	}
 	

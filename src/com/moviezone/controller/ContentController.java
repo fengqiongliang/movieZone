@@ -36,7 +36,7 @@ public class ContentController extends BaseController {
 													HttpServletResponse response,
 													HttpSession session)throws Exception{
 		Movie movie = new Movie();
-		movie.setId(123456);
+		movie.setMovieid(123456);
 		movie.setName("你这我的最爱你这我的最爱你这我的最爱你这我的最爱你这我的最爱你这我的最爱你这我的最爱");
 		mv.addObject("movie", movie);
 		mv.setViewName("/content");

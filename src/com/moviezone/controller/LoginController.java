@@ -44,8 +44,6 @@ import com.moviezone.util.HttpUtil;
 public class LoginController extends BaseController {
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private KeyService keyService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
@@ -143,7 +141,6 @@ public class LoginController extends BaseController {
 				response.getWriter().write(json.toString());
 				return;
 			}
-			user.setUserid(keyService.getUserid());                                         //生成id
 			user.setNickname(nicknames[rand.nextInt(nicknames.length)]);   //设置随机昵称
 			user.setFaceurl("/img/92x71/"+(rand.nextInt(50)+5)+".gif");      //设置随机头像
 			user.setRole("user");                                                                    //设置一般的用户角色

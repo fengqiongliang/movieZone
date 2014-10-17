@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Page<T> implements Serializable{
-	private static final long serialVersionUID = 9085705213219380290L;
+	private static final long serialVersionUID = -17777897897494676L;
 	private long total = 0;
 	private int pageNo = 1;
 	private int pageSize = 10;

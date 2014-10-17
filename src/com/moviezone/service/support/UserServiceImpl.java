@@ -71,6 +71,8 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public long insert(User user) {
+		if(user==null)return 0;
+		user.setUserid(keyService.getUserid());
 		return userDao.insert(user);
 	}
 
