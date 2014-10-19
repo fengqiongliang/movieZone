@@ -67,13 +67,13 @@
 <c:if test="${!empty sceneMovies && !empty sceneCmmts}">
 <div class="show">
 	<div class="showLeft">
-		<c:forEach var="mv" items="1,2,3,4,5" begin="0" end="5" varStatus="status">
-		<a href="${base}/content.do?id=${mv}" class="bigImg" title="变形金刚，今年最火的电影" onmouseover="imgOver(this)" onmouseout="moveImg(this)" ${status.first?"":"style='display:none'" }><img src="${static}/img/blank650x500.gif" width="100%" height="100%"/></a>
+		<c:forEach var="mv" items="${sceneMovies}"  begin="0" end="5" varStatus="status">
+		<a href="${base}/content.do?id=${mv.movieid}" class="bigImg" title="${mv.name}" onmouseover="imgOver(this)" onmouseout="moveImg(this)" ${status.first?"":"style='display:none'" }><img src="${static}${mv.face650x500}" width="100%" height="100%"/></a>
 		</c:forEach>
 		<div class="showLayer"></div>
 		<div class="imgContainer">
-			<c:forEach var="mv" items="1,2,3,4,5" begin="0" end="5" varStatus="status">
-			<a href="${base}/content.do?id=${mv}" class="smallImg" hoverClass="smallImgHover" title="变形金刚，今年最火的电影" onmouseover="imgOver(this)" onmouseout="moveImg(this)"><img src="${static}/img/blank650x500.gif" width="100%" height="100%" /></a>
+			<c:forEach var="mv" items="${sceneMovies}"  begin="0" end="5" varStatus="status">
+			<a href="${base}/content.do?id=${mv.movieid}" class="smallImg" hoverClass="smallImgHover" title="${mv.name}" onmouseover="imgOver(this)" onmouseout="moveImg(this)"><img src="${static}${mv.face650x500}" width="100%" height="100%" /></a>
 			</c:forEach>
 		</div>
 	</div>

@@ -31,7 +31,17 @@ public class MovieServiceImpl implements MovieService{
 	public Page<Movie> selectPage(Movie movie, int pageNo, int pageSize) {
 		return movieDao.selectPage(movie, pageNo, pageSize);
 	}
+	
+	@Override
+	public List<Movie> selectByModule(String modname, Boolean isPublish,int pageNo, int pageSize) {
+		return movieDao.selectByModule(-1L, modname, isPublish, pageNo, pageSize);
+	}
 
+	@Override
+	public Page<Movie> selectPageByModule(String modname, Boolean isPublish,int pageNo, int pageSize) {
+		return movieDao.selectPageByModule(-1L, modname, isPublish, pageNo, pageSize);
+	}
+	
 	@Override
 	public long insert(Movie movie) {
 		movie.setMovieid(keyService.getMovieid());

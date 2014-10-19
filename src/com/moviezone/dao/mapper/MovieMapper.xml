@@ -20,6 +20,7 @@
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="publishtime" property="publishtime" jdbcType="TIMESTAMP" />
     <collection column="movieid" property="attachs"  ofType="com.moviezone.domain.Attach"  javaType="ArrayList"  select="selectAttach"  fetchType="lazy" />
+    <collection column="movieid" property="modules"  ofType="com.moviezone.domain.Module"  javaType="ArrayList"  select="selectModule"  fetchType="lazy" />
   </resultMap>
   <resultMap id="attachResultMap" type="com.moviezone.domain.Attach" >
     <id column="attachid" property="attachid" jdbcType="BIGINT" />
@@ -29,47 +30,83 @@
     <result column="attach_url" property="attach_url" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="moduleResultMap" type="com.moviezone.domain.Module" >
+    <id column="modmvid" property="modmvid" jdbcType="BIGINT" />
+    <result column="movieid" property="movieid" jdbcType="BIGINT" />
+    <result column="modname" property="modname" jdbcType="VARCHAR" />
+    <result column="orderseq" property="orderseq" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
   
   <sql id="movieColumns" >
-    movieid, name,type,shortdesc,longdesc,face650x500,face220x169,face150x220,face80x80,picture,score,approve,favorite,download,broswer,createtime,publishtime
+    mv.movieid, mv.name,mv.type,mv.shortdesc,mv.longdesc,mv.face650x500,mv.face220x169,mv.face150x220,mv.face80x80,mv.picture,mv.score,mv.approve,mv.favorite,mv.download,mv.broswer,mv.createtime,mv.publishtime
   </sql>
   <sql id="selectMovieIFCol">
-  	<if test="movieid >0">  and movieid = #{movieid,jdbcType=BIGINT} </if>
-    <if test="name != null">  and name = #{name,jdbcType=VARCHAR} </if>
-    <if test="type != null">  and type = #{type,jdbcType=VARCHAR} </if>
-    <if test="shortdesc != null"> and shortdesc = #{shortdesc,jdbcType=VARCHAR} </if>
-    <if test="longdesc != null"> and longdesc = #{longdesc,jdbcType=VARCHAR} </if>
-    <if test="face650x500 != null"> and face650x500 = #{face650x500,jdbcType=VARCHAR} </if>
-    <if test="face220x169 != null"> and face220x169 = #{face220x169,jdbcType=VARCHAR} </if>
-    <if test="face150x220 != null"> and face150x220 = #{face150x220,jdbcType=VARCHAR} </if>
-    <if test="face80x80 != null"> and face80x80 = #{face80x80,jdbcType=VARCHAR} </if>
-    <if test="picture != null"> and picture = #{picture,jdbcType=VARCHAR} </if>
-    <if test="score > 0"> and score = #{score,jdbcType=FLOAT} </if>
-    <if test="approve > 0"> and approve = #{approve,jdbcType=INTEGER} </if>
-    <if test="favorite  > 0"> and favorite = #{favorite,jdbcType=INTEGER} </if>
-    <if test="download  > 0"> and download = #{download,jdbcType=INTEGER} </if>
-    <if test="broswer >0 "> and broswer = #{broswer,jdbcType=INTEGER} </if>
-    <if test="createtime != null"> and createtime = #{createtime,jdbcType=TIMESTAMP} </if>
-    <if test="publishtime != null"> and publishtime = #{publishtime,jdbcType=TIMESTAMP} </if>
+  	<if test="movieid >0">  and mv.movieid = #{movieid,jdbcType=BIGINT} </if>
+    <if test="name != null">  and mv.name = #{name,jdbcType=VARCHAR} </if>
+    <if test="type != null">  and mv.type = #{type,jdbcType=VARCHAR} </if>
+    <if test="shortdesc != null"> and mv.shortdesc = #{shortdesc,jdbcType=VARCHAR} </if>
+    <if test="longdesc != null"> and mv.longdesc = #{longdesc,jdbcType=VARCHAR} </if>
+    <if test="face650x500 != null"> and mv.face650x500 = #{face650x500,jdbcType=VARCHAR} </if>
+    <if test="face220x169 != null"> and mv.face220x169 = #{face220x169,jdbcType=VARCHAR} </if>
+    <if test="face150x220 != null"> and mv.face150x220 = #{face150x220,jdbcType=VARCHAR} </if>
+    <if test="face80x80 != null"> and mv.face80x80 = #{face80x80,jdbcType=VARCHAR} </if>
+    <if test="picture != null"> and mv.picture = #{picture,jdbcType=VARCHAR} </if>
+    <if test="score > 0"> and mv.score = #{score,jdbcType=FLOAT} </if>
+    <if test="approve > 0"> and mv.approve = #{approve,jdbcType=INTEGER} </if>
+    <if test="favorite  > 0"> and mv.favorite = #{favorite,jdbcType=INTEGER} </if>
+    <if test="download  > 0"> and mv.download = #{download,jdbcType=INTEGER} </if>
+    <if test="broswer >0 "> and mv.broswer = #{broswer,jdbcType=INTEGER} </if>
+    <if test="createtime != null"> and mv.createtime = #{createtime,jdbcType=TIMESTAMP} </if>
+    <if test="publishtime != null"> and mv.publishtime = #{publishtime,jdbcType=TIMESTAMP} </if>
   </sql>
   
   <select id="selectMovieCount" resultType="map" parameterType="map"  >
     select 'false' as QUERYID, 
-    count(movieid) as total
-    from movie where 1=1 
+    count(mv.movieid) as total
+    from movie mv where 1=1 
     <include refid="selectMovieIFCol" />
   </select>
   
   <select id="selectMovie" resultMap="movieResultMap" parameterType="map"  >
     select 'false' as QUERYID, 
     <include refid="movieColumns" /> 
-    from movie where 1=1 
+    from movie mv where 1=1 
     <include refid="selectMovieIFCol" />
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectMovieByModuleCount" resultType="map" parameterType="map"  >
+    select 'false' as QUERYID, 
+    count(mv.movieid) as total 
+    from module_movie mm left join movie mv on mm.movieid = mv.movieid where 1=1 
+    <if test="movieid >0">  and mv.movieid = #{movieid,jdbcType=BIGINT} </if>
+    <if test="modname != null">  and mm.modname = #{modname,jdbcType=VARCHAR} </if>
+    <if test="isPublish == true">  and mv.publishtime &lt;  sysdate()  </if> 
+    <if test="isPublish == false"> and mv.publishtime &gt; sysdate()  </if> 
+    order by mm.modname asc,mm.orderseq asc,mm.movieid asc
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectMovieByModule" resultMap="movieResultMap" parameterType="map"  >
+    select 'false' as QUERYID, 
+    <include refid="movieColumns" /> 
+    from module_movie mm left join movie mv on mm.movieid = mv.movieid where 1=1 
+    <if test="modmvid > 0">  and mm.v = #{modmvid,jdbcType=BIGINT} </if>
+    <if test="modmvid > 0">  and mm.v = #{modmvid,jdbcType=BIGINT} </if>
+    <if test="modname != null">  and mm.modname = #{modname,jdbcType=VARCHAR} </if>
+    <if test="isPublish == true">  and mv.publishtime &lt;  sysdate()  </if> 
+    <if test="isPublish == false"> and mv.publishtime &gt; sysdate()  </if> 
+    order by mm.modname asc,mm.orderseq asc,mm.movieid asc
     limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
   <select id="selectAttach" resultMap="attachResultMap" parameterType="com.moviezone.domain.Attach"  >
     select 'false' as QUERYID, attachid,movieid,new_name,old_name,attach_url,createtime from attachment where movieid = #{movieid,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectModule" resultMap="moduleResultMap" parameterType="com.moviezone.domain.Module"  >
+    select 'false' as QUERYID, modmvid,movieid,modname,orderseq,createtime from module_movie where movieid = #{movieid,jdbcType=BIGINT} order by modname asc,orderseq asc,movieid asc
   </select>
   
   <insert id="insertMovie" parameterType="com.moviezone.domain.Movie" >

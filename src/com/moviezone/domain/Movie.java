@@ -5,8 +5,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.moviezone.service.MovieService;
+
 public class Movie implements Serializable{
-	private static final long serialVersionUID = -7962170272791783042L;
+	private static final long serialVersionUID = -6485173889051832687L;
 	private long movieid;
 	private String name;
 	private String type;
@@ -25,6 +29,7 @@ public class Movie implements Serializable{
 	private Date createtime;
 	private Date publishtime;
 	private List<Attach> attachs;
+	private List<Module> modules;
 	public long getMovieid() {
 		return movieid;
 	}
@@ -132,6 +137,12 @@ public class Movie implements Serializable{
 	}
 	public void setAttachs(List<Attach> attachs) {
 		this.attachs = attachs;
+	}
+	public List<Module> getModules() {
+		return modules;
+	}
+	public void setModules(List<Module> modules) {
+		this.modules = modules;
 	}	
 	
 }

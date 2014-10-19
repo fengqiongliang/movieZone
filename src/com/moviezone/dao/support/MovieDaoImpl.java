@@ -73,6 +73,32 @@ public class MovieDaoImpl implements MovieDao{
 	}
 	
 	@Override
+	public List<Movie> selectByModule(Long modmvid,String modname, Boolean isPublish, int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("modmvid", modmvid);
+		param.put("modname", modname);
+		param.put("isPublish", isPublish);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectMovieByModule", param);
+	}
+
+	@Override
+	public Page<Movie> selectPageByModule(Long modmvid,String modname, Boolean isPublish, int pageNo, int pageSize) {
+		Page<Movie> page = new Page<Movie>();
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("modmvid", modmvid);
+		param.put("modname", modname);
+		param.put("isPublish", isPublish);
+		Map<String,Object>  result = session.selectOne("selectMovieByModuleCount",param);
+		page.setTotal((Long)result.get("total"));
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setData(selectByModule(modmvid, modname, isPublish, pageNo, pageSize));
+		return page;
+	}
+	
+	@Override
 	public boolean update(Movie movie) {
 		if(movie.getMovieid()<1)return false;
 		return session.update("updateMovie", movie)>0;
@@ -95,6 +121,8 @@ public class MovieDaoImpl implements MovieDao{
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
+
+	
 
 	
 
