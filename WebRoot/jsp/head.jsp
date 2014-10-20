@@ -50,9 +50,6 @@
 	<c:if test='${!empty user}'><div class="face" title="可单击修改"><img class="myFace" src="${static}${user.nextface != null?user.nextface:user.faceurl}"/><img class="loadFace" src="${static}/img/loading.gif" /><div class="uploadContainer"><span uploadUrl="${base}/upUserPic.json" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upStart" upsuccess="upSuccess" uperror="upError"></span></div></div></c:if>
 	<div class="clear"></div>
 </div>
-<c:forEach var="mv" items="1..6" begin="2" end="5" varStatus="status">
-			${status.count}  -- ${mv}  -- ${status.first}  -- ${status.last} <br/>
-		</c:forEach>
 <c:if test="${!empty sceneMovies && !empty sceneCmmts}">
 <div class="show">
 	<div class="showLeft">

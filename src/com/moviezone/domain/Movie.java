@@ -137,6 +137,16 @@ public class Movie implements Serializable{
 	public void setBroswer(int broswer) {
 		this.broswer = broswer;
 	}
+	public float getRecommand(){
+		float recommand = 0.0f;
+		if(6 < score && score < 8)  recommand = recommand + 1;
+		if(score>=8)                        recommand = recommand + 2;
+		if(download > 10)                recommand = recommand + 1;
+		if(broswer > 100)                recommand = recommand + 1;
+		if(favorite>0)                       recommand = recommand + 0.5f;
+		if(approve>0)                      recommand = recommand + 0.5f;
+		return recommand;
+	}
 	public Date getCreatetime() {
 		return createtime;
 	}

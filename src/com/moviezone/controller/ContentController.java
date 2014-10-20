@@ -49,12 +49,16 @@ public class ContentController extends BaseController {
 			response.getWriter().write("该影片已经被删除或已不存在");
 			return null;
 		}
-		JSONArray array = movie.getPictureAsArray();
-		for(Object o:array){
-			System.out.println(o);
-		}
+		float f =  movie.getRecommand();
+		int fullStarCount    = (int)f;
+		int partStarCount   = (int)(f/0.5)-(int)(fullStarCount*2);
+		int blankStarCount = 5-fullStarCount-partStarCount;
+		mv.addObject("fullStarCount",fullStarCount);
+		mv.addObject("partStarCount",partStarCount);
+		mv.addObject("blankStarCount",blankStarCount);
 		mv.addObject("movie",movie);
 		mv.setViewName("/content");
 		return mv;
 	}
+	
 }

@@ -5,7 +5,7 @@
 <div class="contentH">
 	 <img class="cntImg" src="${static}${movie.face400x308}" />
 	 <ul class="cntR">
-		<li class="cntRli">【推荐】：<span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore">${movie.score}</span></li>
+		<li class="cntRli">【推荐】：<c:forEach begin="1" end="${fullStarCount}" ><span class="starFull"></span></c:forEach><c:forEach begin="1" end="${partStarCount}" ><span class="starPart"></span></c:forEach><c:forEach begin="1" end="${blankStarCount}" ><span class="starBlank"></span></c:forEach><span class="cntScore">${movie.score}</span></li>
 		<li class="cntRli">【类型】：<span class="liDes">中国 480p/720p/其它</span></li>
 		<li class="cntRli">【名称】：<span class="liDes">${movie.name}</span></li>
 		<li class="cntRli">【附件】：<a href="./zip/a.xlsx"><span class="zip"></span>大闹天宫.torrent</a></li>
@@ -15,6 +15,7 @@
 
 <div class="cntImgs">
 	<h1 class="cntImgH">影视截图</h1>
+	
 	<c:forEach var="p" items="${movie.pictureAsArray}"  varStatus="status">
 		<img class="cntShowImg" src="${static}${p}" />
 	</c:forEach>
