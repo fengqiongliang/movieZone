@@ -7,9 +7,15 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
+
+import net.sf.json.JSONArray;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -24,21 +30,30 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.HttpCode;
 import com.moviezone.domain.Movie;
+import com.moviezone.service.MovieService;
 
 @Controller
 public class ContentController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(ContentController.class);
-	
+	@Autowired
+	private MovieService movieService;
 	
 	@RequestMapping(value="/content.do",method=RequestMethod.GET)
 	public ModelAndView content(ModelAndView mv,
 													HttpServletRequest request,
 													HttpServletResponse response,
-													HttpSession session)throws Exception{
-		Movie movie = new Movie();
-		movie.setMovieid(123456);
-		movie.setName("你这我的最爱你这我的最爱你这我的最爱你这我的最爱你这我的最爱你这我的最爱你这我的最爱");
-		mv.addObject("movie", movie);
+													@RequestParam(value="id") long movieid)throws Exception{
+		Movie movie = movieService.select(movieid);
+		if(movie==null){
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.getWriter().write("该影片已经被删除或已不存在");
+			return null;
+		}
+		JSONArray array = movie.getPictureAsArray();
+		for(Object o:array){
+			System.out.println(o);
+		}
+		mv.addObject("movie",movie);
 		mv.setViewName("/content");
 		return mv;
 	}

@@ -34,12 +34,17 @@ public class MovieServiceImpl implements MovieService{
 	
 	@Override
 	public List<Movie> selectByModule(String modname, Boolean isPublish,int pageNo, int pageSize) {
-		return movieDao.selectByModule(-1L, modname, isPublish, pageNo, pageSize);
+		return movieDao.selectByModule(-1L, modname, isPublish, null,null,pageNo, pageSize);
 	}
 
 	@Override
 	public Page<Movie> selectPageByModule(String modname, Boolean isPublish,int pageNo, int pageSize) {
-		return movieDao.selectPageByModule(-1L, modname, isPublish, pageNo, pageSize);
+		return movieDao.selectPageByModule(-1L, modname, isPublish, null,null,pageNo, pageSize);
+	}
+	
+	@Override
+	public Page<Movie> selectPageByModule(String modname, Boolean isPublish,Boolean isSortCreateTimeUp, Boolean isScoreUp, int pageNo,int pageSize) {
+		return movieDao.selectPageByModule(-1L, modname, isPublish, isSortCreateTimeUp,isScoreUp,pageNo, pageSize);
 	}
 	
 	@Override
@@ -70,5 +75,7 @@ public class MovieServiceImpl implements MovieService{
 	public void setKeyService(KeyService keyService) {
 		this.keyService = keyService;
 	}
+
+	
 
 }

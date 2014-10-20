@@ -3,24 +3,21 @@
 
 
 <div class="contentH">
-	 <img class="cntImg" src="./img/blank400x308.gif" />
+	 <img class="cntImg" src="${static}${movie.face400x308}" />
 	 <ul class="cntR">
-		<li class="cntRli">【推荐】：<span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore">9.0</span></li>
+		<li class="cntRli">【推荐】：<span class="starFull"></span><span class="starPart"></span><span class="starBlank"></span><span class="cntScore">${movie.score}</span></li>
 		<li class="cntRli">【类型】：<span class="liDes">中国 480p/720p/其它</span></li>
-		<li class="cntRli">【名称】：<span class="liDes">大闹天宫</span></li>
+		<li class="cntRli">【名称】：<span class="liDes">${movie.name}</span></li>
 		<li class="cntRli">【附件】：<a href="./zip/a.xlsx"><span class="zip"></span>大闹天宫.torrent</a></li>
 	 </ul>
-	 <p class="contentDes">在不久的将来，一名年轻的网络黑客（基奴李维斯）发现看似正常的现实世界实际上是由一个名为“矩阵”的计算机人工智能系统控制的，人们就象他放牧的动物一样。李维斯便在网络上查找关于“矩阵”的一切。后来在一名神秘女郎（嘉丽安莫斯）的引导下见到了黑客组织的首领（劳伦斯费许本），三人一起走上了抗争“矩阵”的征途。
-	“尼奥，你曾经作过这样的梦吗，你如此肯定的东西是真的吗？你是否能从那样的梦中醒来？你能分辨出梦境与现实世界的区别吗？”
-	尼奥不顾一切地想追寻“矩阵”的真相－他在梦中总是听到关于它的耳语，这是一种神秘的不可知的东西，他能够肯定地感觉到它不祥地控制着他。</p>
+	 <p class="contentDes">${movie.longdesc}</p>
 </div>
 
 <div class="cntImgs">
 	<h1 class="cntImgH">影视截图</h1>
-	<img class="cntShowImg" src="./img/blank400x308.gif" />
-	<img class="cntShowImg" src="./img/blank400x308.gif" />
-	<img class="cntShowImg" src="./img/blank400x308.gif" />
-	<img class="cntShowImg" src="./img/blank400x308.gif" />
+	<c:forEach var="p" items="${movie.pictureAsArray}"  varStatus="status">
+		<img class="cntShowImg" src="${static}${p}" />
+	</c:forEach>
 </div>
 
 <div class="cntImgs" id="cmmts">

@@ -13,181 +13,99 @@
 		</ul>
 		<div class="movieShow">
 			<ul>
+				<c:forEach var="mv" items="${Movies480p}" begin="0" end="1" varStatus="status">
 				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" style="float:left" width="115px" height="169px"/></a>
 					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigTitle" title="《${mv.name}》">《${mv.name}》</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigDes" title="${mv.shortdesc}">${mv.shortdesc}</a>
 					</div>
 				</li>
-				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
-					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
-					</div>
-				</li>
+				</c:forEach>
 			</ul>
 			<ul>
+				<c:forEach var="mv" items="${Movies480p}" begin="2" end="6" varStatus="status">
 				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" width="90px" height="132px" /></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》" class="sSmallDes">《${mv.name}》</a>
 				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="movieShow" style="display:none">
 			<ul>
+				<c:forEach var="mv" items="${Movies720p}" begin="0" end="1" varStatus="status">
 				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" style="float:left" width="115px" height="169px"/></a>
 					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigTitle" title="《${mv.name}》">《${mv.name}》</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigDes" title="${mv.shortdesc}">${mv.shortdesc}</a>
 					</div>
 				</li>
-				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
-					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
-					</div>
-				</li>
+				</c:forEach>
 			</ul>
 			<ul>
+				<c:forEach var="mv" items="${Movies720p}" begin="2" end="6" varStatus="status">
 				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" width="90px" height="132px" /></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》" class="sSmallDes">《${mv.name}》</a>
 				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="movieShow" style="display:none">
 			<ul>
+				<c:forEach var="mv" items="${Movies1080p}" begin="0" end="1" varStatus="status">
 				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" style="float:left" width="115px" height="169px"/></a>
 					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigTitle" title="《${mv.name}》">《${mv.name}》</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigDes" title="${mv.shortdesc}">${mv.shortdesc}</a>
 					</div>
 				</li>
-				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
-					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
-					</div>
-				</li>
+				</c:forEach>
 			</ul>
 			<ul>
+				<c:forEach var="mv" items="${Movies1080p}" begin="2" end="6" varStatus="status">
 				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" width="90px" height="132px" /></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》" class="sSmallDes">《${mv.name}》</a>
 				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="movieShow" style="display:none">
 			<ul>
+				<c:forEach var="mv" items="${otherMVMovies}" begin="0" end="1" varStatus="status">
 				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" style="float:left" width="115px" height="169px"/></a>
 					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigTitle" title="《${mv.name}》">《${mv.name}》</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigDes" title="${mv.shortdesc}">${mv.shortdesc}</a>
 					</div>
 				</li>
-				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
-					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
-					</div>
-				</li>
+				</c:forEach>
 			</ul>
 			<ul>
+				<c:forEach var="mv" items="${otherMVMovies}" begin="2" end="6" varStatus="status">
 				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" width="90px" height="132px" /></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》" class="sSmallDes">《${mv.name}》</a>
 				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="movieRank">
 			<ul>
-				<li class="topMovie" title="功夫"><span class="rank1">1</span><span class="rankScore">9.1</span><a href="content.html?id=1"><img src="./img/blank80x80.gif" /><p class="topMName">功夫1</p></a></li>
-				<li class="topMovie" title="功夫"><span class="rank2">2</span><span class="rankScore">8.9</span><a href="content.html?id=1"><img src="./img/blank80x80.gif" /><p class="topMName">功夫1</p></a></li>
-				<li class="topMovie" title="功夫"><span class="rank3">3</span><span class="rankScore">7.5</span><a href="content.html?id=1"><img src="./img/blank80x80.gif" /><p class="topMName">功夫1</p></a></li>
+				<c:forEach var="mv" items="${rankMVMovies}" begin="0" end="2" varStatus="status">
+				<li class="topMovie" title="${mv.name}"><span class="rank${status.count}">${status.count}</span><span class="rankScore">${mv.score}</span><a href="${base}/content.do?id=${mv.movieid}"><img src="${static}${mv.face80x80}" /><p class="topMName">${mv.name}</p></a></li>
+				</c:forEach>
 				<li class="clear"></li>
 			</ul>
 			<ul style="margin: 10px 15px 0 20px;">
-				<li class="bottomMovie" title="权力的游戏"><span class="rank4">4</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank5">5</span><span class="btmMName"><a href="content.html?id=2">权力的游戏权力的游戏权力的</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank6">6</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank7">7</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank8">8</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank9">9</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank10">10</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank11">11</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank12">12</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
+				<c:forEach var="mv" items="${rankMVMovies}" begin="3" end="11" varStatus="status">
+				<li class="bottomMovie" title="${mv.name}"><span class="rank${status.count+3}">${status.count+3}</span><span class="btmMName"><a href="${base}/content.do?id=${mv.movieid}">${mv.name}</a></span><span class="btmMScore">${mv.score}</span></li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="clear"></div>
@@ -205,181 +123,99 @@
 		</ul>
 		<div class="movieShow">
 			<ul>
+				<c:forEach var="mv" items="${americaMovies}" begin="0" end="1" varStatus="status">
 				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" style="float:left" width="115px" height="169px"/></a>
 					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigTitle" title="《${mv.name}》">《${mv.name}》</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigDes" title="${mv.shortdesc}">${mv.shortdesc}</a>
 					</div>
 				</li>
-				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
-					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
-					</div>
-				</li>
+				</c:forEach>
 			</ul>
 			<ul>
+				<c:forEach var="mv" items="${americaMovies}" begin="2" end="6" varStatus="status">
 				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" width="90px" height="132px" /></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》" class="sSmallDes">《${mv.name}》</a>
 				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="movieShow" style="display:none">
 			<ul>
+				<c:forEach var="mv" items="${japanMovies}" begin="0" end="1" varStatus="status">
 				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" style="float:left" width="115px" height="169px"/></a>
 					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigTitle" title="《${mv.name}》">《${mv.name}》</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigDes" title="${mv.shortdesc}">${mv.shortdesc}</a>
 					</div>
 				</li>
-				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
-					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
-					</div>
-				</li>
+				</c:forEach>
 			</ul>
 			<ul>
+				<c:forEach var="mv" items="${japanMovies}" begin="2" end="6" varStatus="status">
 				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" width="90px" height="132px" /></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》" class="sSmallDes">《${mv.name}》</a>
 				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="movieShow" style="display:none">
 			<ul>
+				<c:forEach var="mv" items="${hongkongMovies}" begin="0" end="1" varStatus="status">
 				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" style="float:left" width="115px" height="169px"/></a>
 					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigTitle" title="《${mv.name}》">《${mv.name}》</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigDes" title="${mv.shortdesc}">${mv.shortdesc}</a>
 					</div>
 				</li>
-				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
-					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
-					</div>
-				</li>
+				</c:forEach>
 			</ul>
 			<ul>
+				<c:forEach var="mv" items="${hongkongMovies}" begin="2" end="6" varStatus="status">
 				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" width="90px" height="132px" /></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》" class="sSmallDes">《${mv.name}》</a>
 				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="movieShow" style="display:none">
 			<ul>
+				<c:forEach var="mv" items="${chinaMovies}" begin="0" end="1" varStatus="status">
 				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" style="float:left" width="115px" height="169px"/></a>
 					<div style="float:left">
-						<a href="content.html?id=1"><h1 class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</h1></a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigTitle" title="《${mv.name}》">《${mv.name}》</a>
+						<a href="${base}/content.do?id=${mv.movieid}" class="sBigDes" title="${mv.shortdesc}">${mv.shortdesc}</a>
 					</div>
 				</li>
-				<li class="showBig">
-					<a href="content.html?id=1" title="《邪恶的力量 第九秀》"><img src="./img/blank150x220.gif" style="float:left" width="115px" height="169px"/></a>
-					<div style="float:left">
-						<a href="content.html?id=1" class="sBigTitle" title="《邪恶的力量 第九秀》">《邪恶的力量 第九秀》</a>
-						<a href="content.html?id=1" class="sBigDes" title="欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。">欧美版“聊斋”，各方妖魔鬼怪大过招，英俊打鬼兄弟基情四射。</a>
-					</div>
-				</li>
+				</c:forEach>
 			</ul>
 			<ul>
+				<c:forEach var="mv" items="${chinaMovies}" begin="2" end="6" varStatus="status">
 				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》"><img src="${static}${mv.face150x220}" width="90px" height="132px" /></a>
+					<a href="${base}/content.do?id=${mv.movieid}" title="《${mv.name}》" class="sSmallDes">《${mv.name}》</a>
 				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
-				<li class="showSmall">
-					<a href="content.html?id=1" title="《奇皇后》"><img src="./img/blank150x220.gif" width="90px" height="132px" /></a>
-					<a href="content.html?id=2" title="《奇皇后》" class="sSmallDes">《奇皇后》《奇皇后》《奇皇后》《奇皇后》《奇皇后》</a>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="movieRank">
 			<ul>
-				<li class="topMovie" title="功夫"><span class="rank1">1</span><span class="rankScore">9.1</span><a href="content.html?id=1"><img src="./img/blank80x80.gif" /><p class="topMName">功夫1</p></a></li>
-				<li class="topMovie" title="功夫"><span class="rank2">2</span><span class="rankScore">8.9</span><a href="content.html?id=1"><img src="./img/blank80x80.gif" /><p class="topMName">功夫1</p></a></li>
-				<li class="topMovie" title="功夫"><span class="rank3">3</span><span class="rankScore">7.5</span><a href="content.html?id=1"><img src="./img/blank80x80.gif" /><p class="topMName">功夫1</p></a></li>
+				<c:forEach var="mv" items="${rankMVMovies}" begin="0" end="2" varStatus="status">
+				<li class="topMovie" title="${mv.name}"><span class="rank${status.count}">${status.count}</span><span class="rankScore">${mv.score}</span><a href="${base}/content.do?id=${mv.movieid}"><img src="${static}${mv.face80x80}" /><p class="topMName">${mv.name}</p></a></li>
+				</c:forEach>
 				<li class="clear"></li>
 			</ul>
 			<ul style="margin: 10px 15px 0 20px;">
-				<li class="bottomMovie" title="权力的游戏"><span class="rank4">4</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank5">5</span><span class="btmMName"><a href="content.html?id=2">权力的游戏权力的游戏权力的</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank6">6</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank7">7</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank8">8</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank9">9</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank10">10</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank11">11</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
-				<li class="bottomMovie" title="权力的游戏"><span class="rank12">12</span><span class="btmMName"><a href="content.html?id=2">权力的游戏</a></span><span class="btmMScore">7.2</span></li>
+				<c:forEach var="mv" items="${rankMVMovies}" begin="3" end="11" varStatus="status">
+				<li class="bottomMovie" title="${mv.name}"><span class="rank${status.count+3}">${status.count+3}</span><span class="btmMName"><a href="${base}/content.do?id=${mv.movieid}">${mv.name}</a></span><span class="btmMScore">${mv.score}</span></li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="clear"></div>
@@ -388,21 +224,11 @@
 </div>
 <div class="coverflow">
 	<ul class="roundabout-holder">
-		<a href="javascript:void(0);" class="raNext"><</a>
-		<a href="javascript:void(0);" class="raPrev">></a>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
-		<li><a href="content.html?id=1" title="jfldsjlfjl"><img src="./img/blank220x169.gif" width="100%" height="100%"/></a></li>
+		<a href="javascript:void(0);" class="raNext">&lt;</a>
+		<a href="javascript:void(0);" class="raPrev">&gt;</a>
+		<c:forEach var="mv" items="${circuitMovies}" begin="0" end="12" varStatus="status">
+		<li><a href="${base}/content.do?id=${mv.movieid}" title="${mv.name}"><img src="${static}${mv.face220x169}" width="100%" height="100%"/></a></li>
+		</c:forEach>
 	</ul>
 	<div class="clear"></div>
 </div>
@@ -411,12 +237,9 @@
 		<li class="siterLabel">站长推荐</li>
 	</ul>
 	<ul class="guestItems">
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
+		<c:forEach var="mv" items="${siterMovies}" begin="0" end="5" varStatus="status">
+		<li class="guestItem" title="${mv.name}"><span class="rankScore">${mv.score}</span><a href="${base}/content.do?id=${mv.movieid}" class="guestDes"><img src="${static}${mv.face150x220}" />${mv.name}</a></li>
+		</c:forEach>
 		<li style="clear:both"></li>
 	</ul>
 	<div class="clear"></div>

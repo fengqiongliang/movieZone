@@ -8,6 +8,7 @@
     <result column="shortdesc" property="shortdesc" jdbcType="VARCHAR" />
     <result column="longdesc" property="longdesc" jdbcType="VARCHAR" />
     <result column="face650x500" property="face650x500" jdbcType="VARCHAR" />
+    <result column="face400x308" property="face400x308" jdbcType="VARCHAR" />
     <result column="face220x169" property="face220x169" jdbcType="VARCHAR" />
     <result column="face150x220" property="face150x220" jdbcType="VARCHAR" />
     <result column="face80x80" property="face80x80" jdbcType="VARCHAR" />
@@ -39,7 +40,7 @@
   </resultMap>
   
   <sql id="movieColumns" >
-    mv.movieid, mv.name,mv.type,mv.shortdesc,mv.longdesc,mv.face650x500,mv.face220x169,mv.face150x220,mv.face80x80,mv.picture,mv.score,mv.approve,mv.favorite,mv.download,mv.broswer,mv.createtime,mv.publishtime
+    mv.movieid, mv.name,mv.type,mv.shortdesc,mv.longdesc,mv.face650x500,mv.face400x308,mv.face220x169,mv.face150x220,mv.face80x80,mv.picture,mv.score,mv.approve,mv.favorite,mv.download,mv.broswer,mv.createtime,mv.publishtime
   </sql>
   <sql id="selectMovieIFCol">
   	<if test="movieid >0">  and mv.movieid = #{movieid,jdbcType=BIGINT} </if>
@@ -48,6 +49,7 @@
     <if test="shortdesc != null"> and mv.shortdesc = #{shortdesc,jdbcType=VARCHAR} </if>
     <if test="longdesc != null"> and mv.longdesc = #{longdesc,jdbcType=VARCHAR} </if>
     <if test="face650x500 != null"> and mv.face650x500 = #{face650x500,jdbcType=VARCHAR} </if>
+    <if test="face400x308 != null"> and mv.face400x308 = #{face400x308,jdbcType=VARCHAR} </if>
     <if test="face220x169 != null"> and mv.face220x169 = #{face220x169,jdbcType=VARCHAR} </if>
     <if test="face150x220 != null"> and mv.face150x220 = #{face150x220,jdbcType=VARCHAR} </if>
     <if test="face80x80 != null"> and mv.face80x80 = #{face80x80,jdbcType=VARCHAR} </if>
@@ -84,8 +86,6 @@
     <if test="modname != null">  and mm.modname = #{modname,jdbcType=VARCHAR} </if>
     <if test="isPublish == true">  and mv.publishtime &lt;  sysdate()  </if> 
     <if test="isPublish == false"> and mv.publishtime &gt; sysdate()  </if> 
-    order by mm.modname asc,mm.orderseq asc,mm.movieid asc
-    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
   <select id="selectMovieByModule" resultMap="movieResultMap" parameterType="map"  >
@@ -93,11 +93,15 @@
     <include refid="movieColumns" /> 
     from module_movie mm left join movie mv on mm.movieid = mv.movieid where 1=1 
     <if test="modmvid > 0">  and mm.v = #{modmvid,jdbcType=BIGINT} </if>
-    <if test="modmvid > 0">  and mm.v = #{modmvid,jdbcType=BIGINT} </if>
     <if test="modname != null">  and mm.modname = #{modname,jdbcType=VARCHAR} </if>
     <if test="isPublish == true">  and mv.publishtime &lt;  sysdate()  </if> 
     <if test="isPublish == false"> and mv.publishtime &gt; sysdate()  </if> 
-    order by mm.modname asc,mm.orderseq asc,mm.movieid asc
+    order by QUERYID
+    <if test="isSortCreateTimeUp == true">  ,mv.createtime asc </if>
+    <if test="isSortCreateTimeUp == false"> ,mv.createtime desc </if>
+    <if test="isScoreUp == true">  ,mv.score asc  </if>
+    <if test="isScoreUp == false"> ,mv.score desc  </if>
+    <if test="isSortCreateTimeUp == null and isScoreUp == null "> ,mm.modname asc,mm.orderseq asc,mm.movieid asc  </if>
     limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
@@ -118,6 +122,7 @@
       <if test="shortdesc != null" >shortdesc,</if>
       <if test="longdesc != null">longdesc,</if>
       <if test="face650x500 != null" >face650x500,</if>
+      <if test="face400x308 != null" >face400x308,</if>
       <if test="face220x169 != null" >face220x169,</if>
       <if test="face150x220 != null" >face150x220,</if>
       <if test="face80x80 != null" >face80x80,</if>
@@ -137,6 +142,7 @@
       <if test="shortdesc != null" >#{shortdesc,jdbcType=VARCHAR},</if>
       <if test="longdesc != null">#{longdesc,jdbcType=VARCHAR}</if>
       <if test="face650x500 != null" >#{face650x500,jdbcType=VARCHAR},</if>
+      <if test="face400x308 != null" >#{face400x308,jdbcType=VARCHAR},</if>
       <if test="face220x169 != null" >#{face220x169,jdbcType=VARCHAR},</if>
       <if test="face150x220 != null" >#{face150x220,jdbcType=VARCHAR},</if>
       <if test="face80x80 != null" >#{face80x80,jdbcType=VARCHAR},</if>
@@ -159,6 +165,7 @@
       <if test="shortdesc != null" >shortdesc = #{shortdesc,jdbcType=VARCHAR},</if>
       <if test="longdesc != null">longdesc = #{longdesc,jdbcType=VARCHAR}</if>
       <if test="face650x500 != null" >face650x500 = #{face650x500,jdbcType=VARCHAR},</if>
+      <if test="face400x308 != null" >face400x308 = #{face400x308,jdbcType=VARCHAR},</if>
       <if test="face220x169 != null" >face220x169 = #{face220x169,jdbcType=VARCHAR},</if>
       <if test="face150x220 != null" >face150x220 = #{face150x220,jdbcType=VARCHAR},</if>
       <if test="face80x80 != null" >face80x80 = #{face80x80,jdbcType=VARCHAR},</if>

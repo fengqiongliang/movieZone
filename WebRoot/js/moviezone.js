@@ -585,11 +585,11 @@ function sortMtv(source){
 	findMtv($(source).parent().parent());
 }
 function pageMtv(source){
-	var pageNo  = $(source).parent().parent().attr('pageNo');
-	pageNo = pageNo?Number(pageNo):1;
-	var actType = $(source).text().indexOf('上一页');
-	$(source).parent().parent().parent().attr('pageNo',actType>0?pageNo-1:pageNo+1);
-	findMtv($(source).parent().parent().parent());
+	var urlDiv     = $(source).parent().parent().parent();
+	var pageNo  = urlDiv.attr('pageNo')?Number(urlDiv.attr('pageNo')):1;
+	var actType   = $(source).text().indexOf('上一页');
+	urlDiv.attr('pageNo',actType>0?pageNo-1:pageNo+1);
+	findMtv(urlDiv);
 }
 function findMtv(urlDiv){
 	var isRunning = $(urlDiv).attr('isRunning')?$(urlDiv).attr('isRunning'):'false';

@@ -13,6 +13,7 @@ public interface MovieService {
 	public Page<Movie> selectPage(Movie movie,int pageNo,int pageSize);
 	public List<Movie> selectByModule(String modname,Boolean isPublish,int pageNo,int pageSize);
 	public Page<Movie> selectPageByModule(String modname,Boolean isPublish,int pageNo,int pageSize);
+	public Page<Movie> selectPageByModule(String modname,Boolean isPublish,Boolean isSortCreateTimeUp,Boolean isScoreUp,int pageNo,int pageSize);
 	public long insert(Movie movie);
 	public boolean update(Movie movie);
 	public boolean delete(Movie movie);

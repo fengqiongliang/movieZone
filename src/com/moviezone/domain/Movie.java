@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.moviezone.service.MovieService;
@@ -17,6 +19,7 @@ public class Movie implements Serializable{
 	private String shortdesc;
 	private String longdesc;
 	private String face650x500;
+	private String face400x308;
 	private String face220x169;
 	private String face150x220;
 	private String face80x80;
@@ -66,6 +69,12 @@ public class Movie implements Serializable{
 	public void setFace650x500(String face650x500) {
 		this.face650x500 = face650x500;
 	}
+	public String getFace400x308() {
+		return face400x308;
+	}
+	public void setFace400x308(String face400x308) {
+		this.face400x308 = face400x308;
+	}
 	public String getFace220x169() {
 		return face220x169;
 	}
@@ -89,6 +98,14 @@ public class Movie implements Serializable{
 	}
 	public void setPicture(String picture) {
 		this.picture = picture;
+	}
+	public JSONArray getPictureAsArray(){
+		if(picture == null)return new JSONArray();
+		try{
+			return JSONArray.fromObject(picture);
+		}catch(Exception ex){
+			return new JSONArray();
+		}
 	}
 	public float getScore() {
 		return score;

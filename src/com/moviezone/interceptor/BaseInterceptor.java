@@ -29,12 +29,32 @@ public class BaseInterceptor implements HandlerInterceptor {
 	private long beforeController = 0;
 	private long afterController = 0;
 	private long afterJsp = 0; 
+	
+	private String baseDir;
+	private String staticDir;
+	
+	
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, 
 							 				   HttpServletResponse response,
 							 				   Object controller) throws Exception {
 		beforeController = System.currentTimeMillis();
 		response.setContentType("text/html; charset=utf-8");
+		//设置基本变量
+		if(baseDir == null || staticDir == null){
+			String Scheme      = request.getScheme();
+			String ServerName  = request.getServerName();
+			int    ServerPort  = request.getServerPort();
+			String contextPath = request.getContextPath();
+			String webPath = Scheme+"://"+ServerName+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
+			String staticName = Scheme+"://"+"www.movietest.com"+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
+			baseDir = webPath;
+			staticDir = staticName;
+		}
+		request.setAttribute("base",baseDir);
+		request.setAttribute("static",staticDir);
+		
 		//确定ip是否被禁用
 		if(userService.isForbitIp(request.getRemoteAddr())){
 			logger.debug("发现禁用ip【"+request.getRemoteAddr()+"】登陆 ");
