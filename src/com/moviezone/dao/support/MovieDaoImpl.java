@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.moviezone.dao.MovieDao;
+import com.moviezone.domain.Attach;
+import com.moviezone.domain.Module;
 import com.moviezone.domain.Page;
 import com.moviezone.domain.Movie;
 
@@ -103,6 +105,22 @@ public class MovieDaoImpl implements MovieDao{
 	}
 	
 	@Override
+	public List<Module> selectModule(long movieid) {
+		if(movieid<1)return new ArrayList<Module>();
+		Module param = new Module();
+		param.setMovieid(movieid);
+		return session.selectList("selectModule", param);
+	}
+
+	@Override
+	public List<Attach> selectAttach(long movieid) {
+		if(movieid<1)return new ArrayList<Attach>();
+		Attach param = new Attach();
+		param.setMovieid(movieid);
+		return session.selectList("selectAttach", param);
+	}
+	
+	@Override
 	public boolean update(Movie movie) {
 		if(movie.getMovieid()<1)return false;
 		return session.update("updateMovie", movie)>0;
@@ -125,6 +143,8 @@ public class MovieDaoImpl implements MovieDao{
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
+
+	
 
 	
 

@@ -53,7 +53,7 @@ public class HttpUtil {
 		if(response == null || name == null || value == null || "".equals(name) || "".equals(value))return;
 		Cookie cookie = new Cookie(name,value);
 		cookie.setPath("/");
-		cookie.setMaxAge(3000);
+		cookie.setMaxAge(31536000);        //1年 1*365*24*60*60
 		response.addCookie(cookie);
 	}
 	

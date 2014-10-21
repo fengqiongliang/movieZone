@@ -20,8 +20,6 @@
     <result column="broswer" property="broswer" jdbcType="INTEGER" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="publishtime" property="publishtime" jdbcType="TIMESTAMP" />
-    <collection column="movieid" property="attachs"  ofType="com.moviezone.domain.Attach"  javaType="ArrayList"  select="selectAttach"  fetchType="lazy" />
-    <collection column="movieid" property="modules"  ofType="com.moviezone.domain.Module"  javaType="ArrayList"  select="selectModule"  fetchType="lazy" />
   </resultMap>
   <resultMap id="attachResultMap" type="com.moviezone.domain.Attach" >
     <id column="attachid" property="attachid" jdbcType="BIGINT" />

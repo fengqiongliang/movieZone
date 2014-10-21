@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.moviezone.dao.MovieDao;
+import com.moviezone.domain.Attach;
+import com.moviezone.domain.Module;
 import com.moviezone.domain.Page;
 import com.moviezone.domain.Movie;
 import com.moviezone.service.KeyService;
@@ -21,7 +23,17 @@ public class MovieServiceImpl implements MovieService{
 	public Movie select(long movieid) {
 		return movieDao.select(movieid);
 	}
+	
+	@Override
+	public List<Module> selectModule(long movieid) {
+		return movieDao.selectModule(movieid);
+	}
 
+	@Override
+	public List<Attach> selectAttach(long movieid) {
+		return movieDao.selectAttach(movieid);
+	}
+	
 	@Override
 	public List<Movie> select(Movie movie, int pageNo, int pageSize) {
 		return movieDao.select(movie, pageNo, pageSize);
@@ -75,6 +87,8 @@ public class MovieServiceImpl implements MovieService{
 	public void setKeyService(KeyService keyService) {
 		this.keyService = keyService;
 	}
+
+	
 
 	
 

@@ -6,16 +6,26 @@
 	 <img class="cntImg" src="${static}${movie.face400x308}" />
 	 <ul class="cntR">
 		<li class="cntRli">【推荐】：<c:forEach begin="1" end="${fullStarCount}" ><span class="starFull"></span></c:forEach><c:forEach begin="1" end="${partStarCount}" ><span class="starPart"></span></c:forEach><c:forEach begin="1" end="${blankStarCount}" ><span class="starBlank"></span></c:forEach><span class="cntScore">${movie.score}</span></li>
-		<li class="cntRli">【类型】：<span class="liDes">中国 480p/720p/其它</span></li>
+		<c:if test="${fn:length(type)>1}">
+		<li class="cntRli">【类型】：<span class="liDes" style="font-size:16px;">${type}</span></li>
+		</c:if>
 		<li class="cntRli">【名称】：<span class="liDes">${movie.name}</span></li>
-		<li class="cntRli">【附件】：<a href="./zip/a.xlsx"><span class="zip"></span>大闹天宫.torrent</a></li>
+		<c:if test="${!empty attachs}">
+		<li class="cntRli">
+			<span style="float:left">【附件】：</span>
+			<div style="float:left;font-size:12px;width:440px;">
+				<c:forEach var="attach"  items="${attachs}"  varStatus="status">
+				<a href="${attach. attach_url}"><span class="zip"></span>${attach.new_name}</a><br/>
+				</c:forEach>
+			</div>
+		</li>
+		</c:if>
 	 </ul>
 	 <p class="contentDes">${movie.longdesc}</p>
 </div>
 
 <div class="cntImgs">
 	<h1 class="cntImgH">影视截图</h1>
-	
 	<c:forEach var="p" items="${movie.pictureAsArray}"  varStatus="status">
 		<img class="cntShowImg" src="${static}${p}" />
 	</c:forEach>
