@@ -79,8 +79,10 @@ function goReg(){
 	var winHeight = $(window).height();
 	var regWidth  = $('.regWindow').width();
 	var regHeight = $('.regWindow').height();
-	var rightLeft = (winWidth - regWidth)/2;
-	var rightRight= (winHeight - regHeight)/2;
+	var scrollLeft = navigator.userAgent.indexOf("MSIE 6")>0?$(document.body).scrollLeft():$(window).scrollLeft();
+	var scrollTop  = navigator.userAgent.indexOf("MSIE 6")>0?$(document.body).scrollTop():$(window).scrollTop();
+	var rightLeft = (winWidth - regWidth)/2 + scrollLeft;;
+	var rightRight= (winHeight - regHeight)/2 + scrollTop;;
 	$('.layer').width($(document).width());
 	$('.layer').height($(document).height());
 	$('.layer').show();
@@ -836,13 +838,14 @@ function getMoreReply(source){
 }
 function getMoreCmmt(source){
 	var isRunning = $(source).attr('isRunning');
-	var contentId = $(source).attr('contentId');
+	var movieid    = $(source).attr('movieid');
 	var pageNo    = $(source).attr('pageNo')?$(source).attr('pageNo'):2;
+	var pageSize   = $(source).attr('pageSize')?$(source).attr('pageSize'):10;
 	if( isRunning == 'true')return;
 	$.ajax({
         type:'GET',
         url:'moreCmmt.json',
-        data:{'contentId':contentId,'pageNo':pageNo},
+        data:{'movieid':movieid,'pageNo':pageNo},
 		dataType:'html',
         beforeSend:function(){
 			$(source).attr('isRunning','true');
@@ -856,6 +859,7 @@ function getMoreCmmt(source){
 		$(source).attr('pageNo',Number(pageNo)+1);
 		$(source).text($(source).attr('text'));
 		$('.moreCmmtLoading').hide();
+		if($(">div","<div>"+data+"</div>").length<pageSize)$(source).hide();
     }).fail(function(){
 		$(source).text('加载失败').css('color','red');
 		$('.moreCmmtLoading').hide();

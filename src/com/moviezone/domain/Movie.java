@@ -31,8 +31,6 @@ public class Movie implements Serializable{
 	private int broswer;
 	private Date createtime;
 	private Date publishtime;
-	private List<Attach> attachs;
-	private List<Module> modules;
 	public long getMovieid() {
 		return movieid;
 	}
@@ -159,17 +157,5 @@ public class Movie implements Serializable{
 	public void setPublishtime(Date publishtime) {
 		this.publishtime = publishtime;
 	}
-	public List<Attach> getAttachs() {
-		return attachs;
-	}
-	public void setAttachs(List<Attach> attachs) {
-		this.attachs = attachs;
-	}
-	public List<Module> getModules() {
-		return modules;
-	}
-	public void setModules(List<Module> modules) {
-		this.modules = modules;
-	}	
 	
 }

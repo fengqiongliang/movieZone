@@ -20,6 +20,9 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
+
 import net.sf.json.JSONArray;
 
 import org.slf4j.Logger;
@@ -39,8 +42,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.HttpCode;
+import com.moviezone.domain.Comment;
 import com.moviezone.domain.Module;
 import com.moviezone.domain.Movie;
+import com.moviezone.domain.User;
+import com.moviezone.service.CommentService;
 import com.moviezone.service.MovieService;
 
 @Controller
@@ -48,6 +54,8 @@ public class ContentController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(ContentController.class);
 	@Autowired
 	private MovieService movieService;
+	@Autowired
+	private CommentService commentService;
 	
 	@RequestMapping(value="/content.do",method=RequestMethod.GET)
 	public ModelAndView content(ModelAndView mv,
@@ -70,12 +78,26 @@ public class ContentController extends BaseController {
 		mv.addObject("fullStarCount",fullStarCount);
 		mv.addObject("partStarCount",partStarCount);
 		mv.addObject("blankStarCount",blankStarCount);
-		mv.addObject("type",getType(movieService.selectModule(movie.getMovieid())));
-		mv.addObject("attachs",movieService.selectAttach(movie.getMovieid()));
+		mv.addObject("type",getType(movieService.selectModule(movieid)));
+		mv.addObject("attachs",movieService.selectAttach(movieid));
+		mv.addObject("comments",commentService.select(movieid, 1, 10));
 		mv.addObject("movie",movie);
 		mv.setViewName("/content");
+		
 		return mv;
 	}
+	
+	@RequestMapping(value="/moreCmmt.json",method=RequestMethod.GET)
+	public ModelAndView moreCmmt(ModelAndView mv,
+														  HttpServletRequest request,
+														  HttpServletResponse response,
+														  @RequestParam(value="movieid") long movieid,
+														  @RequestParam(value="pageNo") int pageNo)throws Exception{
+		mv.addObject("comments",commentService.select(movieid, pageNo, 10));
+		mv.setViewName("/content_cmmts");
+		return mv;
+	}
+	
 	
 	private String getType(List<Module> modules){
 		Map<String,Boolean> typeHelp1  = new LinkedHashMap<String,Boolean>();
