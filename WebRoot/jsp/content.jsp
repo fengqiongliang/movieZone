@@ -34,27 +34,22 @@
 <div class="cntImgs" id="cmmts">
 	<h1 class="cntImgH">影视评论</h1>
 	<%@ include file="content_cmmts.jsp" %>
-	<c:if test="${fn:length(comments)>=10}">
-		<div class="moreComment" hoverClass="moreCmmtHover" movieid="${movie.movieid}" onclick="getMoreCmmt(this)"><img class="moreCmmtLoading" src="${static}/img/loading.gif" />加载更多</div>
-	</c:if>
+	<div class="moreComment" hoverClass="moreCmmtHover" movieid="${movie.movieid}" onclick="getMoreCmmt(this)" ${fn:length(comments)<10?"style='display:none'":""}><img class="moreCmmtLoading" src="${static}/img/loading.gif"   />加载更多</div>
 	<div class="cmmtSubmit">
 		<div class="cmmtHead">
-			<input class="nickInput"   value=' ${!empty user?"user.nickname":"请先登录"}'   readonly="readonly"  type="text" maxLength="10" autocomplete="off"  ></input>
+			<p class="nickname">${!empty user?user.nickname:"请先登录"}</p>
 			<img class="cmmtImg" src='${static}${!empty user?user.faceurl:"/img/blank92x71.gif"}' />
 			<c:if test="${empty user}">
 				<p class="imgModifyTip"><a href="javascript:goReg()">登录</a></p>
 			</c:if>
 			<c:if test="${!empty user}">
 				<img class="nickImgLoading" src="${static}/img/loading.gif" />
-				<div class="nickImgUploader">
-					<span uploadUrl="http://localhost:8080/moviezone/helloWorld.do" maxSize="1MB" types="*.bmp;*.jpg;*.jpeg;*.png;*.gif;" desc="请选择图片文件" upstart="upNickStart" upsuccess="upNickSuccess" uperror="upNickError"></span>
-				</div>
-				<p class="imgModifyTip">单击图片修改</p>
+				<p class="from">来自:${createarea}</p>
 			</c:if>
 		</div>
 		<div class="cmntCont">
 			<span class="cmntArrow" style="color:#ffffff">◀</span>
-			<textarea class="submitText" maxlength="250" onkeyup="statWords()" onclick="closeEmotion();closeSubSure();"></textarea>
+			<textarea class="submitText" maxlength="250" onkeyup="statWords()" onclick="closeEmotion();closeSubSure();" movieid="${movie.movieid}"></textarea>
 			<div class="subInfo subFailure">你的输入不正确~~~~~</div>
 			<div class="subTip">
 				<span class="tipStat">0/250</span>

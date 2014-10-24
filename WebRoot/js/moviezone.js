@@ -705,25 +705,18 @@ function closeSubSure(){
 	$('.subSure').hide();
 }
 function submitCmmt(){
-	var sureInput  = $('.sureInput');
+	var sureInput   = $('.sureInput');
 	var submitText = $('.submitText');
-	var nickname   = $('.nickInput');
-	var cmmtImg    = $('.cmmtImg');
-	var isReply    = $('.cmmtSubmit').attr('isReply')=='true';
+	var isReply       = $('.cmmtSubmit').attr('isReply')=='true';
 	if(sureInput.val().replace(/\s/g,'').length!=4){
 		alert('请输入四位的验证码');
 		sureInput[0].focus();
 		return;
 	}
-	if(nickname.val().replace(/\s/g,'').length<=0){
-		alert('昵称不能为空');
-		nickname[0].focus();
-		return;
-	}
 	$.ajax({
-        type:'GET',
+        type:'POST',
         url:isReply?'reply.json':'comment.json',
-        data:{'nickname':nickname.val().replace(/\s/g,''),'nickImg':cmmtImg.attr('src').replace(/\s/g,''),'cmmtCode':sureInput.val().replace(/\s/g,''),'comment':sureInput.val().replace(/\s/g,'')},
+        data:{'movieid':submitText.attr('movieid'),'captcha':sureInput.val().replace(/\s/g,''),'content':submitText.val().replace(/\s/g,'')},
 		dataType:'html',
         beforeSend:function(){
 			$('.subSure > .tipBtn').hide();

@@ -10,12 +10,13 @@ CREATE TABLE `increment` (
   PRIMARY KEY  (`field`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `increment` VALUES ('userid',10000);       -- 用户id
-INSERT INTO `increment` VALUES ('movieid',1);            -- 电影/电视id
-INSERT INTO `increment` VALUES ('modmvid',1);          -- 模块_电影/电视关联id 
-INSERT INTO `increment` VALUES ('attachid',1);            -- 电影/电视附件id
-INSERT INTO `increment` VALUES ('commentid',1);       -- 留言id
-INSERT INTO `increment` VALUES ('favoriteid',1);          -- 收藏id
+INSERT INTO `increment` VALUES ('userid',10000);           -- 用户id
+INSERT INTO `increment` VALUES ('movieid',300);            -- 电影/电视id
+INSERT INTO `increment` VALUES ('modmvid',300);          -- 模块_电影/电视关联id 
+INSERT INTO `increment` VALUES ('attachid',300);            -- 电影/电视附件id
+INSERT INTO `increment` VALUES ('commentid',300);       -- 留言id
+INSERT INTO `increment` VALUES ('replyid',300);              -- 回复id
+INSERT INTO `increment` VALUES ('favoriteid',300);          -- 收藏id
 
 -- ----------------------------
 -- 用户表
@@ -393,29 +394,66 @@ CREATE TABLE `comment` (
   `userid` bigint NOT NULL                  COMMENT '用户id(外)',
   `movieid` bigint NOT NULL               COMMENT '电影/电视id(外)',
   `content` varchar(300) NOT NULL   COMMENT '留言内容',
+  `createarea` varchar(15) default NULL  COMMENT '创建地区：北京、上海、广州等',
   `createtime` datetime NOT NULL      COMMENT '创建时间',
   PRIMARY KEY  (`commentid`),
   FOREIGN KEY   (`userid`) REFERENCES `user` (`userid`) ON DELETE CASCADE,
   FOREIGN KEY   (`movieid`) REFERENCES `movie` (`movieid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `comment` VALUES ('1', '1','1','男主角我很喜欢，喜欢楼主多发发这类动画影片','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('2', '1','1','很好很强大','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('3', '1','1','感谢楼主的分享','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('4', '2','2','终于等到高清版本的了，不容易啊','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('5', '3','3','张三到此一游','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('6', '3','3','Thank you for your sharing ~~','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('7', '5','5','有没有别的片源啊~~','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('8', '5','5','跪求更加高清的影片','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('9', '7','7','期待变形金刚4的上映','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('10', '7','7','今夜你会不会来','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('11', '8','8','影集网搞得不错，我挺喜欢的','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('12', '1','3','突然有一种很冲动想打人的感觉','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('13', '2','2','哈哈，不知道该写什么好','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('14', '3','3','什么时候外星人攻打地球，地球才能和平统一','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('15', '4','4','扫地的阿姨又来了','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('16', '8','1','你在哪里高就啊，先生','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('17', '8','1','我不要再继续抱怨了~~','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('1', '1','1','男主角我很喜欢，喜欢楼主多发发这类动画影片','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('2', '1','1','很好很强大','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('3', '1','1','感谢楼主的分享','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('4', '2','2','终于等到高清版本的了，不容易啊','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('5', '3','3','张三到此一游','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('6', '3','3','Thank you for your sharing ~~','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('7', '5','5','有没有别的片源啊~~','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('8', '5','5','跪求更加高清的影片','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('9', '7','7','期待变形金刚4的上映','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('10', '7','7','今夜你会不会来','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('11', '8','8','影集网搞得不错，我挺喜欢的','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('12', '1','3','突然有一种很冲动想打人的感觉','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('13', '2','2','哈哈，不知道该写什么好','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('14', '3','3','什么时候外星人攻打地球，地球才能和平统一','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('15', '4','4','扫地的阿姨又来了','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('16', '8','1','你在哪里高就啊，先生','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('17', '8','1','我不要再继续抱怨了~~','海口','2012-10-21 22:18:56');
+
+-- ----------------------------
+-- 回复表
+-- ----------------------------
+DROP TABLE IF EXISTS `reply`;
+CREATE TABLE `reply` (
+  `replyid` bigint NOT NULL                 COMMENT '回复id' ,
+  `commentid` bigint NOT NULL          COMMENT '留言id' ,
+  `userid` bigint NOT NULL                  COMMENT '用户id(外)',
+  `content` varchar(300) NOT NULL   COMMENT '留言内容',
+  `createarea` varchar(15) default NULL  COMMENT '创建地区：北京、上海、广州等',
+  `createtime` datetime NOT NULL      COMMENT '创建时间',
+  PRIMARY KEY  (`replyid`),
+  FOREIGN KEY   (`userid`) REFERENCES `user` (`userid`) ON DELETE CASCADE,
+  FOREIGN KEY   (`commentid`) REFERENCES `comment` (`commentid`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `reply` VALUES ('1', '1','1','你这是毛评论啊','海口','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('2', '1','2','我并不这么认为','湖南','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('3', '1','3','老实说我觉得电影还行吧，你觉得昵','海口','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('4', '1','4','不要这么客气','海口','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('5', '1','5','这是什么跟什么啊','海口','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('6', '1','6','快来我这边啊','海口','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('7', '1','7','记得那一夜吗','北京','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('8', '1','8','你这是在干什么啊','湖北','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('9', '1','2','那一夜你没有拒绝我','海口','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('10', '1','3','顺序逻辑思维','文昌','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('11', '1','8','我在家看着你哦','沈阳','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('12', '1','2','你别想给我跑啊','海口','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('13', '1','3','Where am I ?','北京','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('14', '2','4','去死 ?','北京','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('15', '3','5','回家干什么 ?','北京','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('16', '2','1','你来了吗 ?','北京','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('17', '3','8','我在马路边 ?','北京','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('18', '2','3','捡到钱了吗 ?','北京','2012-10-21 22:18:56');
+INSERT INTO `reply` VALUES ('19', '2','2','Make money ?','北京','2012-10-21 22:18:56');
 
 -- ----------------------------
 -- 收藏表

@@ -1,6 +1,7 @@
 package com.moviezone.controller;
 
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +24,12 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
+
 import net.sf.json.JSONArray;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -41,6 +46,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.moviezone.constant.Constants;
 import com.moviezone.constant.HttpCode;
 import com.moviezone.domain.Comment;
 import com.moviezone.domain.Module;
@@ -81,6 +87,7 @@ public class ContentController extends BaseController {
 		mv.addObject("type",getType(movieService.selectModule(movieid)));
 		mv.addObject("attachs",movieService.selectAttach(movieid));
 		mv.addObject("comments",commentService.select(movieid, 1, 10));
+		mv.addObject("createarea",getFrom(request));
 		mv.addObject("movie",movie);
 		mv.setViewName("/content");
 		
@@ -97,6 +104,42 @@ public class ContentController extends BaseController {
 		mv.setViewName("/content_cmmts");
 		return mv;
 	}
+	
+	@RequestMapping(value="/comment.json",method=RequestMethod.POST)
+	public ModelAndView comment(ModelAndView mv,
+													   HttpServletRequest request,
+													   HttpServletResponse response,
+													   @RequestParam(value="movieid") long movieid,
+													   @RequestParam(value="captcha") String captcha,
+													   @RequestParam(value="content") String content)throws Exception{
+		User user = (User)request.getAttribute(Constants.USER);
+		if(user == null ){
+			response.getWriter().write("<div class='error'>请先登录再评论</div>");
+			return null;
+		}
+		if(StringUtils.isBlank(content)){
+			response.getWriter().write("<div class='error'>评论内容不能为空</div>");
+			return null;
+		}
+		if(1==2){
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.getWriter().write("<div class='error'>请输入正确的验证码</div>");
+			return null;
+		}
+		Comment comment = new Comment();
+		comment.setMovieid(movieid);
+		comment.setContent(content);
+		comment.setCreatearea(getFrom(request));
+		comment.setMovieid(movieid);
+		comment.setUserid(user.getUserid());
+		long commentid = commentService.insert(comment);
+		List<Comment> comments = new ArrayList<Comment>();
+		comments.add(commentService.select(commentid));
+		mv.addObject("comments",comments);
+		mv.setViewName("/content_cmmts");
+		return mv;
+	}
+	
 	
 	
 	private String getType(List<Module> modules){

@@ -41,6 +41,7 @@ public class CommentDaoImpl implements CommentDao{
 		param.put("userid", comment.getUserid());
 		param.put("movieid", comment.getMovieid());
 		param.put("content", comment.getContent());
+		param.put("createarea", comment.getCreatearea());
 		param.put("createtime", comment.getCreatetime());
 		param.put("start", (pageNo-1)*pageSize);
 		param.put("size", pageSize);

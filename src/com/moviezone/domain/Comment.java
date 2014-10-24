@@ -17,6 +17,7 @@ public class Comment implements Serializable{
 	private long userid;
 	private long movieid;
 	private String content;
+	private String createarea;
 	private Date createtime;
 	private User user;
 	private Movie movie;
@@ -43,6 +44,12 @@ public class Comment implements Serializable{
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getCreatearea() {
+		return createarea;
+	}
+	public void setCreatearea(String createarea) {
+		this.createarea = createarea;
 	}
 	public Date getCreatetime() {
 		return createtime;

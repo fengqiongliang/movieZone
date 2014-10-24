@@ -58,6 +58,16 @@ public abstract class BaseController {
 	
 	**/
 	
+	/**
+	 * 获得ip属于哪个地区：海口、北京等地方
+	 * @param request
+	 * @return
+	 */
+	protected String getFrom(HttpServletRequest request){
+		String ip = request.getRemoteAddr();
+		return "海口";
+	}
+	
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public ModelAndView notSupportMethod(Exception e,
 								         HttpServletRequest request,
@@ -143,4 +153,6 @@ public abstract class BaseController {
 		}
 		return null;
 	}
+	
+	
 }

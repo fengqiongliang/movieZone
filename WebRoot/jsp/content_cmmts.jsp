@@ -8,7 +8,7 @@
 	<div class="cmmtHead">
 		<p class="nickname">${cmmt.user.nickname}</p>
 		<img class="cmmtImg" src="${static}${cmmt.user.faceurl}">
-		<p class="from">来自:${cmmt.user.createarea}</p>
+		<p class="from">来自:${cmmt.createarea}</p>
 	</div>
 	<div class="cmntCont">
 		<span class="cmntArrow">◀</span>
@@ -23,7 +23,7 @@
 			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
 			<li class="rpyli"><img class="replyImg" src="./img/blank92x71.gif" />这是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa是什么情况?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</li>
 		</ul>
-		<div class="moreTxt" onclick="getMoreReply(this)" onmouseout="moreHide(this,event)" commentId="1"><img class="moreReplyLoading" src="./img/loading.gif" />获 得 更 多</div>
+		<div class="moreTxt" onclick="getMoreReply(this)" onmouseout="moreHide(this,event)" commentId="${cmmt.commentid}"><img class="moreReplyLoading" src="./img/loading.gif" />获 得 更 多</div>
 	</div>
 	<div class="clear"></div>
 </div>
