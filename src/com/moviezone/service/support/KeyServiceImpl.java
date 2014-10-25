@@ -25,6 +25,10 @@ public class KeyServiceImpl implements KeyService{
 		return getNext("commentid");
 	}
 	@Override
+	public long getReplyid() {
+		return getNext("replyid");
+	}
+	@Override
 	public  long getFavoriteid() {
 		return getNext("favoriteid");
 	}
@@ -57,5 +61,6 @@ public class KeyServiceImpl implements KeyService{
 		key = keys.get(field);
 		return key.getNextStart();
 	}
+	
 	
 }

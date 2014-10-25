@@ -27,6 +27,8 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
 import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
@@ -48,9 +50,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.Constants;
 import com.moviezone.constant.HttpCode;
+import com.moviezone.domain.CmmtReply;
 import com.moviezone.domain.Comment;
 import com.moviezone.domain.Module;
 import com.moviezone.domain.Movie;
+import com.moviezone.domain.Reply;
 import com.moviezone.domain.User;
 import com.moviezone.service.CommentService;
 import com.moviezone.service.MovieService;
@@ -86,7 +90,7 @@ public class ContentController extends BaseController {
 		mv.addObject("blankStarCount",blankStarCount);
 		mv.addObject("type",getType(movieService.selectModule(movieid)));
 		mv.addObject("attachs",movieService.selectAttach(movieid));
-		mv.addObject("comments",commentService.select(movieid, 1, 10));
+		mv.addObject("cmmtReplys",commentService.selectCmmtReply(movieid, 1, 10, 5));
 		mv.addObject("createarea",getFrom(request));
 		mv.addObject("movie",movie);
 		mv.setViewName("/content");
@@ -100,8 +104,19 @@ public class ContentController extends BaseController {
 														  HttpServletResponse response,
 														  @RequestParam(value="movieid") long movieid,
 														  @RequestParam(value="pageNo") int pageNo)throws Exception{
-		mv.addObject("comments",commentService.select(movieid, pageNo, 10));
+		mv.addObject("cmmtReplys",commentService.selectCmmtReply(movieid, pageNo, 10,5));
 		mv.setViewName("/content_cmmts");
+		return mv;
+	}
+	
+	@RequestMapping(value="/moreReply.json",method=RequestMethod.GET)
+	public ModelAndView moreReply(ModelAndView mv,
+														 HttpServletRequest request,
+														 HttpServletResponse response,
+														 @RequestParam(value="commentid") long commentid,
+														 @RequestParam(value="pageNo") int pageNo)throws Exception{
+		mv.addObject("replys",commentService.selectReply(commentid, pageNo, 5));
+		mv.setViewName("/content_replys");
 		return mv;
 	}
 	
@@ -133,13 +148,48 @@ public class ContentController extends BaseController {
 		comment.setMovieid(movieid);
 		comment.setUserid(user.getUserid());
 		long commentid = commentService.insert(comment);
-		List<Comment> comments = new ArrayList<Comment>();
-		comments.add(commentService.select(commentid));
-		mv.addObject("comments",comments);
+		List<CmmtReply> cmmtReplys = new ArrayList<CmmtReply>();
+		CmmtReply cmmtReply = new CmmtReply();
+		cmmtReply.setCmmt(commentService.select(commentid));
+		cmmtReplys.add(cmmtReply);
+		mv.addObject("cmmtReplys",cmmtReplys);
 		mv.setViewName("/content_cmmts");
 		return mv;
 	}
 	
+	@RequestMapping(value="/reply.json",method=RequestMethod.POST)
+	public ModelAndView reply(ModelAndView mv,
+												HttpServletRequest request,
+												HttpServletResponse response,
+												@RequestParam(value="commentid") long commentid,
+												@RequestParam(value="captcha") String captcha,
+												@RequestParam(value="content") String content)throws Exception{
+		User user = (User)request.getAttribute(Constants.USER);
+		if(user == null ){
+			response.getWriter().write("<div class='error'>请先登录再评论</div>");
+			return null;
+		}
+		if(StringUtils.isBlank(content)){
+			response.getWriter().write("<div class='error'>评论内容不能为空</div>");
+			return null;
+		}
+		if(1==2){
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.getWriter().write("<div class='error'>请输入正确的验证码</div>");
+			return null;
+		}
+		Reply reply = new Reply();
+		reply.setCommentid(commentid);
+		reply.setContent(content);
+		reply.setCreatearea(getFrom(request));
+		reply.setUserid(user.getUserid());
+		long replyid = commentService.insertReply(reply);
+		List<Reply> replys = new ArrayList<Reply>();
+		replys.add(commentService.selectReply(replyid));
+		mv.addObject("replys",replys);
+		mv.setViewName("/content_replys");
+		return mv;
+	}
 	
 	
 	private String getType(List<Module> modules){

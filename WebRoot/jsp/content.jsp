@@ -34,7 +34,7 @@
 <div class="cntImgs" id="cmmts">
 	<h1 class="cntImgH">影视评论</h1>
 	<%@ include file="content_cmmts.jsp" %>
-	<div class="moreComment" hoverClass="moreCmmtHover" movieid="${movie.movieid}" onclick="getMoreCmmt(this)" ${fn:length(comments)<10?"style='display:none'":""}><img class="moreCmmtLoading" src="${static}/img/loading.gif"   />加载更多</div>
+	<div class="moreComment" hoverClass="moreCmmtHover" movieid="${movie.movieid}" onclick="getMoreCmmt(this)" ${fn:length(cmmtReplys)<10?"style='display:none'":""}><img class="moreCmmtLoading" src="${static}/img/loading.gif"   />加载更多</div>
 	<div class="cmmtSubmit">
 		<div class="cmmtHead">
 			<p class="nickname">${!empty user?user.nickname:"请先登录"}</p>

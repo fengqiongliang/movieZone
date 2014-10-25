@@ -11,11 +11,24 @@
     <association property="user"  resultMap="com.moviezone.dao.UserDao.UserResultMap" columnPrefix="user_"   />
     <association property="movie"  resultMap="com.moviezone.dao.MovieDao.movieResultMap" columnPrefix="mv_" />
   </resultMap>
+  <resultMap id="replyResultMap" type="com.moviezone.domain.Reply" >
+  	<id column="replyid" property="replyid" jdbcType="BIGINT" />
+    <result column="commentid" property="commentid" jdbcType="BIGINT" />
+    <result column="userid" property="userid" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="createarea" property="createarea" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <association property="user"  resultMap="com.moviezone.dao.UserDao.UserResultMap" columnPrefix="user_"   />
+  </resultMap>
   
   <sql id="cmmtColumns" >
     cmmt.commentid,cmmt.userid,cmmt.movieid,cmmt.content,cmmt.createarea,cmmt.createtime,
     u.userid as user_userid,u.username as user_username,u.password as user_password,u.nickname as user_nickname,u.faceurl as user_faceurl,u.cookie_id as user_cookie_id,u.role as user_role,u.lastlogtime as user_lastlogtime,u.updatetime as user_updatetime,u.createip as user_createip,u.createtime as user_createtime,u.createarea as user_createarea,u.nextnick as user_nextnick,u.nextface as user_nextface,u.isForbit as  user_isForbit,
     mv.movieid as mv_movieid,mv.name as mv_name,mv.type as mv_type,mv.shortdesc as mv_shortdesc,mv.longdesc as mv_longdesc,mv.face650x500 as mv_face650x500,mv.face400x308 as mv_face400x308,mv.face220x169 as mv_face220x169,mv.face150x220 as mv_face150x220,mv.face80x80 as mv_face80x80,mv.picture as mv_picture,mv.score as mv_score,mv.approve as mv_approve,mv.favorite as mv_favorite,mv.download as mv_download,mv.broswer as mv_broswer,mv.createtime as mv_createtime,mv.publishtime as mv_publishtime
+  </sql>
+  <sql id="replyColumns" >
+    r.replyid,r.commentid,r.userid,r.content,r.createarea,r.createtime,
+    u.userid as user_userid,u.username as user_username,u.password as user_password,u.nickname as user_nickname,u.faceurl as user_faceurl,u.cookie_id as user_cookie_id,u.role as user_role,u.lastlogtime as user_lastlogtime,u.updatetime as user_updatetime,u.createip as user_createip,u.createtime as user_createtime,u.createarea as user_createarea,u.nextnick as user_nextnick,u.nextface as user_nextface,u.isForbit as  user_isForbit 
   </sql>
   <sql id="selectCmmtIFCol">
   	<if test="commentid >0">  and cmmt.commentid = #{commentid,jdbcType=BIGINT} </if>
@@ -24,6 +37,14 @@
     <if test="content != null">  and cmmt.content = #{content,jdbcType=VARCHAR} </if>
     <if test="createarea != null">  and cmmt.createarea = #{createarea,jdbcType=VARCHAR} </if>
     <if test="createtime != null">  and cmmt.createtime = #{createtime,jdbcType=TIMESTAMP} </if>
+  </sql>
+  <sql id="selectReplyIFCol">
+  	<if test="replyid >0">  and r.replyid = #{replyid,jdbcType=BIGINT} </if>
+  	<if test="commentid >0">  and r.commentid = #{commentid,jdbcType=BIGINT} </if>
+  	<if test="userid >0">  and r.userid = #{userid,jdbcType=BIGINT} </if>
+    <if test="content != null">  and r.content = #{content,jdbcType=VARCHAR} </if>
+    <if test="createarea != null">  and r.createarea = #{createarea,jdbcType=VARCHAR} </if>
+    <if test="createtime != null">  and r.createtime = #{createtime,jdbcType=TIMESTAMP} </if>
   </sql>
   
   <select id="selectCmmtCount" resultType="map" parameterType="map"  >
@@ -47,6 +68,26 @@
     order by QUERYID asc,cmmt.createtime asc
     limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
+  
+   <select id="selectReplyCount" resultType="map" parameterType="map"  >
+    select 'false' as QUERYID, 
+    count(r.replyid) as total
+    from reply r
+    left join user u on r.userid = u.userid
+    where 1=1 
+    <include refid="selectReplyIFCol" />
+  </select>
+  
+  <select id="selectReply" resultMap="replyResultMap" parameterType="map"  >
+    select 'false' as QUERYID, 
+    <include refid="replyColumns" /> 
+    from reply r
+    left join user u on r.userid = u.userid
+    where 1=1 
+    <include refid="selectReplyIFCol" />
+    order by QUERYID asc,r.createtime desc
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
     
   <insert id="insertComment" parameterType="com.moviezone.domain.Comment" >
     insert into comment
@@ -67,7 +108,27 @@
       sysdate()
     </trim>
   </insert>
-    
+  
+  <insert id="insertReply" parameterType="com.moviezone.domain.Reply" >
+    insert into reply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="replyid >0" >replyid,</if>
+      <if test="commentid >0" >commentid,</if>
+      <if test="userid >0" >userid,</if>
+      <if test="content != null" >content,</if>
+      <if test="createarea != null" >createarea,</if>
+      createtime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="replyid >0" >#{replyid,jdbcType=BIGINT},</if>
+      <if test="commentid >0" >#{commentid,jdbcType=BIGINT},</if>
+      <if test="userid >0" >#{userid,jdbcType=BIGINT},</if>
+      <if test="content != null" >#{content,jdbcType=VARCHAR},</if>
+      <if test="createarea != null" >#{createarea,jdbcType=VARCHAR},</if>
+      sysdate()
+    </trim>
+  </insert>
+  
   <update id="updateComment" parameterType="com.moviezone.domain.Comment" >
     update comment
     <set>
@@ -78,8 +139,22 @@
     where commentid = #{commentid,jdbcType=BIGINT}
   </update>
   
+  <update id="updateReply" parameterType="com.moviezone.domain.Reply" >
+    update reply
+    <set>
+      <if test="commentid >0" >commentid = #{commentid,jdbcType=BIGINT},</if>
+      <if test="userid >0" >userid = #{userid,jdbcType=BIGINT},</if>
+      <if test="content != null" >content = #{content,jdbcType=VARCHAR},</if>
+    </set>
+    where replyid = #{replyid,jdbcType=BIGINT}
+  </update>
+  
   <delete id="deleteComment" parameterType="com.moviezone.domain.Comment" >
     delete from comment where commentid = #{commentid,jdbcType=BIGINT}
+  </delete>
+  
+  <delete id="deleteReply" parameterType="com.moviezone.domain.Reply" >
+    delete from reply where replyid = #{replyid,jdbcType=BIGINT}
   </delete>
   
 </mapper>

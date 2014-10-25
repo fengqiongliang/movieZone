@@ -708,7 +708,11 @@ function submitCmmt(){
 	var sureInput   = $('.sureInput');
 	var submitText = $('.submitText');
 	var isReply       = $('.cmmtSubmit').attr('isReply')=='true';
-	if(sureInput.val().replace(/\s/g,'').length!=4){
+	var movieid      = !isReply?submitText.attr('movieid').replace(/\s/g,''):undefined;
+	var commentid = isReply?submitText.attr('commentid').replace(/\s/g,''):undefined;
+	var content       = submitText.val().replace(/\s/g,'');
+	var captcha       = sureInput.val().replace(/\s/g,'');
+	if(captcha.length!=4){
 		alert('请输入四位的验证码');
 		sureInput[0].focus();
 		return;
@@ -716,7 +720,7 @@ function submitCmmt(){
 	$.ajax({
         type:'POST',
         url:isReply?'reply.json':'comment.json',
-        data:{'movieid':submitText.attr('movieid'),'captcha':sureInput.val().replace(/\s/g,''),'content':submitText.val().replace(/\s/g,'')},
+        data:{'commentid':commentid,'movieid':movieid,'captcha':captcha,'content':content},
 		dataType:'html',
         beforeSend:function(){
 			$('.subSure > .tipBtn').hide();
@@ -739,7 +743,7 @@ function submitCmmt(){
 			location.hash = $('.cmmtDiv',dataHtml).attr('id');
 		}
 		//回复成功
-		if($('.reply',dataHtml).length>0){
+		if($('.rpyli',dataHtml).length>0){
 			if($('.reply',$.cmmtDom).length<=0){
 				$('.clear',$.cmmtDom).before(data);
 			}else{
@@ -797,36 +801,38 @@ function reply(source){
 	$('.layer').width($(document).width());
 	$('.layer').height($(document).height());
 	$('.layer').show();
+	$('.submitText').attr('commentid',$(source).attr('commentid'));
 	$('.submitText')[0].focus();
 	$('.cmmtSubmit').attr('isReply','true');
 	$(document.body).css('overflow-y','hidden');
 	$.cmmtDom = $(source).parent().parent();
 }
 function getMoreReply(source){
-	var isRunning = $(source).attr('isRunning');
-	var commentId = $(source).attr('commentId');
-	var pageNo    = $(source).attr('pageNo')?$(source).attr('pageNo'):2;
+	var isRunning   = $(source).attr('isRunning');
+	var commentid = $(source).attr('commentid');
+	var pageNo      = $(source).attr('pageNo')?$(source).attr('pageNo'):2;
+	var loadImg      = $('.moreReplyLoading',source);
 	if( isRunning == 'true')return;
 	$.ajax({
         type:'GET',
         url:'moreReply.json',
-        data:{'commentId':commentId,'pageNo':pageNo},
+        data:{'commentid':commentid,'pageNo':pageNo},
 		dataType:'html',
         beforeSend:function(){
 			$(source).attr('isRunning','true');
 			$(source).attr('text',$(source).text());
-			$(source).text('');
-			$('.moreReplyLoading').show();
+			$(source).empty().append(loadImg);
+			loadImg.show();
         }
     }).done(function(data){
-		$('.replyCont',$(source).parent()).append(data);
+    	var lis = $('.replyCont > li','<div>'+data+'</div>');
+		$('.replyCont',$(source).parent()).append(lis);
 		$(source).attr('isRunning','false');
 		$(source).attr('pageNo',Number(pageNo)+1);
-		$(source).text($(source).attr('text'));
-		$('.moreReplyLoading').hide();
+		$(source).empty().text($(source).attr('text'));
+		if(lis.length<5)$(source).remove();
     }).fail(function(){
-		$(source).text('加载失败').css('color','red');
-		$('.moreReplyLoading').hide();
+		$(source).empty().text('加载失败').css('color','red');
     });
 }
 function getMoreCmmt(source){
@@ -834,6 +840,7 @@ function getMoreCmmt(source){
 	var movieid    = $(source).attr('movieid');
 	var pageNo    = $(source).attr('pageNo')?$(source).attr('pageNo'):2;
 	var pageSize   = $(source).attr('pageSize')?$(source).attr('pageSize'):10;
+	var loadImg    = $('.moreCmmtLoading');
 	if( isRunning == 'true')return;
 	$.ajax({
         type:'GET',
@@ -843,19 +850,17 @@ function getMoreCmmt(source){
         beforeSend:function(){
 			$(source).attr('isRunning','true');
 			$(source).attr('text',$(source).text());
-			$(source).text('');
-			$('.moreCmmtLoading').show();
+			$(source).empty().append(loadImg);
+			loadImg.show();
         }
     }).done(function(data){
 		$(source).before(data);
 		$(source).attr('isRunning','false');
 		$(source).attr('pageNo',Number(pageNo)+1);
-		$(source).text($(source).attr('text'));
-		$('.moreCmmtLoading').hide();
+		$(source).empty().text($(source).attr('text'));
 		if($(">div","<div>"+data+"</div>").length<pageSize)$(source).hide();
     }).fail(function(){
-		$(source).text('加载失败').css('color','red');
-		$('.moreCmmtLoading').hide();
+		$(source).empty().text('加载失败').css('color','red');
     });
 }
 function closeReply(){
@@ -864,16 +869,6 @@ function closeReply(){
 	$('.centerCmmt').hide();
 	$('.cmmtSubmit').attr('isReply','false');
 	$(document.body).css('overflow-y','auto');
-}
-function upNickStart(file){
-	$(".nickImgLoading").show();
-}
-function upNickSuccess(file,serverdata,resp){
-	$(".nickImgLoading").hide();
-	$(".cmmtImg").attr("src",$.parseJSON(serverdata).faceImgUrl);
-}
-function upNickError(file,errorCode,msg){
-	alert("上传发生网络错误，请稍后再试");
 }
 
 
