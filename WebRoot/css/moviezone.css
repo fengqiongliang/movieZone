@@ -173,7 +173,7 @@ a:hover{text-decoration:underline;}
 .replyImg {width:70px;height:54px;float:left;margin-right:10px;}
 .replyCont {float:left;margin: 30px 0 0 15px;padding:0 10px 10px 10px;background:#b6bbc6;border-radius:5px;box-shadow:0 1px 1px 0 #EAEAEA inset;color: #555555;width: 350px;font-size:12px;line-height:22px;}
 .rpyli {line-height:18px;word-break:break-all;border-bottom:1px dotted #898989;padding:10px 0 5px 0;width:100%}
-.cmmtSubmit {display:inline-block;overflow:visible;}
+.cmmtSubmit {display:inline-block;overflow:visible;padding-top:20px;}
 .nickInput{border: 1px solid #cccccc;border-radius:2px;box-shadow: 0 1px 1px 0 #eaeaea inset;width:92px;display:block;font-size: 12px;height: 25px;line-height:25px;color:#555555;_margin-left:-25px;text-align:center;}
 .submitText {float:left;margin-left:-8px;padding:10px 10px 30px 10px;background:#ffffff;border-radius:5px;box-shadow:0 1px 1px 0 #EAEAEA inset;color: #555555;width: 350px;height: 200px;font-size:12px;line-height:22px;  overflow-x: hidden;overflow-y: auto;resize: none;word-break: break-all;}
 .subInfo {clear:both;position:absolute;top:0;left:22px;_left:27px;z-index:1;width:370px;text-align:center;border-radius:5px 5px 0 0;opacity:0.6;filter:alpha(opacity=60);line-height:25px;display:none;}

@@ -11,7 +11,8 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 public class HttpUtil {
-	
+	private final static String raplceHtmlForEmotion = "<img src='./img/qqemotion/$1.gif'></img>";
+	private final static Pattern regexForEmotion = Pattern.compile("\\{emotion:([0-9]+)\\}");
 	private final static String regxpForHtml = "<([^>]*)>";
 	
 	public static String encoding(String html){
@@ -36,6 +37,19 @@ public class HttpUtil {
 			result1 = matcher.find();
 		}
 		matcher.appendTail(sb);
+		return sb.toString();
+	}
+	public static String filterEmotion(String str) {
+		if (str == null) {
+			return null;
+		}
+		Matcher m = regexForEmotion.matcher(str);
+		StringBuffer sb  = new StringBuffer();
+		while(m.find()){
+			m.appendReplacement(sb,raplceHtmlForEmotion);
+		}
+		m.appendTail(sb);
+		System.out.println(sb.toString());
 		return sb.toString();
 	}
 	
@@ -89,10 +103,10 @@ public class HttpUtil {
 	
 	
 	public static void main(String[] args){
-		String html = "<p style='display:none;'>这是新的测试哦</p>还有的代码是这样的<div style='position:abosule'>内容</div>";
-		String encodeHtml = HttpUtil.encoding(html);
-		String decodeHtml = HttpUtil.decoding(html);
-		System.out.println(encodeHtml);
-		System.out.println(decodeHtml);
+		String result = HttpUtil.filterEmotion("{emotion:1{emotion:2}},{emotion:2},{em{emo{emot{emotion:2}ion:2}tion:2}otion:3},{em{emotion:2}otion:45},{emotion:66}");
+		System.out.println("====================");
+		System.out.println(result);
+		System.out.println(result.length());
+		System.out.println("====================");
 	}
 }

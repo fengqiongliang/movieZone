@@ -10,6 +10,7 @@ import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.moviezone.service.MovieService;
+import com.moviezone.util.HttpUtil;
 
 public class Comment implements Serializable{
 	private static final long serialVersionUID = 494845959575546516L;
@@ -43,7 +44,7 @@ public class Comment implements Serializable{
 		return content;
 	}
 	public void setContent(String content) {
-		this.content = content;
+		this.content = HttpUtil.filterEmotion(content);
 	}
 	public String getCreatearea() {
 		return createarea;
