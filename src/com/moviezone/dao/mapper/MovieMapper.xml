@@ -59,6 +59,8 @@
     <if test="broswer >0 "> and mv.broswer = #{broswer,jdbcType=INTEGER} </if>
     <if test="createtime != null"> and mv.createtime = #{createtime,jdbcType=TIMESTAMP} </if>
     <if test="publishtime != null"> and mv.publishtime = #{publishtime,jdbcType=TIMESTAMP} </if>
+    <if test="isPublish == true">  and mv.publishtime &lt;  sysdate()  </if> 
+    <if test="isPublish == false"> and mv.publishtime &gt; sysdate()  </if> 
   </sql>
   
   <select id="selectMovieCount" resultType="map" parameterType="map"  >

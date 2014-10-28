@@ -41,26 +41,10 @@ import com.moviezone.domain.User;
 import com.moviezone.service.UserService;
 
 @Controller
-public class AdminController extends BaseController {
-	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+public class AdminUserController extends BaseController {
+	private static final Logger logger = LoggerFactory.getLogger(AdminUserController.class);
 	@Autowired
 	private UserService userService;
-	
-	@RequestMapping(value="/admin_movie.do",method=RequestMethod.GET)
-	public ModelAndView movieView(ModelAndView mv,
-														 HttpServletRequest request,
-														 HttpServletResponse response)throws Exception{
-		mv.setViewName("/admin_movie");
-		return mv;
-	}
-	
-	@RequestMapping(value="/admin_module.do",method=RequestMethod.GET)
-	public ModelAndView moduleView(ModelAndView mv,
-														   HttpServletRequest request,
-														   HttpServletResponse response)throws Exception{
-		mv.setViewName("/admin_module");
-		return mv;
-	}
 	
 	@RequestMapping(value="/admin_user.do",method=RequestMethod.GET)
 	public ModelAndView userView(ModelAndView mv,

@@ -11,7 +11,9 @@ import com.moviezone.domain.Movie;
 public interface MovieDao {
 	public Movie select(long movieid);
 	public List<Movie> select(Movie movie,int pageNo,int pageSize);
+	public List<Movie> select(Movie movie,Boolean isPublish,int pageNo,int pageSize);
 	public Page<Movie> selectPage(Movie movie,int pageNo,int pageSize);
+	public Page<Movie> selectPage(Movie movie,Boolean isPublish,int pageNo,int pageSize);
 	public List<Movie> selectByModule(Long modmvid,String modname,Boolean isPublish,Boolean isSortCreateTimeUp,Boolean isScoreUp,int pageNo,int pageSize);
 	public Page<Movie> selectPageByModule(Long modmvid,String modname,Boolean isPublish,Boolean isSortCreateTimeUp,Boolean isScoreUp,int pageNo,int pageSize);
 	public List<Module> selectModule(long movieid);

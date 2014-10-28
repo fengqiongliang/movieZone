@@ -32,7 +32,7 @@
 			<table class="adminTable">
 				<thead><tr><th style="width:20px">id</th><th>昵称</th><th style="width:55px">地区</th><th style="width:150px">ip</th><th style="width:75px">操作</th></tr></thead>
 				<tbody>
-					<%@ include file="admin_user_forbit.jsp" %>
+					<%@ include file="admin_user_forbit.jsp"  %>
 				</tbody>
 			</table>
 		</div>
@@ -46,7 +46,7 @@
 			<table class="adminTable">
 				<thead><tr><th style="width:20px">id</th><th>昵称</th><th style="width:55px">地区</th><th style="width:150px">ip</th><th>修改昵称</th><th>修改关像</th><th style="width:130px">操作</th></tr></thead>
 				<tbody>
-					<%@ include file="admin_user_normal.jsp" %>
+					<%@ include file="admin_user_normal.jsp"  %>
 				</tbody>
 			</table>
 		</div>

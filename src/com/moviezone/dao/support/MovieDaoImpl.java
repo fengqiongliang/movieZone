@@ -36,67 +36,43 @@ public class MovieDaoImpl implements MovieDao{
 	}
 	
 	@Override
-	public List<Movie> select(Movie movie,int pageNo,int pageSize) {
-		if(movie == null)return new ArrayList<Movie>();
-		Map<String,Object> param = new  HashMap<String,Object>();
-		param.put("movieid", movie.getMovieid());
-		param.put("name", movie.getName());
-		param.put("type", movie.getType());
-		param.put("shortdesc", movie.getShortdesc());
-		param.put("longdesc", movie.getLongdesc());
-		param.put("face650x500", movie.getFace650x500());
-		param.put("face220x169", movie.getFace220x169());
-		param.put("face150x220", movie.getFace150x220());
-		param.put("face80x80", movie.getFace80x80());
-		param.put("picture", movie.getPicture());
-		param.put("score", movie.getScore());
-		param.put("approve", movie.getApprove());
-		param.put("favorite", movie.getFavorite());
-		param.put("download", movie.getDownload());
-		param.put("broswer", movie.getBroswer());
-		param.put("createtime", movie.getCreatetime());
-		param.put("publishtime", movie.getPublishtime());
-		param.put("start", (pageNo-1)*pageSize);
-		param.put("size", pageSize);
-		return session.selectList("selectMovie", param);
+	public List<Movie> select(Movie movie, int pageNo,int pageSize) {
+		return select(movie,null,pageNo,pageSize);
 	}
-		
 	
 	@Override
-	public Page<Movie> selectPage(Movie movie, int pageNo, int pageSize) {
+	public List<Movie> select(Movie movie,Boolean isPublish,int pageNo,int pageSize) {
+		if(movie == null)return new ArrayList<Movie>();
+		return session.selectList("selectMovie", getMovieParamMap(movie,isPublish,pageNo,pageSize));
+	}
+	
+	@Override
+	public Page<Movie> selectPage(Movie movie, int pageNo,int pageSize) {
+		return selectPage(movie, null,pageNo, pageSize) ;
+	}
+	
+	@Override
+	public Page<Movie> selectPage(Movie movie, Boolean isPublish,int pageNo, int pageSize) {
 		Page<Movie> page = new Page<Movie>();
 		if(movie == null)return page;
-		Map<String,Object>  result = session.selectOne("selectMovieCount",movie);
+		Map<String,Object>  result = session.selectOne("selectMovieCount",getMovieParamMap(movie,isPublish,pageNo,pageSize));
 		page.setTotal((Long)result.get("total"));
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
-		page.setData(select(movie,pageNo,pageSize));
+		page.setData(select(movie,isPublish,pageNo,pageSize));
 		return page;
 	}
 	
+	
 	@Override
 	public List<Movie> selectByModule(Long modmvid,String modname,Boolean isPublish,Boolean isSortCreateTimeUp,Boolean isScoreUp,int pageNo,int pageSize) {
-		Map<String,Object> param = new  HashMap<String,Object>();
-		param.put("modmvid", modmvid);
-		param.put("modname", modname);
-		param.put("isPublish", isPublish);
-		param.put("isSortCreateTimeUp", isSortCreateTimeUp);
-		param.put("isScoreUp", isScoreUp);
-		param.put("start", (pageNo-1)*pageSize);
-		param.put("size", pageSize);
-		return session.selectList("selectMovieByModule", param);
+		return session.selectList("selectMovieByModule", getModuleParamMap(modmvid,modname,isPublish,isSortCreateTimeUp,isScoreUp,pageNo,pageSize));
 	}
 
 	@Override
 	public Page<Movie> selectPageByModule(Long modmvid,String modname,Boolean isPublish,Boolean isSortCreateTimeUp,Boolean isScoreUp,int pageNo,int pageSize) {
 		Page<Movie> page = new Page<Movie>();
-		Map<String,Object> param = new  HashMap<String,Object>();
-		param.put("modmvid", modmvid);
-		param.put("modname", modname);
-		param.put("isPublish", isPublish);
-		param.put("isSortCreateTimeUp", isSortCreateTimeUp);
-		param.put("isScoreUp", isScoreUp);
-		Map<String,Object>  result = session.selectOne("selectMovieByModuleCount",param);
+		Map<String,Object>  result = session.selectOne("selectMovieByModuleCount",getModuleParamMap(modmvid,modname,isPublish,isSortCreateTimeUp,isScoreUp,pageNo,pageSize));
 		page.setTotal((Long)result.get("total"));
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
@@ -143,6 +119,45 @@ public class MovieDaoImpl implements MovieDao{
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
+
+	
+	private Map<String,Object> getMovieParamMap(Movie movie, Boolean isPublish,int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("movieid", movie.getMovieid());
+		param.put("name", movie.getName());
+		param.put("type", movie.getType());
+		param.put("shortdesc", movie.getShortdesc());
+		param.put("longdesc", movie.getLongdesc());
+		param.put("face650x500", movie.getFace650x500());
+		param.put("face220x169", movie.getFace220x169());
+		param.put("face150x220", movie.getFace150x220());
+		param.put("face80x80", movie.getFace80x80());
+		param.put("picture", movie.getPicture());
+		param.put("score", movie.getScore());
+		param.put("approve", movie.getApprove());
+		param.put("favorite", movie.getFavorite());
+		param.put("download", movie.getDownload());
+		param.put("broswer", movie.getBroswer());
+		param.put("createtime", movie.getCreatetime());
+		param.put("publishtime", movie.getPublishtime());
+		param.put("isPublish",isPublish);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return param;
+	}
+	
+	private Map<String,Object> getModuleParamMap(Long modmvid,String modname,Boolean isPublish,Boolean isSortCreateTimeUp,Boolean isScoreUp,int pageNo,int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("modmvid", modmvid);
+		param.put("modname", modname);
+		param.put("isPublish", isPublish);
+		param.put("isSortCreateTimeUp", isSortCreateTimeUp);
+		param.put("isScoreUp", isScoreUp);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return param;
+	}
+	
 
 	
 

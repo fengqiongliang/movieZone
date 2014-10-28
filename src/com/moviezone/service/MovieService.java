@@ -23,4 +23,6 @@ public interface MovieService {
 	public boolean update(Movie movie);
 	public boolean delete(Movie movie);
 	public boolean delete(long userid);
+	public Page<Movie> selectOnlineMovie(Movie movie,int pageNo,int pageSize);
+	public Page<Movie> selectOfflineMovie(Movie movie,int pageNo,int pageSize);
 }

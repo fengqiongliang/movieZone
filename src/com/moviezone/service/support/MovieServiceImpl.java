@@ -60,6 +60,16 @@ public class MovieServiceImpl implements MovieService{
 	}
 	
 	@Override
+	public Page<Movie> selectOnlineMovie(Movie movie, int pageNo, int pageSize) {
+		return movieDao.selectPage(movie, true, pageNo, pageSize);
+	}
+
+	@Override
+	public Page<Movie> selectOfflineMovie(Movie movie, int pageNo, int pageSize) {
+		return movieDao.selectPage(movie, false, pageNo, pageSize);
+	}
+	
+	@Override
 	public long insert(Movie movie) {
 		movie.setMovieid(keyService.getMovieid());
 		return movieDao.insert(movie);
@@ -87,6 +97,8 @@ public class MovieServiceImpl implements MovieService{
 	public void setKeyService(KeyService keyService) {
 		this.keyService = keyService;
 	}
+
+	
 
 	
 
