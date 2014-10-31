@@ -30,6 +30,7 @@
 	<bean id="movieService" class="com.moviezone.service.support.MovieServiceImpl">
 		<property name="movieDao" ref="movieDao" />
 		<property name="keyService" ref="keyService" />
+		<property name="commentService" ref="commentService" />
 	</bean>
 	
 	<bean id="commentService" class="com.moviezone.service.support.CommentServiceImpl">

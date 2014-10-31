@@ -26,6 +26,14 @@ public class CommentServiceImpl implements CommentService{
 	}
 	
 	@Override
+	public long selectCommentCount(long movieid) {
+		if(movieid<1)return 0;
+		Comment comment = new Comment();
+		comment.setMovieid(movieid);
+		return commentDao.selectCount(comment);
+	}
+	
+	@Override
 	public Reply selectReply(long replyid) {
 		return commentDao.selectReply(replyid);
 	}

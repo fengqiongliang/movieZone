@@ -15,6 +15,7 @@ import com.moviezone.domain.Reply;
 
 public interface CommentService {
 	public Comment select(long commentid);
+	public long selectCommentCount(long movieid);
 	public Reply selectReply(long replyid);
 	public List<Comment> select(Comment comment,int pageNo,int pageSize);
 	public List<Comment> select(long movieid,int pageNo,int pageSize);
@@ -27,4 +28,5 @@ public interface CommentService {
 	public boolean delete(long comment);
 	public List<CmmtReply> selectCmmtReply(long movieid,int pageNo,int pageSize);
 	public List<CmmtReply> selectCmmtReply(long movieid, int pageNo,int pageSize,int replySize);
+	
 }

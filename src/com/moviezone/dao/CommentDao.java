@@ -8,6 +8,7 @@ import com.moviezone.domain.Reply;
 
 
 public interface CommentDao {
+	public long selectCount(Comment comment);   
 	public Comment select(long commentid);
 	public List<Comment> select(Comment comment,int pageNo,int pageSize);
 	public Page<Comment> selectPage(Comment comment,int pageNo,int pageSize);
@@ -21,5 +22,5 @@ public interface CommentDao {
 	public long insertReply(Reply reply);
 	public boolean updateReply(Reply reply);
 	public boolean deleteReply(Reply reply);    
-	public boolean deleteReply(long replyid);   
+	public boolean deleteReply(long replyid);
 }

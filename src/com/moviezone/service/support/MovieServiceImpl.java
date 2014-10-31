@@ -1,5 +1,6 @@
 package com.moviezone.service.support;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,8 +10,10 @@ import org.slf4j.LoggerFactory;
 import com.moviezone.dao.MovieDao;
 import com.moviezone.domain.Attach;
 import com.moviezone.domain.Module;
+import com.moviezone.domain.MovieWrapper;
 import com.moviezone.domain.Page;
 import com.moviezone.domain.Movie;
+import com.moviezone.service.CommentService;
 import com.moviezone.service.KeyService;
 import com.moviezone.service.MovieService;
 
@@ -18,7 +21,8 @@ public class MovieServiceImpl implements MovieService{
 	private static final Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
 	private MovieDao movieDao;
 	private KeyService keyService;
-
+	private CommentService commentService;
+	
 	@Override
 	public Movie select(long movieid) {
 		return movieDao.select(movieid);
@@ -60,13 +64,13 @@ public class MovieServiceImpl implements MovieService{
 	}
 	
 	@Override
-	public Page<Movie> selectOnlineMovie(Movie movie, int pageNo, int pageSize) {
-		return movieDao.selectPage(movie, true, pageNo, pageSize);
+	public Page<MovieWrapper> selectOnlineMovie(Movie movie, int pageNo, int pageSize) {
+		return getMovieWraper(movieDao.selectPage(movie, true, pageNo, pageSize));
 	}
 
 	@Override
-	public Page<Movie> selectOfflineMovie(Movie movie, int pageNo, int pageSize) {
-		return movieDao.selectPage(movie, false, pageNo, pageSize);
+	public Page<MovieWrapper> selectOfflineMovie(Movie movie, int pageNo, int pageSize) {
+		return getMovieWraper(movieDao.selectPage(movie, false, pageNo, pageSize));
 	}
 	
 	@Override
@@ -97,7 +101,29 @@ public class MovieServiceImpl implements MovieService{
 	public void setKeyService(KeyService keyService) {
 		this.keyService = keyService;
 	}
+	
+	public void setCommentService(CommentService commentService) {
+		this.commentService = commentService;
+	}
 
+	private Page<MovieWrapper> getMovieWraper(Page<Movie> movies){
+		List<MovieWrapper> datas = new ArrayList<MovieWrapper>();
+		Page<MovieWrapper> movieWrappers = new Page<MovieWrapper>();
+		movieWrappers.setPageNo(movies.getPageNo());
+		movieWrappers.setPageSize(movies.getPageSize());
+		movieWrappers.setTotal(movies.getPageTotal());
+		movieWrappers.setData(datas);
+		for(Movie mv:movies.getData()){
+			MovieWrapper data = new MovieWrapper();
+			data.setMovie(mv);
+			data.setModules(selectModule(mv.getMovieid()));
+			data.setCmmtCount(commentService.selectCommentCount(mv.getMovieid()));
+			datas.add(data);
+		}
+		return movieWrappers;
+	}
+
+	
 	
 
 	

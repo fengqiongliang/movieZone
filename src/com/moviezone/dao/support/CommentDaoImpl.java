@@ -78,11 +78,17 @@ public class CommentDaoImpl implements CommentDao{
 	}	
 	
 	@Override
+	public long selectCount(Comment comment) {
+		if(comment == null)return 0;
+		Map<String,Object>  result = session.selectOne("selectCmmtCount",comment);
+		return (Long)result.get("total");
+	}
+	
+	@Override
 	public Page<Comment> selectPage(Comment comment, int pageNo, int pageSize) {
 		Page<Comment> page = new Page<Comment>();
 		if(comment == null)return page;
-		Map<String,Object>  result = session.selectOne("selectCmmtCount",comment);
-		page.setTotal((Long)result.get("total"));
+		page.setTotal(selectCount(comment));
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setData(select(comment,pageNo,pageSize));

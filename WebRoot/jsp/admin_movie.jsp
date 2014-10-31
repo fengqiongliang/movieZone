@@ -39,7 +39,7 @@
 			<table class="adminTable">
 				<thead><tr><th style="width:20px">id</th><th>名称</th><th style="width:55px">类型</th><th style="width:45px">评分</th><th style="width:110px">上线时间</th><th style="width:100px">还有</th><th style="width:110px">作用版块</th><th style="width:75px">操作</th></tr></thead>
 				<tbody>
-					<c:set var="movies" value="${offlineMovies}" />
+					<c:set var="wrappers" value="${offlineMovies}" />
 					<%@ include file="admin_movie_offline.jsp"  %>
 				</tbody>
 			</table>
@@ -55,7 +55,7 @@
 			<table class="adminTable">
 				<thead><tr><th style="width:20px">id</th><th>名称</th><th style="width:55px">类型</th><th style="width:45px">评分</th><th style="width:45px">收藏</th><th style="width:45px">下载</th><th style="width:45px">浏览</th><th style="width:45px">赞数</th><th style="width:45px">留言</th><th style="width:110px">上线时间</th><th style="width:110px">作用版块</th><th style="width:75px">操作</th></tr></thead>
 				<tbody>
-					<c:set var="movies" value="${onlineMovies}" />
+					<c:set var="wrappers" value="${onlineMovies}" />
 					<%@ include file="admin_movie_online.jsp"  %>
 				</tbody>
 			</table>

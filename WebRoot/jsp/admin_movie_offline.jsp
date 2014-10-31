@@ -4,7 +4,21 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"  %>
 
 
-<c:forEach var="mv" items="${movies.data}"  varStatus="status">
-<tr hoverClass="adminTrHover"><td>${mv.movieid}</td><td style="text-align:left;padding-left:10px">${mv.name}</td><td>${mv.type}</td><td>${mv.score}</td><td>${mv.publishtime}</td><td>1天 01:20:01</td><td style="text-align:left;padding-left:10px">首页-480p<br/>内容页</td><td>修改 删除</td></tr>
+<c:forEach var="wrapper" items="${wrappers.data}"  varStatus="status">
+<tr hoverClass="adminTrHover">
+	<td>${wrapper.movie.movieid}</td>
+	<td style="text-align:left;padding-left:10px"><a href="${base}/content.do?id=${wrapper.movie.movieid}">${wrapper.movie.name}</a></td>
+	<td>${wrapper.movie.type}</td>
+	<td>${wrapper.movie.score}</td>
+	<td>${wrapper.strPubTime}</td>
+	<td>${wrapper.strTimeFromNow}</td>
+	<td style="text-align:left;padding-left:10px" title="<c:forEach var="module" items="${wrapper.modules}">${module.modname}&#10;</c:forEach>">
+		<c:forEach var="module" items="${wrapper.modules}"  varStatus="status" begin="0" end="3">
+			${module.modname}<br/>
+		</c:forEach>
+		<c:if test="${fn:length(wrapper.modules)>4}">...</c:if>
+	</td>
+	<td>修改 删除</td>
+</tr>
 </c:forEach>
-<tr height="40" valign="middle"><td colspan="20" style="text-align:right;background:#F1F8FE">${movies.pageNo}/${movies.pageTotal} 共${movies.total}条   &nbsp&nbsp<c:if test="${!movies.isfirstPage}"><input  style="width:60px" class="adminBtn" hoverClass="adminBtnHover" type="button" value="<上一页" onclick="adminQuery(this,'up')"></input></c:if><c:if test="${!movies.islastPage}"><input style="width:60px" class="adminBtn" hoverClass="adminBtnHover" type="button" value="下一页>" onclick="adminQuery(this,'down')"></input></c:if></td></tr>
+<tr height="40" valign="middle"><td colspan="20" style="text-align:right;background:#F1F8FE">${wrappers.pageNo}/${wrappers.pageTotal} 共${wrappers.total}条   &nbsp&nbsp<c:if test="${!wrappers.isfirstPage}"><input  style="width:60px" class="adminBtn" hoverClass="adminBtnHover" type="button" value="<上一页" onclick="adminQuery(this,'up')"></input></c:if><c:if test="${!wrappers.islastPage}"><input style="width:60px" class="adminBtn" hoverClass="adminBtnHover" type="button" value="下一页>" onclick="adminQuery(this,'down')"></input></c:if></td></tr>
