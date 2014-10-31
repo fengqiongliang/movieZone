@@ -14,26 +14,26 @@
 	
 	<div class="adminRight">
 		<div class="adminPicContainer">
-			<div class="adminPic" url="stat.json" interval="1000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=broswer" interval="1000"></div>
 			<p class="adminPicTitle">按浏览量进行排名</p>
 		</div>
 		<div class="adminPicContainer" style="margin-left:30px">
-			<div class="adminPic" url="stat.json" interval="1000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=down" interval="1000"></div>
 			<p class="adminPicTitle">按下载量进行排名</p>
 		</div>
 		<div class="adminPicContainer">
-			<div class="adminPic" url="stat.json" interval="1000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=approve" interval="1000"></div>
 			<p class="adminPicTitle">按点赞数进行排名</p>
 		</div>
 		<div class="adminPicContainer" style="margin-left:30px">
-			<div class="adminPic" url="stat.json" interval="1000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=comment" interval="1000"></div>
 			<p class="adminPicTitle">按留言数进行排名</p>
 		</div>
 		<div class="adminTableContainer">
-			<ul class="adminTableQuery" url="adminMovie1.json">
+			<ul class="adminTableQuery" url="${base}/offlineMovies.json">
 				<li class="adminTableTitle">队列上线</li>
 				<li class="adminLi">I D：<input class="adminInput" focusclass="adminInputFocus" type="text" name="id"></input> 名称：<input class="adminInput" focusclass="adminInputFocus" type="text" name="name"></input></li>
-				<li class="adminLi">类型：<input onclick="checkType(this)" type="checkbox" value="movie"/> 电影 <input onclick="checkType(this)" type="checkbox" value="tv"/> 电视剧<span name="type" class="checkLabel" style="margin-left:276px;display:none;width:230px"></span><a href="javascript:void(0)" onclick="delQuery(this)" style="font-size:12px;display:none">删除</a></li>
+				<li class="adminLi">类型：<input onclick="checkType(this)" type="checkbox" value="mv" autocomplete="off"/> 电影 <input onclick="checkType(this)" type="checkbox" value="tv" autocomplete="off"/> 电视剧<span name="type" class="checkLabel" style="margin-left:276px;display:none;width:230px"></span><a href="javascript:void(0)" onclick="delQuery(this)" style="font-size:12px;display:none">删除</a></li>
 				<li class="adminBtns"><input class="adminBtn" hoverClass="adminBtnHover" type="button" value="查询" onclick="adminQuery(this)"></input><input class="adminBtn" hoverClass="adminBtnHover" type="button" value="添加" onclick="openWnd('admin_movieAction.html')"></input></li>
 			</ul>
 			<table class="adminTable">
@@ -45,11 +45,11 @@
 			</table>
 		</div>
 		<div class="adminTableContainer">
-			<ul class="adminTableQuery" url="adminMovie2.json">
+			<ul class="adminTableQuery" url="${base}/onlineMovies.json">
 				<li class="adminTableTitle">线上影片</li>
 				<li class="adminLi">I D：<input class="adminInput" focusclass="adminInputFocus" type="text" name="id"></input> 名称：<input class="adminInput" focusclass="adminInputFocus" type="text" name="name"></input></li>
-				<li class="adminLi">类型：<input onclick="checkType(this)" type="checkbox" value="movie"/> 电影 <input onclick="checkType(this)" type="checkbox" value="tv"/> 电视剧<span name="type" class="checkLabel" style="margin-left:276px;display:none;width:230px"></span><a href="javascript:void(0)" onclick="delQuery(this)" style="font-size:12px;display:none">删除</a></li>
-				<li class="adminLi">排序：<input onclick="checkType(this)" type="checkbox" value="time"/> 时间 <input onclick="checkType(this)" type="checkbox" value="score"/> 评分 <input onclick="checkType(this)" type="checkbox" value="favorite"/> 收藏 <input onclick="checkType(this)" type="checkbox" value="down"/> 下载 <input onclick="checkType(this)" type="checkbox" value="browse"/> 浏览 <input onclick="checkType(this)" type="checkbox" value="good"/> 赞数 <input onclick="checkType(this)" type="checkbox" value="comment"/> 留言<span name="sort" class="checkLabel" style="margin-left:50px;display:none;width:230px"></span><a href="javascript:void(0)" onclick="delQuery(this)" style="font-size:12px;display:none">删除</a></li>
+				<li class="adminLi">类型：<input onclick="checkType(this)" type="checkbox" value="mv" autocomplete="off"/> 电影 <input onclick="checkType(this)" type="checkbox" value="tv" autocomplete="off"/> 电视剧<span name="type" class="checkLabel" style="margin-left:276px;display:none;width:230px"></span><a href="javascript:void(0)" onclick="delQuery(this)" style="font-size:12px;display:none">删除</a></li>
+				<!--  <li class="adminLi">排序：<input onclick="checkType(this)" type="checkbox" value="time" autocomplete="off"/> 时间 <input onclick="checkType(this)" type="checkbox" value="score" autocomplete="off"/> 评分 <input onclick="checkType(this)" type="checkbox" value="favorite" autocomplete="off"/> 收藏 <input onclick="checkType(this)" type="checkbox" value="down" autocomplete="off"/> 下载 <input onclick="checkType(this)" type="checkbox" value="browse" autocomplete="off"/> 浏览 <input onclick="checkType(this)" type="checkbox" value="good" autocomplete="off"/> 赞数 <input onclick="checkType(this)" type="checkbox" value="comment" autocomplete="off"/> 留言<span name="sort" class="checkLabel" style="margin-left:50px;display:none;width:230px"></span><a href="javascript:void(0)" onclick="delQuery(this)" style="font-size:12px;display:none">删除</a></li>-->
 				<li class="adminBtns"><input class="adminBtn" hoverClass="adminBtnHover" type="button" value="查询" onclick="adminQuery(this)"></input><input class="adminBtn" hoverClass="adminBtnHover" type="button" value="添加" onclick="openWnd('admin_movieAction.html')"></input></li>
 			</ul>
 			<table class="adminTable">

@@ -64,13 +64,21 @@ public class MovieServiceImpl implements MovieService{
 	}
 	
 	@Override
-	public Page<MovieWrapper> selectOnlineMovie(Movie movie, int pageNo, int pageSize) {
-		return getMovieWraper(movieDao.selectPage(movie, true, pageNo, pageSize));
+	public Page<MovieWrapper> selectOnlineMovie(Long movieid,String name,String[] type,String[] sort,int pageNo) {
+		Movie movie = new Movie();
+		if(movieid !=null)movie.setMovieid(movieid);
+		if(StringUtils.isNotBlank(name))movie.setName(name);
+		if(type!=null && type.length == 1 && StringUtils.isNotBlank(type[0]))movie.setType(type[0]);
+		return getMovieWraper(movieDao.selectPage(movie, true, pageNo, 25));
 	}
 
 	@Override
-	public Page<MovieWrapper> selectOfflineMovie(Movie movie, int pageNo, int pageSize) {
-		return getMovieWraper(movieDao.selectPage(movie, false, pageNo, pageSize));
+	public Page<MovieWrapper> selectOfflineMovie(Long movieid,String name,String[] type,int pageNo) {
+		Movie movie = new Movie();
+		if(movieid !=null)movie.setMovieid(movieid);
+		if(StringUtils.isNotBlank(name))movie.setName(name);
+		if(type!=null && type.length == 1 && StringUtils.isNotBlank(type[0]))movie.setType(type[0]);
+		return getMovieWraper(movieDao.selectPage(movie, false, pageNo, 25));
 	}
 	
 	@Override

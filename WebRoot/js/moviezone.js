@@ -925,7 +925,7 @@ function initAdminPic(){
 			backgroundOpacity:0,
 			labelFormatter: function(label, series) {
 				if(!series.id)return label+'<span class="adminData">('+series.data[0][1]+')</span>';
-				return '<a href="content.html?id='+series.id+'" target="_blank">'+label+'<span class="adminData">('+series.data[0][1]+')</span></a>';
+				return '<a href="content.do?id='+series.id+'" target="_blank">'+label+'<span class="adminData">('+series.data[0][1]+')</span></a>';
 			}
 		}
 	};
@@ -1012,8 +1012,10 @@ function adminQuery(source,action){
 	nameDoms.each(function(){
 		var nameVal = $(this).attr('name');
 		var val     = $(this).val();
-		if(val == undefined || "" == val.replace(/\s/g,''))return true;
-		val = val.replace(/\s/g,'');
+		if(val == undefined)return true;
+		if(val.length<1)return true;
+		if(val.replace && "" == val.replace(/\s/g,''))return true;
+		if(val.replace)val = val.replace(/\s/g,'');
 		$(this).val(val);
 		params[nameVal] = val;
 	});
@@ -1023,6 +1025,7 @@ function adminQuery(source,action){
         type:'GET',
         url:tableQuery.attr('url'),
         data:params,
+        traditional:true,
 		dataType:'html',
         beforeSend:function(){
 			tableQuery.attr('isRunning','true');

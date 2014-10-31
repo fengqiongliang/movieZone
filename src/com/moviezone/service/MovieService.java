@@ -6,6 +6,7 @@ import java.util.List;
 
 
 
+
 import com.moviezone.domain.Attach;
 import com.moviezone.domain.Module;
 import com.moviezone.domain.MovieWrapper;
@@ -25,6 +26,6 @@ public interface MovieService {
 	public boolean update(Movie movie);
 	public boolean delete(Movie movie);
 	public boolean delete(long userid);
-	public Page<MovieWrapper> selectOnlineMovie(Movie movie,int pageNo,int pageSize);
-	public Page<MovieWrapper> selectOfflineMovie(Movie movie,int pageNo,int pageSize);
+	public Page<MovieWrapper> selectOnlineMovie(Long movieid,String name,String[] type,String[] sort,int pageNo);
+	public Page<MovieWrapper> selectOfflineMovie(Long movieid,String name,String[] type,int pageNo);
 }
