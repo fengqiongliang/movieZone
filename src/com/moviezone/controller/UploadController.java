@@ -6,10 +6,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 
 
 
@@ -52,23 +54,69 @@ public class UploadController extends BaseController{
 	public void upUserPic(HttpServletRequest request,
 						 	  			HttpServletResponse response,
 						 	  			HttpSession session,
-						 	  			@RequestParam(value="upFile",required=false) MultipartFile file)throws Exception{
+						 	  			@RequestParam(value="creationdate") Date creationdate,
+						 	  			@RequestParam(value="modificationdate") Date modificationdate,
+						 	  			@RequestParam(value="upFile") MultipartFile file)throws Exception{
 		User user = (User)request.getAttribute(Constants.USER);
 		if(user == null ){
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}
 		
+		String originalName =  new String(file.getOriginalFilename().getBytes("ISO-8859-1"),"utf-8");
+		
+		String fileName = writeFile(session,file,true);
+		
+		if(StringUtils.isNotBlank(fileName)){
+			JSONObject json = new JSONObject();
+			json.put("faceImgUrl", Constants.base+fileName);
+			json.put("upFileName", originalName);
+			response.getWriter().write(json.toString());
+			//保存至数据库中
+			user.setNextface(fileName);;
+			userService.update(user);
+			logger.debug("头像更新 "+user.getUserid()+".【"+user.getUsername()+"】  ---> "+fileName+"  originalName："+originalName);
+		}
+		
+	}
+	
+	@RequestMapping(value="/upMoviePic.json",method=RequestMethod.POST)
+	public void upMoviePic(HttpServletRequest request,
+						 	  			   HttpServletResponse response,
+						 	  			   HttpSession session,
+						 	  			   @RequestParam(value="creationdate") Date creationdate,
+						 	  			   @RequestParam(value="modificationdate") Date modificationdate,
+						 	  			   @RequestParam(value="upFile") MultipartFile file)throws Exception{
+		User user = (User)request.getAttribute(Constants.USER);
+		if(user == null ){
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+		
+		String originalName =  new String(file.getOriginalFilename().getBytes("ISO-8859-1"),"utf-8");
+		System.out.println("originalName:"+originalName);
+		System.out.println(creationdate);
+		System.out.println(modificationdate);
+		
+		String fileName = writeFile(session,file,false);
+		
+		if(StringUtils.isNotBlank(fileName)){
+			JSONObject json = new JSONObject();
+			json.put("faceImgUrl", Constants.base+fileName);
+			json.put("upFileName", originalName);
+			response.getWriter().write(json.toString());
+			logger.debug("文件上传成功   ---> "+fileName+"  originalName："+originalName);
+			
+		}
+		
+	}
+	
+	private String writeFile(HttpSession session,MultipartFile file,boolean isUpUserface)throws Exception{
 		//错误判断
-		if(file == null)return;
-		if(file.getBytes().length<1)return;
+		if(file == null)return null;
+		if(file.getBytes().length<1)return null;
 		
 		//获得基本变量
-		String Scheme         = request.getScheme();
-		String ServerName  = request.getServerName();
-		int    ServerPort       = request.getServerPort();
-		String contextPath  = request.getContextPath();
-		String webPath        = Scheme+"://"+ServerName+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
 		String realpath         = session.getServletContext().getRealPath("/");
 		String name             = SecurityUtil.encryptMD5(file.getBytes())+".jpg";
 		String finalName      = "/upload/"+name;
@@ -81,66 +129,21 @@ public class UploadController extends BaseController{
 			FileOutputStream fos  = new FileOutputStream(jpgFile);
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			long before = System.currentTimeMillis();
-			writeSuccess = ImageUtil.scaleImg(92, 71, is, bos);
+			//如果是上传用户头像则切图像
+			if(isUpUserface)writeSuccess = ImageUtil.scaleImg(92, 71, is, bos);
+			//如果是上传其它文件，则原样保存
+			if(!isUpUserface){
+				bos.write(file.getBytes());
+			}
 			long after    = System.currentTimeMillis();
 			logger.info((writeSuccess?"成功":"失败")+" 花费 "+(after-before)+"ms 将文件【"+file.getOriginalFilename()+"】 --> 【"+finalName+"】 写入磁盘  "+jpgFile);
 			is.close(); 
 			bos.close();
 		}
-		
-		if(writeSuccess){
-			JSONObject json = new JSONObject();
-			json.put("faceImgUrl", webPath+finalName);
-			response.getWriter().write(json.toString());
-			//保存至数据库中
-			user.setNextface(finalName);;
-			userService.update(user);
-			logger.debug("头像更新 "+user.getUserid()+".【"+user.getUsername()+"】  ---> "+finalName+"  ");
-		}
-		
-	}
-	
-	@RequestMapping(value="/upload/video.json",method=RequestMethod.POST)
-	public ModelAndView upVideo(HttpServletRequest request,
-						 	  	HttpServletResponse response,
-						 	  	HttpSession session,
-						 	  	@RequestHeader(value="User-Agent",required=false,defaultValue="firefox") String userAgent,
-						 	  	@CookieValue(value="JSESSIONID",required=false,defaultValue="haha") String cookie,
-						 	  	@RequestParam(value="file",required=false) MultipartFile file)throws Exception{
+		if(writeSuccess)return finalName;
 		return null;
 	}
 	
-	@RequestMapping(value="/upload/bt.json",method=RequestMethod.POST)
-	public ModelAndView upBt(HttpServletRequest request,
-						 	 HttpServletResponse response,
-						 	 HttpSession session,
-						 	 @RequestHeader(value="User-Agent",required=false,defaultValue="firefox") String userAgent,
-						 	 @CookieValue(value="JSESSIONID",required=false,defaultValue="haha") String cookie,
-						 	 @RequestParam(value="file",required=false) MultipartFile file)throws Exception{
-		System.out.println(file.getOriginalFilename());
-		System.out.println(file.getInputStream());
-		//response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		JSONObject json = new JSONObject();
-		json.put("url", "img/bt.jpg");
-		response.getWriter().write(json.toString());
-		return null;
-	}
-	
-	@RequestMapping(value="/upload/music.json",method=RequestMethod.POST)
-	public ModelAndView upMusic(HttpServletRequest request,
-						 	  	HttpServletResponse response,
-						 	  	HttpSession session,
-						 	  	@RequestHeader(value="User-Agent",required=false,defaultValue="firefox") String userAgent,
-						 	  	@CookieValue(value="JSESSIONID",required=false,defaultValue="haha") String cookie,
-						 	  	@RequestParam(value="file",required=false) MultipartFile file)throws Exception{
-		System.out.println(file.getOriginalFilename());
-		System.out.println(file.getInputStream());
-		//response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		JSONObject json = new JSONObject();
-		json.put("url", "img/music.jpg");
-		response.getWriter().write(json.toString());
-		return null;
-	}
 	
 	
 }

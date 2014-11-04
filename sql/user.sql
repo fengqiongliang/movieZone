@@ -368,22 +368,22 @@ CREATE TABLE `attachment` (
   FOREIGN KEY   (`movieid`) REFERENCES `movie` (`movieid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `attachment` VALUES ('1', '1', '[驯龙高手].How.To.Train.Your.Dragon.720p.Bluray.x264-CBGB.mkv', '[驯龙高手].How.To.Train.Your.Dragon.720p.Bluray.x264-CBGB.mkv', '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('2', '1', '百度网盘', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('3', '1', '迅雷快传', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('4', '1', '华为网盘', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('5', '1', 'Uploader', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('6', '2', '腾讯网盘', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('7', '2', '[天才眼镜狗].Mr.Peabody.And.Sherman.2014.BluRay.720p.x264.AC3.4Audios-CMCT.mkv', '[天才眼镜狗].Mr.Peabody.And.Sherman.2014.BluRay.720p.x264.AC3.4Audios-CMCT.mkv', '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('8', '3', '百度网盘', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('9', '4', '迅雷快传', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('10', '5', '华为网盘', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('11', '5', 'Uploader', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('12', '6', '腾讯网盘', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('13', '7', 'X战警：逆转未来', 'X-Men.Days.of.Future.Past.2014.KORSUB.720p.HDRip.x264.AC3-SeeHD.mkv', '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('14', '7', '百度网盘', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('15', '8', '迅雷快传', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
-INSERT INTO `attachment` VALUES ('16', '8', '华为网盘', null, '/upload/b2fc39c04ebde8b5e95088181b08e9b3.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('1', '1', '[驯龙高手].How.To.Train.Your.Dragon.720p.Bluray.x264-CBGB.mkv', '[驯龙高手].How.To.Train.Your.Dragon.720p.Bluray.x264-CBGB.mkv', '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('2', '1', '百度网盘', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('3', '1', '迅雷快传', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('4', '1', '华为网盘', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('5', '1', 'Uploader', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('6', '2', '腾讯网盘', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('7', '2', '[天才眼镜狗].Mr.Peabody.And.Sherman.2014.BluRay.720p.x264.AC3.4Audios-CMCT.mkv', '[天才眼镜狗].Mr.Peabody.And.Sherman.2014.BluRay.720p.x264.AC3.4Audios-CMCT.mkv', '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('8', '3', '百度网盘', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('9', '4', '迅雷快传', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('10', '5', '华为网盘', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('11', '5', 'Uploader', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('12', '6', '腾讯网盘', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('13', '7', 'X战警：逆转未来', 'X-Men.Days.of.Future.Past.2014.KORSUB.720p.HDRip.x264.AC3-SeeHD.mkv', '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('14', '7', '百度网盘', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('15', '8', '迅雷快传', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
+INSERT INTO `attachment` VALUES ('16', '8', '华为网盘', null, '/upload/102eaeb97bbad64bcc53666d3cefe26a.jpg','2012-10-21 22:18:56');
 
 -- ----------------------------
 -- 留言表

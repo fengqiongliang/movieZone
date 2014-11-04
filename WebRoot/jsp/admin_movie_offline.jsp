@@ -7,7 +7,7 @@
 <c:forEach var="wrapper" items="${wrappers.data}"  varStatus="status">
 <tr hoverClass="adminTrHover">
 	<td>${wrapper.movie.movieid}</td>
-	<td style="text-align:left;padding-left:10px"><a href="${base}/content.do?id=${wrapper.movie.movieid}">${wrapper.movie.name}</a></td>
+	<td style="text-align:left;padding-left:10px"><a href="${base}/content.do?id=${wrapper.movie.movieid}"  target="_blank">${wrapper.movie.name}</a></td>
 	<td>${wrapper.movie.type}</td>
 	<td>${wrapper.movie.score}</td>
 	<td>${wrapper.strPubTime}</td>
@@ -18,7 +18,7 @@
 		</c:forEach>
 		<c:if test="${fn:length(wrapper.modules)>4}">...</c:if>
 	</td>
-	<td>修改 删除</td>
+	<td><span class="adminAction" onclick="openWnd('${base}/admin_movieAction.json?id=${wrapper.movie.movieid}')">修改</span> 删除</td>
 </tr>
 </c:forEach>
 <tr height="40" valign="middle"><td colspan="20" style="text-align:right;background:#F1F8FE">${wrappers.pageNo}/${wrappers.pageTotal} 共${wrappers.total}条   &nbsp&nbsp<c:if test="${!wrappers.isfirstPage}"><input  style="width:60px" class="adminBtn" hoverClass="adminBtnHover" type="button" value="<上一页" onclick="adminQuery(this,'up')"></input></c:if><c:if test="${!wrappers.islastPage}"><input style="width:60px" class="adminBtn" hoverClass="adminBtnHover" type="button" value="下一页>" onclick="adminQuery(this,'down')"></input></c:if></td></tr>

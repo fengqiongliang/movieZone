@@ -51,6 +51,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 			String staticName = Scheme+"://"+"www.movietest.com"+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
 			baseDir = webPath;
 			staticDir = staticName;
+			Constants.base = baseDir;
 		}
 		request.setAttribute("base",baseDir);
 		request.setAttribute("static",staticDir);

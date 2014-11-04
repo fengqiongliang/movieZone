@@ -18,6 +18,11 @@
 </head>
 <body>
 <div class="layer"></div>
+<div class="layerWindow">
+	<a class="closeReg" hoverClass="closeRegHover" href="javascript:closeLayerWnd();"></a>
+	<img src="${static}/img/loading.gif">
+	<div class="contContainer"></div>
+</div>
 <c:if test='${empty user}'>
 <div class="regWindow">
 	<a class="closeReg" hoverClass="closeRegHover" href="javascript:closeReg();"></a>

@@ -372,10 +372,11 @@ function initSWFUpload(){
 			flash_url : "./swf/swfupload.swf",
 			upload_url: $(span).attr("uploadUrl")+";jsessionid="+getCookie("JSESSIONID"),
 			file_post_name: "upFile",
-
+			
 			//选择文件窗口事件处理
 			file_queued_handler : function(selFile){
 				this.selFile = selFile;
+				this.setPostParams({'creationdate':selFile.creationdate,'modificationdate':selFile.modificationdate});
 			},
 			file_queue_error_handler : function(file,code,msg){
 				if(code == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT)alert("文件大小超过"+this.settings.file_size_limit+"，请重新选择");
@@ -389,6 +390,7 @@ function initSWFUpload(){
 			//文件事件上传处理
 			upload_start_handler : function(file){
 				this.setButtonDisabled(true);
+				
 				if($(span).attr('upstart'))eval($(span).attr('upstart')+"(file,this)");
 			},
 			upload_success_handler : function(file,serverdata,resp){
@@ -1094,7 +1096,7 @@ function addMovie(source){
 		params[name] = val;
 	});
 	$.ajax({
-        type:'GET',
+        type:'POST',
         url:'addMovie.json',
         data:params,
 		dataType:'html',

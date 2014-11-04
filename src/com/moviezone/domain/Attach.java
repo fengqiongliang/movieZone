@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.moviezone.constant.Constants;
+
 public class Attach implements Serializable{
 	private static final long serialVersionUID = -494037651708381235L;
 	private long attachid;
@@ -42,6 +44,7 @@ public class Attach implements Serializable{
 	}
 	public void setAttach_url(String attach_url) {
 		this.attach_url = attach_url;
+		if(attach_url!=null && !attach_url.toLowerCase().startsWith("http")) this.attach_url =  Constants.base + attach_url;
 	}
 	public Date getCreatetime() {
 		return createtime;

@@ -29,6 +29,17 @@ public class MovieServiceImpl implements MovieService{
 	}
 	
 	@Override
+	public MovieWrapper selectAsWrapper(long movieid) {
+		if(movieid<1)return null;
+		Movie mv = select(movieid);
+		MovieWrapper wrapper = new MovieWrapper();
+		wrapper.setMovie(mv);
+		wrapper.setModules(selectModule(mv.getMovieid()));
+		wrapper.setAttachs(selectAttach(mv.getMovieid()));
+		return wrapper;
+	}
+	
+	@Override
 	public List<Module> selectModule(long movieid) {
 		return movieDao.selectModule(movieid);
 	}
@@ -130,6 +141,8 @@ public class MovieServiceImpl implements MovieService{
 		}
 		return movieWrappers;
 	}
+
+	
 
 	
 	
