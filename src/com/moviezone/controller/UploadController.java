@@ -117,8 +117,10 @@ public class UploadController extends BaseController{
 		if(file.getBytes().length<1)return null;
 		
 		//获得基本变量
+		String originalName =  new String(file.getOriginalFilename().getBytes("ISO-8859-1"),"utf-8");
+		String suffixName    = originalName.substring(originalName.lastIndexOf(".")).toLowerCase();
 		String realpath         = session.getServletContext().getRealPath("/");
-		String name             = SecurityUtil.encryptMD5(file.getBytes())+".jpg";
+		String name             = SecurityUtil.encryptMD5(file.getBytes())+(isUpUserface?".jpg":suffixName);
 		String finalName      = "/upload/"+name;
 		File     jpgFile            = new File(realpath+finalName);
 		
