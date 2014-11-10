@@ -1045,13 +1045,17 @@ function adminQuery(source,action){
 function upMovieSuccess(file,serverdata,resp){
 	$('#attachUrl').val($.parseJSON(serverdata).faceImgUrl);
 	$('#attachName').val(file.name);
+	$('#attachName').attr('old_url',$.parseJSON(serverdata).faceImgUrl);
+	$('#attachName').attr('old_name',$.parseJSON(serverdata).upFileName);
 }
 function upMovieError(file,errorCode,msg){
 	alert("上传失败");
 }
 function addAttach(source){
-	var url  = $('#attachUrl').val().replace(/\s/g,'');
-	var name = $('#attachName').val().replace(/\s/g,'');
+	var url            = $('#attachUrl').val().replace(/\s/g,'');
+	var name       = $('#attachName').val().replace(/\s/g,'');
+	var old_name = "";
+	if(url==$('#attachName').attr('old_url'))old_name = $('#attachName').attr('old_name');
 	if(url.length<1){
 		$('#attachUrl').val('');
 		$('#attachUrl')[0].focus();
@@ -1062,7 +1066,7 @@ function addAttach(source){
 		$('#attachName')[0].focus();
 		return;
 	}
-	var li   = "<li><a name='attach' href='"+url+"' value='"+url+"_"+name+"' class='attachItem'>"+name+"</a><a href='javascript:void(0)' onclick='$(this).parent().remove()' style='color:#f41c54'>删除</a></li>";
+	var li   = "<li><a name='attachs' href='"+url+"' value='"+name+"_"+url+"_"+old_name+"' class='attachItem'>"+name+"</a><a href='javascript:void(0)' onclick='$(this).parent().remove()' style='color:#f41c54'>删除</a></li>";
 	$('.attachContainer').append(li);
 }
 function upImgSuccess(file,serverdata,resp,swfObj){
@@ -1073,7 +1077,8 @@ function upImgSuccess(file,serverdata,resp,swfObj){
 function mvPreviewImg(file,serverdata,resp,swfObj){
 	var url= $.parseJSON(serverdata).faceImgUrl;
 	var ul = $('#'+swfObj.movieName).parent().parent().parent().parent();
-	var li = "<li class='baseImgItem'><img name='mvImgs' src='"+url+"'/></li>";
+	
+	var li = "<li class='baseImgItem'><img name='pictures' src='"+url+"'/><input type='button' value='删除' hoverclass='adminBtnHover' class='adminBtn' onclick='$(this).parent().remove()'/></li>";
 	$('>li:last',ul).before(li);
 }
 function addMovie(source){
@@ -1112,6 +1117,18 @@ function addMovie(source){
     }).fail(function(){
 		alert('网络发生错误,添加失败');
     });
+}
+function delMovie(source,movieid){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'delMovie.json?movieid='+movieid,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$(source).parent().parent().remove();
+    }).fail(function(){alert('删除失败');});
 }
 function queryModuleMvs(source,direction){
 	var loadImgHtml = "<tr><td colspan='10'><img src='./img/loading.gif' /></td></tr>";

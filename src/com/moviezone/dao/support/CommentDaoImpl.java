@@ -85,6 +85,14 @@ public class CommentDaoImpl implements CommentDao{
 	}
 	
 	@Override
+	public long selectCommentCount(long movieid) {
+		if(movieid<1)return 0;
+		Comment comment = new Comment();
+		comment.setMovieid(movieid);
+		return selectCount(comment);
+	}
+	
+	@Override
 	public Page<Comment> selectPage(Comment comment, int pageNo, int pageSize) {
 		Page<Comment> page = new Page<Comment>();
 		if(comment == null)return page;

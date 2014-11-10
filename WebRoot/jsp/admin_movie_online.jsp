@@ -22,7 +22,7 @@
 		</c:forEach>
 		<c:if test="${fn:length(wrapper.modules)>4}">...</c:if>
 	</td>
-	<td><span class="adminAction" onclick="openWnd('${base}/admin_movieAction.json?id=${wrapper.movie.movieid}')">修改</span> 删除</td>
+	<td><span class="adminAction" onclick="openWnd('${base}/admin_movieAction.json?id=${wrapper.movie.movieid}')">修改</span> <span class="adminAction" onclick="delMovie(this,${wrapper.movie.movieid})">删除</span></td>
 </tr>
 </c:forEach>
 <tr height="40" valign="middle"><td colspan="20" style="text-align:right;background:#F1F8FE">${wrappers.pageNo}/${wrappers.pageTotal} 共${wrappers.total}条   &nbsp&nbsp<c:if test="${!wrappers.isfirstPage}"><input  style="width:60px" class="adminBtn" hoverClass="adminBtnHover" type="button" value="<上一页" onclick="adminQuery(this,'up')"></input></c:if><c:if test="${!wrappers.islastPage}"><input style="width:60px" class="adminBtn" hoverClass="adminBtnHover" type="button" value="下一页>" onclick="adminQuery(this,'down')"></input></c:if></td></tr>

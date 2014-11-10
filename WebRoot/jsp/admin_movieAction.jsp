@@ -29,19 +29,19 @@
 	</div>
 	<div class="actMvTr">
 		<span class="actMvColumn">发布时间：</span>
-		<input name="publishDate" type="text" value="${wrapper.strPubTime}" class="mvColInput" focusClass="inputF" readonly="readonly"  autocomplete="off" />
+		<input name="publishDate" type="text" value="${wrapper.strPubTime}" class="Wdate"  autocomplete="off"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
 	</div>
 	<div class="actMvTr">
 		<span class="actMvColumn">附件管理：</span>
 		<input id="attachUrl"  type="text"  title="示例：http://www.baidu.com/1.rar" class="mvColInput" focusClass="inputF" autocomplete="off" /><input id="attachName" type="text" title="示例：百度网盘" class="mvColInput" focusClass="inputF"  autocomplete="off" />
-		<input type="button" onclick="addAttach(this)" value="添加" hoverclass="adminBtnHover" class="adminBtn" />
 		<span class="mvUpContainer">
 			<input type="button" value="上传" hoverclass="adminBtnHover" class="adminBtn" />
 			<div class="mvUploader"><span uploadUrl="${base}/upMoviePic.json" maxSize="1024GB" types="*.*" desc="请选择附件" upsuccess="upMovieSuccess" uperror="upMovieError"></span></div>
 		</span>
+		<input type="button" onclick="addAttach(this)" value="添加" hoverclass="adminBtnHover" class="adminBtn" />
 		<ul class="attachContainer">
 			<c:forEach var="item" items="${wrapper.attachs}"  varStatus="status">
-				<li><a name="attachs" href="${item.attach_url}" value="${item.attach_url}" class="attachItem" title="${item.old_name}">${item.new_name}</a><a href="javascript:void(0)" onclick="$(this).parent().remove()" style="color:#f41c54">删除</a></li>
+				<li><a name="attachs" href="${item.absoluteAttachUrl}" value="${item.new_name}_${item.absoluteAttachUrl}_${item.old_name}" class="attachItem" title="${item.old_name}">${item.new_name}</a><a href="javascript:void(0)" onclick="$(this).parent().remove()" style="color:#f41c54">删除</a></li>
 			</c:forEach>
 		</ul>
 	</div>
@@ -131,7 +131,7 @@
 			</div>
 		</li>
 		<c:forEach var="pictue" items="${wrapper.movie.pictureAsArray}"  varStatus="status">
-			<li class="baseImgItem"><img name="pictures" src="${static}${pictue}" /></li>
+			<li class="baseImgItem"><img name="pictures" src="${static}${pictue}" /> <input type="button" value="删除" hoverclass="adminBtnHover" class="adminBtn" onclick="$(this).parent().remove()"/> </li>
 		</c:forEach>
 		<li style="clear:both"></li>
 	</ul>

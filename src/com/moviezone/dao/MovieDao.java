@@ -19,7 +19,11 @@ public interface MovieDao {
 	public List<Module> selectModule(long movieid);
 	public List<Attach> selectAttach(long movieid);
 	public long insert(Movie movie);
+	public long insert(Attach attach);
+	public long insert(Module module);
 	public boolean update(Movie movie);
 	public boolean delete(Movie movie);    
 	public boolean delete(long movieid);   
+	public boolean deleteAttach(long movieid);   
+	public boolean deleteModule(long movieid);   
 }

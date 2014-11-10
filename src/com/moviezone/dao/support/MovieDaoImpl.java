@@ -25,7 +25,17 @@ public class MovieDaoImpl implements MovieDao{
 	public long insert(Movie movie) {
 		return session.insert("insertMovie", movie)>0?movie.getMovieid():0;
 	}
+	
+	@Override
+	public long insert(Attach attach) {
+		return session.insert("insertAttach", attach)>0?attach.getAttachid():0;
+	}
 
+	@Override
+	public long insert(Module module) {
+		return session.insert("insertModule", module)>0?module.getModmvid():0;
+	}
+	
 	@Override
 	public Movie select(long movieid) {
 		if(movieid<1)return null;
@@ -115,6 +125,21 @@ public class MovieDaoImpl implements MovieDao{
 		movie.setMovieid(movieid);
 		return delete(movie);
 	}
+	@Override
+	public boolean deleteAttach(long movieid) {
+		if(movieid<1)return false;
+		Attach attach = new Attach();
+		attach.setMovieid(movieid);
+		return session.delete("deleteAttachByMovieid", attach)>0;
+	}
+
+	@Override
+	public boolean deleteModule(long movieid) {
+		if(movieid<1)return false;
+		Module module = new Module();
+		module.setMovieid(movieid);
+		return session.delete("deleteModuleByMovieid", module)>0;
+	}
 	
 	public void setSession(SqlSession session) {
 		this.session = session;
@@ -157,6 +182,10 @@ public class MovieDaoImpl implements MovieDao{
 		param.put("size", pageSize);
 		return param;
 	}
+
+	
+
+	
 	
 
 	

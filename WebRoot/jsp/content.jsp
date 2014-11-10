@@ -15,7 +15,7 @@
 			<span style="float:left">【附件】：</span>
 			<div style="float:left;font-size:12px;width:440px;">
 				<c:forEach var="attach"  items="${attachs}"  varStatus="status">
-				<a href="${attach. attach_url}"><span class="zip"></span>${attach.new_name}</a><br/>
+				<a href="${attach. absoluteAttachUrl}"><span class="zip"></span>${attach.new_name}</a><br/>
 				</c:forEach>
 			</div>
 		</li>

@@ -1,11 +1,20 @@
 package com.moviezone.controller;
 
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+
+
+
+
+
 
 
 
@@ -40,6 +49,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.HttpCode;
+import com.moviezone.domain.Attach;
+import com.moviezone.domain.Module;
 import com.moviezone.domain.Movie;
 import com.moviezone.domain.MovieWrapper;
 import com.moviezone.domain.Page;
@@ -49,7 +60,7 @@ import com.moviezone.service.UserService;
 
 @Controller
 public class AdminMovieController extends BaseController {
-	private static final Logger logger = LoggerFactory.getLogger(AdminMovieController.class);
+	private static final Logger logger    = LoggerFactory.getLogger(AdminMovieController.class);
 	@Autowired
 	private MovieService movieService;
 	
@@ -104,29 +115,38 @@ public class AdminMovieController extends BaseController {
 	}
 	
 	@RequestMapping(value="/addMovie.json",method=RequestMethod.POST)
-	public ModelAndView addMovie(ModelAndView mv,
-														HttpServletRequest request,
-														HttpServletResponse response,
-														@RequestParam(value="id",required=false,defaultValue="-1") long movieid,
-														@RequestParam(value="name") String name,
-														@RequestParam(value="type") String type,
-														@RequestParam(value="shortDesc") String shortdesc,
-														@RequestParam(value="longDesc") String longdesc,
-														@RequestParam(value="score") float score,
-														@RequestParam(value="approve") int approve,
-														@RequestParam(value="download") int download,
-														@RequestParam(value="browse") int browse,
-														@RequestParam(value="publishDate") String publishDate,
-														@RequestParam(value="attachs") String[] attach,
-														@RequestParam(value="modules") String[] modules,
-														@RequestParam(value="face650x500") String face650x500,
-														@RequestParam(value="face400x308") String face400x308,
-														@RequestParam(value="face220x169") String face220x169,
-														@RequestParam(value="face150x220") String face150x220,
-														@RequestParam(value="face80x80") String face80x80,
-														@RequestParam(value="pictures") String[] picture	)throws Exception{
-		
-		return mv;
+	public void saveMovie(ModelAndView mv,
+						 	  			 HttpServletRequest request,
+										 HttpServletResponse response,
+										 @RequestParam(value="id",required=false,defaultValue="-1") long movieid,
+										 @RequestParam(value="name") String name,
+										 @RequestParam(value="type") String type,
+										 @RequestParam(value="shortDesc") String shortdesc,
+										 @RequestParam(value="longDesc") String longdesc,
+										 @RequestParam(value="score") float score,
+										 @RequestParam(value="approve") int approve,
+										 @RequestParam(value="download") int download,
+										 @RequestParam(value="browse") int browse,
+										 @RequestParam(value="publishDate") String publishDate,
+										 @RequestParam(value="attachs",required=false) String[] attachInfos,
+										 @RequestParam(value="modules") String[] modnames,
+										 @RequestParam(value="face650x500") String face650x500,
+										 @RequestParam(value="face400x308") String face400x308,
+										 @RequestParam(value="face220x169") String face220x169,
+										 @RequestParam(value="face150x220") String face150x220,
+										 @RequestParam(value="face80x80") String face80x80,
+										 @RequestParam(value="pictures") String[] pictures	)throws Exception{
+		movieService.saveMovie(movieid, name, type, shortdesc, longdesc, score, approve, download, browse, publishDate, attachInfos, modnames, face650x500, face400x308, face220x169, face150x220, face80x80, pictures);
+	}
+	
+	@RequestMapping(value="/delMovie.json",method=RequestMethod.POST)
+	public void delMovie(HttpServletRequest request,
+							    	   HttpServletResponse response,
+									   @RequestParam(value="movieid",required=false,defaultValue="-1") long movieid)throws Exception{
+		if(movieid<1)throw new Exception("movieid can not be null");
+		Movie movie = new Movie();
+		movie.setMovieid(movieid);
+		movieService.delete(movie);
 	}
 	
 	

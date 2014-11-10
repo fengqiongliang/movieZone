@@ -140,7 +140,7 @@
       <if test="name != null" >#{name,jdbcType=VARCHAR},</if>
       <if test="type != null" >#{type,jdbcType=VARCHAR},</if>
       <if test="shortdesc != null" >#{shortdesc,jdbcType=VARCHAR},</if>
-      <if test="longdesc != null">#{longdesc,jdbcType=VARCHAR}</if>
+      <if test="longdesc != null">#{longdesc,jdbcType=VARCHAR},</if>
       <if test="face650x500 != null" >#{face650x500,jdbcType=VARCHAR},</if>
       <if test="face400x308 != null" >#{face400x308,jdbcType=VARCHAR},</if>
       <if test="face220x169 != null" >#{face220x169,jdbcType=VARCHAR},</if>
@@ -163,7 +163,7 @@
       <if test="name != null" >name = #{name,jdbcType=VARCHAR},</if>
       <if test="type != null" >type = #{type,jdbcType=VARCHAR},</if>
       <if test="shortdesc != null" >shortdesc = #{shortdesc,jdbcType=VARCHAR},</if>
-      <if test="longdesc != null">longdesc = #{longdesc,jdbcType=VARCHAR}</if>
+      <if test="longdesc != null">longdesc = #{longdesc,jdbcType=VARCHAR},</if>
       <if test="face650x500 != null" >face650x500 = #{face650x500,jdbcType=VARCHAR},</if>
       <if test="face400x308 != null" >face400x308 = #{face400x308,jdbcType=VARCHAR},</if>
       <if test="face220x169 != null" >face220x169 = #{face220x169,jdbcType=VARCHAR},</if>
@@ -180,8 +180,55 @@
     where movieid = #{movieid,jdbcType=BIGINT}
   </update>
   
+  <insert id="insertAttach" parameterType="com.moviezone.domain.Attach" >
+    insert into attachment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="attachid >0" >attachid,</if>
+      <if test="movieid >0" >movieid,</if>
+      <if test="new_name != null" >new_name,</if>
+      <if test="old_name != null" >old_name,</if>
+      <if test="attach_url != null" >attach_url,</if>
+      createtime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="attachid >0" >#{attachid,jdbcType=BIGINT},</if>
+      <if test="movieid >0" >#{movieid,jdbcType=BIGINT},</if>
+      <if test="new_name != null" >#{new_name,jdbcType=VARCHAR},</if>
+      <if test="old_name != null" >#{old_name,jdbcType=VARCHAR},</if>
+      <if test="attach_url != null" >#{attach_url,jdbcType=VARCHAR},</if>
+      sysdate()
+    </trim>
+  </insert>
+  
+  <insert id="insertModule" parameterType="com.moviezone.domain.Module" >
+  	<selectKey keyProperty="orderseq"  resultType="int" order="BEFORE">
+  		select ifnull(max(orderseq)+1,1) from module_movie where modname = #{modname,jdbcType=VARCHAR}
+  	</selectKey>
+    insert into module_movie
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="modmvid >0" >modmvid,</if>
+      <if test="movieid >0" >movieid,</if>
+      <if test="modname != null" >modname,</if>
+      <if test="orderseq != null" >orderseq,</if>
+      createtime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="modmvid >0" >#{modmvid,jdbcType=BIGINT},</if>
+      <if test="movieid >0" >#{movieid,jdbcType=BIGINT},</if>
+      <if test="modname != null" >#{modname,jdbcType=VARCHAR},</if>
+      <if test="orderseq != null" >#{orderseq,jdbcType=BIGINT},</if>
+      sysdate()
+    </trim>
+  </insert>
+  
   <delete id="deleteMovie" parameterType="com.moviezone.domain.Movie" >
     delete from movie where movieid = #{movieid,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteAttachByMovieid" parameterType="com.moviezone.domain.Attach" >
+    delete from attachment where movieid = #{movieid,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteModuleByMovieid" parameterType="com.moviezone.domain.Module" >
+    delete from module_movie where movieid = #{movieid,jdbcType=BIGINT}
   </delete>
   
 </mapper>

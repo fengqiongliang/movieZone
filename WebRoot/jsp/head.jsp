@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="${static}/js/jquery.flot.min.js"></script>
 	<script type="text/javascript" src="${static}/js/swfupload.js"></script>
 	<script type="text/javascript" src="${static}/js/moviezone.js"></script>
+	<script type="text/javascript" src="${static}/js/My97DatePicker/WdatePicker.js"></script> 
 	<title>影集网</title>
 </head>
 <body>

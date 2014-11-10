@@ -44,13 +44,16 @@ public class Attach implements Serializable{
 	}
 	public void setAttach_url(String attach_url) {
 		this.attach_url = attach_url;
-		if(attach_url!=null && !attach_url.toLowerCase().startsWith("http")) this.attach_url =  Constants.base + attach_url;
 	}
 	public Date getCreatetime() {
 		return createtime;
 	}
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
+	}
+	public String getAbsoluteAttachUrl(){
+		if(attach_url!=null && !attach_url.toLowerCase().startsWith("http")) return  Constants.base + attach_url;
+		return attach_url;
 	}
 	
 }

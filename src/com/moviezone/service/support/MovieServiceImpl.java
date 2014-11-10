@@ -1,12 +1,17 @@
 package com.moviezone.service.support;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.moviezone.constant.Constants;
+import com.moviezone.dao.CommentDao;
 import com.moviezone.dao.MovieDao;
 import com.moviezone.domain.Attach;
 import com.moviezone.domain.Module;
@@ -21,7 +26,7 @@ public class MovieServiceImpl implements MovieService{
 	private static final Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
 	private MovieDao movieDao;
 	private KeyService keyService;
-	private CommentService commentService;
+	private CommentDao commentDao;
 	
 	@Override
 	public Movie select(long movieid) {
@@ -120,9 +125,9 @@ public class MovieServiceImpl implements MovieService{
 	public void setKeyService(KeyService keyService) {
 		this.keyService = keyService;
 	}
-	
-	public void setCommentService(CommentService commentService) {
-		this.commentService = commentService;
+
+	public void setCommentDao(CommentDao commentDao) {
+		this.commentDao = commentDao;
 	}
 
 	private Page<MovieWrapper> getMovieWraper(Page<Movie> movies){
@@ -136,19 +141,85 @@ public class MovieServiceImpl implements MovieService{
 			MovieWrapper data = new MovieWrapper();
 			data.setMovie(mv);
 			data.setModules(selectModule(mv.getMovieid()));
-			data.setCmmtCount(commentService.selectCommentCount(mv.getMovieid()));
+			data.setCmmtCount(commentDao.selectCommentCount(mv.getMovieid()));
 			datas.add(data);
 		}
 		return movieWrappers;
 	}
 
-	
-
-	
-	
-
-	
-
-	
+	@Override
+	public void saveMovie(long movieid, 
+										String name, 
+										String type,
+										String shortdesc, 
+										String longdesc, 
+										float score,
+										int approve,
+										int download, 
+										int browse,
+										String publishDate,
+										String[] attachInfos,
+										String[] modnames, 
+										String face650x500, 
+										String face400x308,
+										String face220x169, 
+										String face150x220, 
+										String face80x80,
+										String[] pictures) throws Exception {
+		Movie movie = movieid>0?movieDao.select(movieid):new Movie();
+		movie.setMovieid(movieid>0?movieid:keyService.getMovieid());
+		movie.setName(name.trim());
+		movie.setType(type.trim());
+		movie.setShortdesc(shortdesc.trim());
+		movie.setLongdesc(longdesc.trim());
+		movie.setScore(score);
+		movie.setApprove(approve);
+		movie.setDownload(download);
+		movie.setBroswer(browse);
+		movie.setPublishtime(Constants.formater.parse(publishDate));
+		movie.setFace650x500(face650x500.replace(Constants.base, "").trim());
+		movie.setFace400x308(face400x308.replace(Constants.base, "").trim());
+		movie.setFace220x169(face220x169.replace(Constants.base, "").trim());
+		movie.setFace150x220(face150x220.replace(Constants.base, "").trim());
+		movie.setFace80x80(face80x80.replace(Constants.base, "").trim());
+		JSONArray picJsonArray = new JSONArray();
+		for(String picture:pictures){
+			picJsonArray.add(picture.replace(Constants.base, "").trim());
+		}
+		movie.setPicture(picJsonArray.toString());
+		if(movieid>0){ //更新
+			movieDao.update(movie);
+		}else{              //新增
+			movieDao.insert(movie);
+		}
+		//附件
+		if(movieid>0)movieDao.deleteAttach(movieid);
+		for(int i=0;attachInfos!=null && i<attachInfos.length;i++){
+			Attach attach = new Attach();
+			attach.setMovieid(movie.getMovieid());
+			attach.setAttachid(keyService.getAttachid());
+			int startIndex       = attachInfos[i].indexOf("_http");
+			int endIndex        = attachInfos[i].indexOf("_", startIndex+1);
+			String new_name = attachInfos[i].substring(0, startIndex).trim();
+			String attach_url  = attachInfos[i].substring(startIndex+1, endIndex).replace(Constants.base, "").trim();
+			String old_name  = attachInfos[i].substring(endIndex+1);
+			attach.setAttach_url(attach_url);
+			attach.setNew_name(new_name);
+			if(StringUtils.isNotBlank(old_name))attach.setOld_name(old_name);
+			movieDao.insert(attach);
+		}
+		
+		//模块 
+		if(movieid>0)movieDao.deleteModule(movieid);
+		for(String modName:modnames){
+			Module module = new Module();
+			module.setMovieid(movie.getMovieid());
+			module.setModmvid(keyService.getModmvid());
+			module.setModname(modName);
+			movieDao.insert(module);
+		}
+		
+		
+	}	
 
 }
