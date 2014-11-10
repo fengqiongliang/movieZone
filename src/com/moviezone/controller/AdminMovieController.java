@@ -129,7 +129,7 @@ public class AdminMovieController extends BaseController {
 										 @RequestParam(value="browse") int browse,
 										 @RequestParam(value="publishDate") String publishDate,
 										 @RequestParam(value="attachs",required=false) String[] attachInfos,
-										 @RequestParam(value="modules") String[] modnames,
+										 @RequestParam(value="modules",required=false) String[] modnames,
 										 @RequestParam(value="face650x500") String face650x500,
 										 @RequestParam(value="face400x308") String face400x308,
 										 @RequestParam(value="face220x169") String face220x169,

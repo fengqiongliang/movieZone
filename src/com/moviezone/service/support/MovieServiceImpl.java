@@ -211,11 +211,11 @@ public class MovieServiceImpl implements MovieService{
 		
 		//模块 
 		if(movieid>0)movieDao.deleteModule(movieid);
-		for(String modName:modnames){
+		for(int i=0;modnames!=null && i<modnames.length;i++){
 			Module module = new Module();
 			module.setMovieid(movie.getMovieid());
 			module.setModmvid(keyService.getModmvid());
-			module.setModname(modName);
+			module.setModname(modnames[i]);
 			movieDao.insert(module);
 		}
 		
