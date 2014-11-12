@@ -15,7 +15,7 @@
 	<td>${wrapper.movie.broswer}</td>
 	<td>${wrapper.movie.approve}</td>
 	<td>${wrapper.cmmtCount}</td>
-	<td>${wrapper.strPubTime}</td>
+	<td>${wrapper.movie.strPubTime}</td>
 	<td style="text-align:left;padding-left:10px" title="<c:forEach var="module" items="${wrapper.modules}">${module.modname}&#10;</c:forEach>">
 		<c:forEach var="module" items="${wrapper.modules}"  varStatus="status" begin="0" end="3">
 			${module.modname}<br/>

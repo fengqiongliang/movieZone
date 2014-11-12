@@ -1151,27 +1151,32 @@ function queryModuleMvs(source,direction){
 		tbody.empty().append('<tr><td colspan="10" style="color:red">网络发生错误,添加失败</td></tr>');
     });
 }
-function mvModuleMv(source,id,direction){
+function mvModuleMv(source,direction){
 	var isUp   = direction == 'up'?true:false;
 	var tr     = $(source).parent().parent();
 	var prevTr = tr.prev().is('tr')?tr.prev():undefined;
-	var nextTr = tr.next().is('tr')?tr.next():undefined;
+	var nextTr = tr.next().is('tr')&&tr.next().next().is('tr')?tr.next():undefined;
+	if(isUp  && !prevTr)return;
+	if(!isUp && !nextTr)return;
+	var fromid = tr.children('td:eq(0)').text().replace(/\s/g,'');
+	var toid     = isUp?prevTr.children('td:eq(0)').text().replace(/\s/g,''):nextTr.children('td:eq(0)').text().replace(/\s/g,'');
 	$.ajax({
         type:'GET',
-        url:'mvModuleMV.json',
-		dataType:'json'
+        url:'mvModule.json',
+        data:{'fromid':fromid,'toid':toid},
+		dataType:'html'
     }).done(function(data){
 		if(isUp  && prevTr)tr.after(prevTr);
 		if(!isUp && nextTr)tr.before(nextTr);
     }).fail(function(){alert('移动失败');});
 }
-function delModuleMv(source,id){
+function delModuleMv(source,modmvid){
 	if($(source).attr('isRunning')=='true')return;
 	$(source).attr('isRunning','true');
 	$.ajax({
         type:'GET',
-        url:'delModuleMV.json',
-		dataType:'json'
+        url:'delModule.json?modmvid='+modmvid,
+		dataType:'html'
     }).done(function(data){
 		$(source).attr('isRunning','false');
 		$(source).parent().parent().remove();

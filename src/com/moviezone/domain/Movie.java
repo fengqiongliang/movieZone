@@ -1,6 +1,7 @@
 package com.moviezone.domain;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +10,12 @@ import net.sf.json.JSONArray;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.moviezone.constant.Constants;
 import com.moviezone.service.MovieService;
 
 public class Movie implements Serializable{
-	private static final long serialVersionUID = -6485173889051832687L;
+	private static final long serialVersionUID = 6250419173507014081L;
+	private long modmvid;   /*有可能为空,即0*/
 	private long movieid;
 	private String name;
 	private String type;
@@ -31,6 +34,12 @@ public class Movie implements Serializable{
 	private int broswer;
 	private Date createtime;
 	private Date publishtime;
+	public long getModmvid() {
+		return modmvid;
+	}
+	public void setModmvid(long modmvid) {
+		this.modmvid = modmvid;
+	}
 	public long getMovieid() {
 		return movieid;
 	}
@@ -157,5 +166,18 @@ public class Movie implements Serializable{
 	public void setPublishtime(Date publishtime) {
 		this.publishtime = publishtime;
 	}
-	
+	public String getStrTimeFromNow() {
+		if(getPublishtime() == null)return "";
+		long times = getPublishtime().getTime() - System.currentTimeMillis();
+		if(times<=0)return "0天 00:00:00";
+		long days = times/86400000;
+		long hour = (times - days*86400000)/3600000;
+		long min   = (times-days*86400000-hour*3600000)/60000;
+		long sec    = (times-days*86400000-hour*3600000-min*60000)/1000;
+		return days+"天 "+(hour<10?"0"+hour:hour)+":"+(min<10?"0"+min:min)+":"+(sec<10?"0"+sec:sec);
+	}
+	public String getStrPubTime() {
+		if(getPublishtime() == null)return "";
+		return Constants.formater.format(getPublishtime());
+	}
 }

@@ -14,15 +14,15 @@
 	
 	<div class="adminRight">
 		<div class="adminPicContainer">
-			<div class="adminPic" url="${base}/statMovie.json?sort=broswer" interval="100000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=broswer" interval="1000"></div>
 			<p class="adminPicTitle">按浏览量进行排名</p>
 		</div>
 		<div class="adminPicContainer" style="margin-left:30px">
-			<div class="adminPic" url="${base}/statMovie.json?sort=down" interval="100000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=down" interval="1000"></div>
 			<p class="adminPicTitle">按下载量进行排名</p>
 		</div>
 		<div class="adminPicContainer">
-			<div class="adminPic" url="${base}/statMovie.json?sort=approve" interval="100000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=approve" interval="1000"></div>
 			<p class="adminPicTitle">按点赞数进行排名</p>
 		</div>
 		<div class="adminPicContainer" style="margin-left:30px">

@@ -34,8 +34,10 @@ public interface MovieService {
 	public boolean update(Movie movie);
 	public boolean delete(Movie movie);
 	public boolean delete(long userid);
+	public boolean deleteModuleById(long modmvid);
 	public Page<MovieWrapper> selectOnlineMovie(Long movieid,String name,String[] type,String[] sort,int pageNo);
 	public Page<MovieWrapper> selectOfflineMovie(Long movieid,String name,String[] type,int pageNo);
 	public MovieWrapper selectAsWrapper(long movieid);
 	public void saveMovie(long movieid,String name,String type,String shortdesc, String longdesc,float score, int approve, int download,int browse,String publishDate,String[] attachInfos,String[] modnames,String face650x500,String face400x308,String face220x169,String face150x220,String face80x80,String[] pictures) throws Exception;
+	public boolean mvModule(long fromModmvid,long toModmvid);
 }

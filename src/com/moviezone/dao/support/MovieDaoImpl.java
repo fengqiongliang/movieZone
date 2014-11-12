@@ -73,6 +73,7 @@ public class MovieDaoImpl implements MovieDao{
 		return page;
 	}
 	
+
 	
 	@Override
 	public List<Movie> selectByModule(Long modmvid,String modname,Boolean isPublish,Boolean isSortCreateTimeUp,Boolean isScoreUp,int pageNo,int pageSize) {
@@ -88,6 +89,15 @@ public class MovieDaoImpl implements MovieDao{
 		page.setPageSize(pageSize);
 		page.setData(selectByModule(modmvid, modname, isPublish, isSortCreateTimeUp,isScoreUp,pageNo, pageSize));
 		return page;
+	}
+	
+	@Override
+	public Module selectModuleById(long modmvid) {
+		if(modmvid<1)return null;
+		Module param = new Module();
+		param.setModmvid(modmvid);
+		List<Module> modules = session.selectList("selectModule", param);
+		return modules.size()>0?modules.get(0):null;
 	}
 	
 	@Override
@@ -110,6 +120,12 @@ public class MovieDaoImpl implements MovieDao{
 	public boolean update(Movie movie) {
 		if(movie.getMovieid()<1)return false;
 		return session.update("updateMovie", movie)>0;
+	}
+	
+	@Override
+	public boolean update(Module module) {
+		if(module.getModmvid()<1)return false;
+		return session.update("updateModule", module)>0;
 	}
 
 	@Override
@@ -139,6 +155,14 @@ public class MovieDaoImpl implements MovieDao{
 		Module module = new Module();
 		module.setMovieid(movieid);
 		return session.delete("deleteModuleByMovieid", module)>0;
+	}
+	
+	@Override
+	public boolean deleteModuleById(long modmvid) {
+		if(modmvid<1)return false;
+		Module module = new Module();
+		module.setModmvid(modmvid);
+		return session.delete("deleteModuleById", module)>0;
 	}
 	
 	public void setSession(SqlSession session) {
@@ -182,6 +206,12 @@ public class MovieDaoImpl implements MovieDao{
 		param.put("size", pageSize);
 		return param;
 	}
+
+	
+
+	
+
+
 
 	
 

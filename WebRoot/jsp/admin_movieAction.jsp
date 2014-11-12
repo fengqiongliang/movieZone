@@ -29,7 +29,7 @@
 	</div>
 	<div class="actMvTr">
 		<span class="actMvColumn">发布时间：</span>
-		<input name="publishDate" type="text" value="${wrapper.strPubTime}" class="Wdate"  autocomplete="off"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+		<input name="publishDate" type="text" value="${wrapper.movie.strPubTime}" class="Wdate"  autocomplete="off"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
 	</div>
 	<div class="actMvTr">
 		<span class="actMvColumn">附件管理：</span>

@@ -10,8 +10,8 @@
 	<td style="text-align:left;padding-left:10px"><a href="${base}/content.do?id=${wrapper.movie.movieid}"  target="_blank">${wrapper.movie.name}</a></td>
 	<td>${wrapper.movie.type}</td>
 	<td>${wrapper.movie.score}</td>
-	<td>${wrapper.strPubTime}</td>
-	<td>${wrapper.strTimeFromNow}</td>
+	<td>${wrapper.movie.strPubTime}</td>
+	<td>${wrapper.movie.strTimeFromNow}</td>
 	<td style="text-align:left;padding-left:10px" title="<c:forEach var="module" items="${wrapper.modules}">${module.modname}&#10;</c:forEach>">
 		<c:forEach var="module" items="${wrapper.modules}"  varStatus="status" begin="0" end="3">
 			${module.modname}<br/>

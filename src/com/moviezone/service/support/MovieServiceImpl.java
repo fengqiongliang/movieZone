@@ -220,6 +220,27 @@ public class MovieServiceImpl implements MovieService{
 		}
 		
 		
-	}	
+	}
+
+	@Override
+	public boolean deleteModuleById(long modmvid) {
+		return movieDao.deleteModuleById(modmvid);
+	}
+
+	@Override
+	public boolean mvModule(long fromModmvid, long toModmvid) {
+		if(fromModmvid<1||toModmvid<1)return false;
+		Module fromModule = movieDao.selectModuleById(fromModmvid);
+		if(fromModule == null)return false;
+		Module toModule = movieDao.selectModuleById(toModmvid);
+		if(toModule==null)return false;
+		int fromOrderseq = fromModule.getOrderseq();
+		int toOrderseq      = toModule.getOrderseq();
+		fromModule.setOrderseq(toOrderseq);
+		toModule.setOrderseq(fromOrderseq);
+		movieDao.update(fromModule);
+		movieDao.update(toModule);
+		return true;
+	}
 
 }

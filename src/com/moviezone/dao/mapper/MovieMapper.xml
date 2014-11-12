@@ -90,9 +90,9 @@
   
   <select id="selectMovieByModule" resultMap="movieResultMap" parameterType="map"  >
     select 'false' as QUERYID, 
-    <include refid="movieColumns" /> 
+    <include refid="movieColumns" />,mm.modmvid 
     from module_movie mm left join movie mv on mm.movieid = mv.movieid where 1=1 
-    <if test="modmvid > 0">  and mm.v = #{modmvid,jdbcType=BIGINT} </if>
+    <if test="modmvid > 0">  and mm.modmvid = #{modmvid,jdbcType=BIGINT} </if>
     <if test="modname != null">  and mm.modname = #{modname,jdbcType=VARCHAR} </if>
     <if test="isPublish == true">  and mv.publishtime &lt;  sysdate()  </if> 
     <if test="isPublish == false"> and mv.publishtime &gt; sysdate()  </if> 
@@ -110,7 +110,10 @@
   </select>
   
   <select id="selectModule" resultMap="moduleResultMap" parameterType="com.moviezone.domain.Module"  >
-    select 'false' as QUERYID, modmvid,movieid,modname,orderseq,createtime from module_movie where movieid = #{movieid,jdbcType=BIGINT} order by modname asc,orderseq asc,movieid asc
+    select 'false' as QUERYID, modmvid,movieid,modname,orderseq,createtime from module_movie where 1=1 
+    <if test="modmvid > 0">  and modmvid = #{modmvid,jdbcType=BIGINT} </if>
+    <if test="movieid > 0">  and movieid = #{movieid,jdbcType=BIGINT} </if>
+    order by modname asc,orderseq asc,movieid asc
   </select>
   
   <insert id="insertMovie" parameterType="com.moviezone.domain.Movie" >
@@ -180,6 +183,16 @@
     where movieid = #{movieid,jdbcType=BIGINT}
   </update>
   
+  <update id="updateModule" parameterType="com.moviezone.domain.Module" >
+    update module_movie
+    <set>
+      <if test="modname != null" >modname = #{modname,jdbcType=VARCHAR},</if>
+      <if test="movieid >0" >movieid = #{movieid,jdbcType=VARCHAR},</if>
+      <if test="orderseq >0" >orderseq = #{orderseq,jdbcType=VARCHAR},</if>
+    </set>
+    where modmvid = #{modmvid,jdbcType=BIGINT}
+  </update>
+  
   <insert id="insertAttach" parameterType="com.moviezone.domain.Attach" >
     insert into attachment
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -230,5 +243,9 @@
   <delete id="deleteModuleByMovieid" parameterType="com.moviezone.domain.Module" >
     delete from module_movie where movieid = #{movieid,jdbcType=BIGINT}
   </delete>
+  <delete id="deleteModuleById" parameterType="com.moviezone.domain.Module" >
+    delete from module_movie where modmvid = #{modmvid,jdbcType=BIGINT}
+  </delete>
+  
   
 </mapper>
