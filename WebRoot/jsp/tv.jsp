@@ -15,6 +15,7 @@
 			</div>
 			<div>
 				<c:set var="movies" value="${americaMovies}" />
+				<c:set var="fromModule" value="tvAmerica" />
 				<%@ include file="movie_tv_list.jsp" %>
 			</div>
 		</div>
@@ -35,6 +36,7 @@
 			</div>
 			<div>
 				<c:set var="movies" value="${japanMovies}" />
+				<c:set var="fromModule" value="tvJapan" />
 				<%@ include file="movie_tv_list.jsp" %>
 			</div>
 		</div>
@@ -55,6 +57,7 @@
 			</div>
 			<div>
 				<c:set var="movies" value="${hongkongMovies}" />
+				<c:set var="fromModule" value="tvHongkong" />
 				<%@ include file="movie_tv_list.jsp" %>
 			</div>
 		</div>
@@ -75,6 +78,7 @@
 			</div>
 			<div>
 				<c:set var="movies" value="${chinaMovies}" />
+				<c:set var="fromModule" value="tvChina" />
 				<%@ include file="movie_tv_list.jsp" %>
 			</div>
 		</div>

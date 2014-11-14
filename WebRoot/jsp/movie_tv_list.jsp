@@ -5,7 +5,7 @@
 
 <ul class="mvItems">
 	<c:forEach var="mv" items="${movies.data}"  varStatus="status">
-	<li class="mvItem" title="《${mv.name}》"><span class="rankScore">${mv.score}</span><a href="${base}/content.do?id=${mv.movieid}" class="mvItemDes"><img src="${static}${mv.face150x220}" width="120px" height="176" />《${mv.name}》</a></li>
+	<li class="mvItem" title="《${mv.name}》"><span class="rankScore">${mv.score}</span><a href="${base}/content.do?id=${mv.movieid}&fromModule=${fromModule}" class="mvItemDes"><img src="${static}${mv.face150x220}" width="120px" height="176" />《${mv.name}》</a></li>
 	</c:forEach>
 	<li style="clear:both"></li>
 </ul>

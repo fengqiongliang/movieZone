@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.moviezone.constant.Constants;
 import com.moviezone.controller.BaseController;
 import com.moviezone.domain.User;
+import com.moviezone.service.StatService;
 import com.moviezone.service.UserService;
 import com.moviezone.util.HttpUtil;
 
@@ -23,6 +24,8 @@ import com.moviezone.util.HttpUtil;
 public class BaseInterceptor implements HandlerInterceptor {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private StatService statService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(BaseInterceptor.class);
 	
@@ -86,9 +89,13 @@ public class BaseInterceptor implements HandlerInterceptor {
 			if(dbUser != null && !dbUser.getForbit()){
 				logger.debug("用户登陆【"+dbUser.getUsername()+"】登陆，【"+(dbUser.getRole().endsWith("admin")?"管理员":"非管理员")+"】");
 				request.setAttribute(Constants.USER, dbUser);
+				//统计区域访问量
+				statService.addAreaStat(request.getRemoteAddr(),dbUser.getUserid());
 				return true;
 			}
 		}
+		
+		statService.addAreaStat(request.getRemoteAddr(),-1);
 		
 		return true; 
 	}

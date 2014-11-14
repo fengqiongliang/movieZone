@@ -59,6 +59,7 @@ public class MovieController extends BaseController {
 		mv.addObject("Movies720p",movieService.selectPageByModule("电影-720p", true, false,true,1, 14));
 		mv.addObject("Movies1080p",movieService.selectPageByModule("电影-1080p", true, false,true,1, 14));
 		mv.addObject("otherMVMovies",movieService.selectPageByModule("电影-其它", true, false,true,1, 14));
+		mv.addObject("fromModule", "movieShow");
 		mv.setViewName("/movie");
 		return mv; 
 	}
@@ -78,6 +79,7 @@ public class MovieController extends BaseController {
 		mv.addObject("japanMovies",movieService.selectPageByModule("电视剧-日韩", true, false,true,1, 14));
 		mv.addObject("hongkongMovies",movieService.selectPageByModule("电视剧-港台", true,false,true, 1, 14));
 		mv.addObject("chinaMovies",movieService.selectPageByModule("电视剧-内地", true, false,true,1, 14));
+		mv.addObject("fromModule", "tvShow");
 		mv.setViewName("/tv");
 		return mv; 
 	}
@@ -92,14 +94,14 @@ public class MovieController extends BaseController {
 												  		 @RequestParam(value="pageNo") int pageNo,
 												  		 @RequestParam(value="pageType") String pageType)throws Exception{
 		String modname = "";
-		if("480p".endsWith(type))modname = "电影-480p";
-		if("720p".endsWith(type))modname = "电影-720p";
-		if("1080p".endsWith(type))modname = "电影-1080p";
-		if("other".endsWith(type))modname = "电影-其它";
-		if("america".endsWith(type))modname = "电视剧-英美";
-		if("japan".endsWith(type))modname = "电视剧-日韩";
-		if("hongkong".endsWith(type))modname = "电视剧-港台";
-		if("china".endsWith(type))modname = "电视剧-内地";
+		if("480p".endsWith(type)){modname = "电影-480p";mv.addObject("fromModule", "movie480p");}
+		if("720p".endsWith(type)){modname = "电影-720p";mv.addObject("fromModule", "movie720p");}
+		if("1080p".endsWith(type)){modname = "电影-1080p";mv.addObject("fromModule", "movie1080p");}
+		if("other".endsWith(type)){modname = "电影-其它";mv.addObject("fromModule", "movieOther");}
+		if("america".endsWith(type)){modname = "电视剧-英美";mv.addObject("fromModule", "tvAmerica");}
+		if("japan".endsWith(type)){modname = "电视剧-日韩";mv.addObject("fromModule", "tvJapan");}
+		if("hongkong".endsWith(type)){modname = "电视剧-港台";mv.addObject("fromModule", "tvHongkong");}
+		if("china".endsWith(type)){modname = "电视剧-内地";mv.addObject("fromModule", "tvChina");}
 		boolean isSortCreateTimeUp  = "asc".equals(timeSort)?true:false;
 		boolean isScoreUp  = "asc".equals(scoreSort)?true:false;
 		pageNo    = pageNo <1?1:pageNo;

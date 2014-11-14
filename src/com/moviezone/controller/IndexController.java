@@ -71,6 +71,7 @@ public class IndexController extends BaseController {
 		mv.addObject("hongkongMovies",movieService.selectByModule("首页-电视剧-港台", true, 1, 7));
 		mv.addObject("chinaMovies",movieService.selectByModule("首页-电视剧-内地", true, 1, 7));
 		mv.addObject("rankTVMovies",movieService.selectByModule("首页-电视剧-排行榜", true, 1, 12));
+		mv.addObject("fromModule", "indexShow");
 		mv.setViewName("/index");
 		return mv; 
 	}

@@ -15,6 +15,7 @@
 			</div>
 			<div>
 				<c:set var="movies" value="${Movies480p}" />
+				<c:set var="fromModule" value="movie480p" />
 				<%@ include file="movie_tv_list.jsp" %>
 			</div>
 		</div>
@@ -35,6 +36,7 @@
 			</div>
 			<div>
 				<c:set var="movies" value="${Movies720p}" />
+				<c:set var="fromModule" value="movie720p" />
 				<%@ include file="movie_tv_list.jsp" %>
 			</div>
 		</div>
@@ -55,6 +57,7 @@
 			</div>
 			<div>
 				<c:set var="movies" value="${Movies1080p}" />
+				<c:set var="fromModule" value="movie1080p" />
 				<%@ include file="movie_tv_list.jsp" %>
 			</div>
 		</div>
@@ -75,6 +78,7 @@
 			</div>
 			<div>
 				<c:set var="movies" value="${otherMVMovies}" />
+				<c:set var="fromModule" value="movieOther" />
 				<%@ include file="movie_tv_list.jsp" %>
 			</div>
 		</div>

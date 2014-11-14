@@ -60,12 +60,12 @@
 <div class="show">
 	<div class="showLeft">
 		<c:forEach var="mv" items="${sceneMovies}"  begin="0" end="5" varStatus="status">
-		<a href="${base}/content.do?id=${mv.movieid}" class="bigImg" title="${mv.name}" onmouseover="imgOver(this)" onmouseout="moveImg(this)" ${status.first?"":"style='display:none'" }><img src="${static}${mv.face650x500}" width="100%" height="100%"/></a>
+		<a href="${base}/content.do?id=${mv.movieid}&fromModule=${fromModule}" class="bigImg" title="${mv.name}" onmouseover="imgOver(this)" onmouseout="moveImg(this)" ${status.first?"":"style='display:none'" }><img src="${static}${mv.face650x500}" width="100%" height="100%"/></a>
 		</c:forEach>
 		<div class="showLayer"></div>
 		<div class="imgContainer">
 			<c:forEach var="mv" items="${sceneMovies}"  begin="0" end="5" varStatus="status">
-			<a href="${base}/content.do?id=${mv.movieid}" class="smallImg" hoverClass="smallImgHover" title="${mv.name}" onmouseover="imgOver(this)" onmouseout="moveImg(this)"><img src="${static}${mv.face650x500}" width="100%" height="100%" /></a>
+			<a href="${base}/content.do?id=${mv.movieid}&fromModule=${fromModule}" class="smallImg" hoverClass="smallImgHover" title="${mv.name}" onmouseover="imgOver(this)" onmouseout="moveImg(this)"><img src="${static}${mv.face650x500}" width="100%" height="100%" /></a>
 			</c:forEach>
 		</div>
 	</div>

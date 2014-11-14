@@ -872,7 +872,14 @@ function closeReply(){
 	$('.cmmtSubmit').attr('isReply','false');
 	$(document.body).css('overflow-y','auto');
 }
-
+function statDownload(movieid){
+	$.ajax({
+        type:'POST',
+        async : false,
+        url:'statDownload.json?movieid='+movieid,
+		dataType:'html'
+    });
+}
 
 /* 搜索页 */
 function deepSearch(type){

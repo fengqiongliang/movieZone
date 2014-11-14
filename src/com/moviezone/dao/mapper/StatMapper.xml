@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moviezone.dao.StatDao" >
+  <resultMap id="IpResultMap" type="com.moviezone.domain.IP" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="start_ip" property="start_ip" jdbcType="BIGINT" />
+    <result column="end_ip" property="end_ip" jdbcType="BIGINT" />
+    <result column="start_ip_str" property="start_ip_str" jdbcType="VARCHAR" />
+    <result column="end_ip_str" property="end_ip_str" jdbcType="VARCHAR" />
+    <result column="Province" property="Province" jdbcType="VARCHAR" />
+    <result column="City" property="City" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectIp" resultMap="IpResultMap" parameterType="map"  >
+    select 'false' as QUERYID, id, start_ip,end_ip,start_ip_str,end_ip_str,Province,City from ip where 1=1 
+    <if test="id >0">  and id = #{id,jdbcType=BIGINT} </if>
+    <if test="start_ip >0">  and start_ip = #{start_ip,jdbcType=BIGINT} </if>
+    <if test="end_ip >0">  and end_ip = #{end_ip,jdbcType=BIGINT} </if>
+    <if test="start_ip_str != null"> and start_ip_str = #{start_ip_str,jdbcType=VARCHAR} </if>
+    <if test="end_ip_str != null"> and end_ip_str = #{end_ip_str,jdbcType=VARCHAR} </if>
+    <if test="Province != null"> and Province = #{Province,jdbcType=VARCHAR} </if>
+    <if test="City != null"> and City = #{City,jdbcType=VARCHAR} </if>
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <update id="updateIp" parameterType="com.moviezone.domain.IP" >
+    update ip set start_ip_str = #{start_ip_str,jdbcType=VARCHAR},end_ip_str = #{end_ip_str,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

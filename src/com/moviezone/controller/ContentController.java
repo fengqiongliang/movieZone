@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 
 
 
+
 import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
@@ -58,6 +59,7 @@ import com.moviezone.domain.Reply;
 import com.moviezone.domain.User;
 import com.moviezone.service.CommentService;
 import com.moviezone.service.MovieService;
+import com.moviezone.service.StatService;
 
 @Controller
 public class ContentController extends BaseController {
@@ -66,19 +68,25 @@ public class ContentController extends BaseController {
 	private MovieService movieService;
 	@Autowired
 	private CommentService commentService;
+	@Autowired
+	private StatService statService;
 	
 	@RequestMapping(value="/content.do",method=RequestMethod.GET)
 	public ModelAndView content(ModelAndView mv,
 													HttpServletRequest request,
 													HttpServletResponse response,
-													@RequestParam(value="id") long movieid)throws Exception{
+													@RequestParam(value="id") long movieid,
+													@RequestParam(value="fromModule",required=false) String fromModule)throws Exception{
 		Movie movie = movieService.select(movieid);
 		if(movie==null){
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.getWriter().write("该影片已经被删除或已不存在");
 			return null;
 		}
-		
+		//统计模块、电影浏览量
+		if(StringUtils.isNotBlank(fromModule))statService.addModuleStat(fromModule);
+		if(movie != null)statService.addBrowserStat(movie);
+				
 		//计算推荐星级
 		float f =  movie.getRecommand();
 		int fullStarCount    = (int)f;
@@ -191,6 +199,12 @@ public class ContentController extends BaseController {
 		return mv;
 	}
 	
+	@RequestMapping(value="/statDownload.json",method=RequestMethod.POST)
+	public void statDownload(HttpServletRequest request,
+											  HttpServletResponse response,
+											  @RequestParam(value="movieid") long movieid)throws Exception{
+		statService.addDownloadStat(movieid);
+	}
 	
 	private String getType(List<Module> modules){
 		Map<String,Boolean> typeHelp1  = new LinkedHashMap<String,Boolean>();

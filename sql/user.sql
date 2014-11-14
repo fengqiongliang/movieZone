@@ -505,4 +505,76 @@ INSERT INTO `forbitUser` VALUES ('58', '系统禁用ip', '192.168.1.58', '海口
 INSERT INTO `forbitUser` VALUES ('59', '系统禁用ip', '192.168.1.59', '海口');
 INSERT INTO `forbitUser` VALUES ('60', '系统禁用ip', '192.168.1.60', '海口');
 
+-- ----------------------------
+-- 模块统计表
+-- ----------------------------
+DROP TABLE IF EXISTS `moduleStat`;
+CREATE TABLE `moduleStat` (
+  `stat_id` varchar(15) NOT NULL               COMMENT '统计id模块英文名',
+  `mod_name` varchar(35) NOT NULL        COMMENT '昵称',
+  `statCount` bigint NOT NULL                    COMMENT '统计数',
+  PRIMARY KEY  (`stat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			
+INSERT INTO `moduleStat` VALUES ('indexShow', '首页-展示区', 0);
+INSERT INTO `moduleStat` VALUES ('indexCarrousel', '首页-论播区', 0);
+INSERT INTO `moduleStat` VALUES ('indexSiter', '首页-站长区', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovie480p', '首页-电影-480p', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovie720p', '首页-电影-720p', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovie1080p', '首页-电影-1080p', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovieOther', '首页-电影-其它', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovieRank', '首页-电影-排行榜', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvAmerica', '首页-电视剧-英美', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvJapan', '首页-电视剧-日韩', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvHongkong', '首页-电视剧-港台', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvChina', '首页-电视剧-内地', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvRank', '首页-电视剧-排行榜', 0);
+INSERT INTO `moduleStat` VALUES ('movieShow', '电影-展示区', 0);
+INSERT INTO `moduleStat` VALUES ('movie480p', '电影-480p', 0);
+INSERT INTO `moduleStat` VALUES ('movie720p', '电影-720p', 0);
+INSERT INTO `moduleStat` VALUES ('movie1080p', '电影-1080p', 0);
+INSERT INTO `moduleStat` VALUES ('movieOther', '电影-其它', 0);
+INSERT INTO `moduleStat` VALUES ('tvShow', '电视剧-展示区', 0);
+INSERT INTO `moduleStat` VALUES ('tvAmerica', '电视剧-英美', 0);
+INSERT INTO `moduleStat` VALUES ('tvJapan', '电视剧-日韩', 0);
+INSERT INTO `moduleStat` VALUES ('tvHongkong', '电视剧-港台', 0);
+INSERT INTO `moduleStat` VALUES ('tvChina', '电视剧-内地', 0);
+
+
+-- ----------------------------
+-- 模块统计表
+-- ----------------------------
+DROP TABLE IF EXISTS `moduleStat`;
+CREATE TABLE `moduleStat` (
+  `stat_id` varchar(15) NOT NULL               COMMENT '统计id模块英文名',
+  `mod_name` varchar(35) NOT NULL        COMMENT '昵称',
+  `statCount` bigint NOT NULL                    COMMENT '统计数',
+  PRIMARY KEY  (`stat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			
+INSERT INTO `moduleStat` VALUES ('indexShow', '首页-展示区', 0);
+INSERT INTO `moduleStat` VALUES ('indexCarrousel', '首页-论播区', 0);
+INSERT INTO `moduleStat` VALUES ('indexSiter', '首页-站长区', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovie480p', '首页-电影-480p', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovie720p', '首页-电影-720p', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovie1080p', '首页-电影-1080p', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovieOther', '首页-电影-其它', 0);
+INSERT INTO `moduleStat` VALUES ('indexMovieRank', '首页-电影-排行榜', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvAmerica', '首页-电视剧-英美', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvJapan', '首页-电视剧-日韩', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvHongkong', '首页-电视剧-港台', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvChina', '首页-电视剧-内地', 0);
+INSERT INTO `moduleStat` VALUES ('indexTvRank', '首页-电视剧-排行榜', 0);
+INSERT INTO `moduleStat` VALUES ('movieShow', '电影-展示区', 0);
+INSERT INTO `moduleStat` VALUES ('movie480p', '电影-480p', 0);
+INSERT INTO `moduleStat` VALUES ('movie720p', '电影-720p', 0);
+INSERT INTO `moduleStat` VALUES ('movie1080p', '电影-1080p', 0);
+INSERT INTO `moduleStat` VALUES ('movieOther', '电影-其它', 0);
+INSERT INTO `moduleStat` VALUES ('tvShow', '电视剧-展示区', 0);
+INSERT INTO `moduleStat` VALUES ('tvAmerica', '电视剧-英美', 0);
+INSERT INTO `moduleStat` VALUES ('tvJapan', '电视剧-日韩', 0);
+INSERT INTO `moduleStat` VALUES ('tvHongkong', '电视剧-港台', 0);
+INSERT INTO `moduleStat` VALUES ('tvChina', '电视剧-内地', 0);
+
+
 SET FOREIGN_KEY_CHECKS=1;

@@ -126,7 +126,7 @@ a:hover{text-decoration:underline;}
 .guestLClick {background:#5cc1dc;color:#ffffff;border-radius:5px 5px 0 0;}
 .guestLine {height:5px;background:#5cc1dc;*margin-top:-18px;z-index:1;}
 .guestItems {background:#dddee3;padding-bottom:25px;}
-.guestItem {float:left;margin:10px 20px 0 0;*margin:10px 16px 0 0;}
+.guestItem {float:left;margin:10px 0px 0 18px;*margin:10px 0px 0 14px;}
 .guestDes {color: #555555;font-size: 12px;text-align: center;display:block;width:150px;}
 .siterLabel {clear:both;height:27px;font-size:21px;padding:5px 0 5px 8px;background:#5cc1dc;color:#ffffff;border-radius:5px 5px 0 0;}
 

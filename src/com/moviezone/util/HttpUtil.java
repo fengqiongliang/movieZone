@@ -83,6 +83,19 @@ public class HttpUtil {
 		}
 	}
 	
+	public static long ipToLong(String ip){
+		String[] items = ip.split("\\.");
+		return Long.valueOf(items[0]) << 24 | Long.valueOf(items[1]) << 16 | Long.valueOf(items[2]) << 8 | Long.valueOf(items[3]);
+	}
+	
+	public static String ipToString(long ip){
+		StringBuilder sb = new StringBuilder();
+        sb.append(ip & 0xFF).append(".");
+        sb.append((ip >> 8) & 0xFF).append(".");
+        sb.append((ip >> 16) & 0xFF).append(".");
+        sb.append((ip >> 24) & 0xFF);
+        return sb.toString();
+	}
 	
 	/**
 	 * 制造相同长度的非替换字符 1个字节的替换成, 2个字节的替换成2字节
@@ -101,12 +114,4 @@ public class HttpUtil {
 		return result.toString();
 	}
 	
-	
-	public static void main(String[] args){
-		String result = HttpUtil.filterEmotion("{emotion:1{emotion:2}},{emotion:2},{em{emo{emot{emotion:2}ion:2}tion:2}otion:3},{em{emotion:2}otion:45},{emotion:66}");
-		System.out.println("====================");
-		System.out.println(result);
-		System.out.println(result.length());
-		System.out.println("====================");
-	}
 }
