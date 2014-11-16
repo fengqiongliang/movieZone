@@ -203,6 +203,11 @@ a:hover{text-decoration:underline;}
 .moreCmmtHover {background:#5cc1dc;color: #ffffff;opacity:0.7;filter:alpha(opacity=70);}
 .moreCmmtLoading {width:25px;height:25px;display:none;}
 .moreReplyLoading {width:20px;height:20px;display:none;}
+.cntOpr{float:left;width:80px;height:30px;margin-right:10px;background:#c6c7cc;color:gray;cursor:pointer;}
+.cntOprHover {background:#5cc1dc;color:#ffffff;}
+.cntOprL{float:left;font-size:16px;margin:3px 0 0 10px;font-family:'微软雅黑' }
+.cntOprR{float:left;font-size:30px;line-height:30px;margin-left:5px;}
+.cntOprHeart {float:left;font-size:30px;line-height:30px;margin-left:5px;}
 
 /* 搜索页 */
 .searchWrap {width:1024px;margin:20px auto;}

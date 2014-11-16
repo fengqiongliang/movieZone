@@ -49,7 +49,6 @@ public class HttpUtil {
 			m.appendReplacement(sb,raplceHtmlForEmotion);
 		}
 		m.appendTail(sb);
-		System.out.println(sb.toString());
 		return sb.toString();
 	}
 	

@@ -10,7 +10,7 @@
 		<li class="cntRli">【类型】：<span class="liDes" style="font-size:16px;">${type}</span></li>
 		</c:if>
 		<li class="cntRli">【名称】：<span class="liDes">${movie.name}</span></li>
-		<li class="cntRli">【操作】：赞<span class="liDes" style="font-size:40px;color:red">☜</span> 收藏<span class="liDes" style="font-size:40px;color:red">♥</span></li>
+		<li class="cntRli"><span style="float:left;margin-top:3px;">【操作】：</span><div class="cntOpr" hoverClass="cntOprHover" onclick="jQuery.post('${base}/statApprove.json?movieid='+${movie.movieid});jQuery(this).remove();"><span class="cntOprL">赞</span><span class="cntOprR" >☜</span></div> <div class="cntOpr" hoverClass="cntOprHover" onclick="jQuery.post('${base}/statFavorite.json?movieid='+${movie.movieid});jQuery(this).remove();"><span class="cntOprL">收藏</span><span class="cntOprHeart">♥</span></div></li>
 		<c:if test="${!empty attachs}">
 		<li class="cntRli">
 			<span style="float:left">【附件】：</span>

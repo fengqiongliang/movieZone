@@ -30,25 +30,29 @@ public class StatServiceImpl implements StatService{
 	
 	@Override
 	public void addModuleStat(String fromModule) {
-		// TODO Auto-generated method stub
+		System.out.println("======addModuleStat=========");
 		
 	}
 
 	@Override
-	public void addBrowserStat(Movie movie) {
-		// TODO Auto-generated method stub
-		
+	public void addBrowserStat(long movieid) {
+		System.out.println("======addBrowserStat=========");
 	}
 	
 	@Override
 	public void addDownloadStat(long movieid) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("======addDownloadStat=========");
 	}
 
 	@Override
-	public void addApproveStat(Movie movie) {
-		// TODO Auto-generated method stub
+	public void addApproveStat(long movieid) {
+		System.out.println("======addApproveStat=========");
+		
+	}
+	
+	@Override
+	public void addFavorite(long movieid, long userid) {
+		System.out.println("======addFavorite=========");
 		
 	}
 
@@ -56,12 +60,14 @@ public class StatServiceImpl implements StatService{
 	public void addAreaStat(String ip,long userid) {
 		if(StringUtils.isBlank(ip))return;
 		if(userid<1);
-		
+		System.out.println("======addAreaStat=========");
 	}
 	
 	public void setStatDao(StatDao statDao) {
 		this.statDao = statDao;
 	}
+
+	
 
 	
 

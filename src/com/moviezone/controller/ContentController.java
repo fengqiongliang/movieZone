@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 
 
 
+
 import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
@@ -60,6 +61,7 @@ import com.moviezone.domain.User;
 import com.moviezone.service.CommentService;
 import com.moviezone.service.MovieService;
 import com.moviezone.service.StatService;
+import com.moviezone.util.HttpUtil;
 
 @Controller
 public class ContentController extends BaseController {
@@ -85,7 +87,7 @@ public class ContentController extends BaseController {
 		}
 		//统计模块、电影浏览量
 		if(StringUtils.isNotBlank(fromModule))statService.addModuleStat(fromModule);
-		if(movie != null)statService.addBrowserStat(movie);
+		if(movie != null)statService.addBrowserStat(movie.getMovieid());
 				
 		//计算推荐星级
 		float f =  movie.getRecommand();
@@ -151,7 +153,7 @@ public class ContentController extends BaseController {
 		}
 		Comment comment = new Comment();
 		comment.setMovieid(movieid);
-		comment.setContent(content);
+		comment.setContent(HttpUtil.encoding(content));
 		comment.setCreatearea(getFrom(request));
 		comment.setMovieid(movieid);
 		comment.setUserid(user.getUserid());
@@ -188,7 +190,7 @@ public class ContentController extends BaseController {
 		}
 		Reply reply = new Reply();
 		reply.setCommentid(commentid);
-		reply.setContent(content);
+		reply.setContent(HttpUtil.encoding(content));
 		reply.setCreatearea(getFrom(request));
 		reply.setUserid(user.getUserid());
 		long replyid = commentService.insertReply(reply);
@@ -203,7 +205,27 @@ public class ContentController extends BaseController {
 	public void statDownload(HttpServletRequest request,
 											  HttpServletResponse response,
 											  @RequestParam(value="movieid") long movieid)throws Exception{
+		Movie movie = movieService.select(movieid);
+		if(movie == null)return;
 		statService.addDownloadStat(movieid);
+	}
+	@RequestMapping(value="/statApprove.json",method=RequestMethod.POST)
+	public void statApprove(HttpServletRequest request,
+										    HttpServletResponse response,
+											@RequestParam(value="movieid") long movieid)throws Exception{
+		Movie movie = movieService.select(movieid);
+		if(movie == null)return;
+		statService.addApproveStat(movieid);
+	}
+	@RequestMapping(value="/statFavorite.json",method=RequestMethod.POST)
+	public void statFavorite(HttpServletRequest request,
+										   HttpServletResponse response,
+										   @RequestParam(value="movieid") long movieid)throws Exception{
+		User user = (User)request.getAttribute(Constants.USER);
+		if(user == null)return;
+		Movie movie = movieService.select(movieid);
+		if(movie == null)return;
+		statService.addFavorite(movieid,user.getUserid());
 	}
 	
 	private String getType(List<Module> modules){
