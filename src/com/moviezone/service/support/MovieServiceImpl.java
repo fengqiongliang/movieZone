@@ -142,6 +142,7 @@ public class MovieServiceImpl implements MovieService{
 			data.setMovie(mv);
 			data.setModules(selectModule(mv.getMovieid()));
 			data.setCmmtCount(commentDao.selectCommentCount(mv.getMovieid()));
+			data.setFavoriteCount(movieDao.selectFavoriteMovieCount(mv.getMovieid()));
 			datas.add(data);
 		}
 		return movieWrappers;
@@ -241,6 +242,12 @@ public class MovieServiceImpl implements MovieService{
 		movieDao.update(fromModule);
 		movieDao.update(toModule);
 		return true;
+	}
+
+	@Override
+	public List<Movie> selectFavoriteMovie(long userid, int pageNo, int pageSize) {
+		if(userid<1)return new ArrayList<Movie>();
+		return movieDao.selectFavoriteMovie(userid, pageNo, pageSize);
 	}
 
 }

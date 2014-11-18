@@ -20,6 +20,7 @@ public class MovieWrapper implements Serializable{
 	private List<Module> modules = new ArrayList<Module>();
 	private List<Attach> attachs = new ArrayList<Attach>();
 	private long cmmtCount;
+	private long favoriteCount;
 	public Movie getMovie() {
 		return movie;
 	}
@@ -43,6 +44,12 @@ public class MovieWrapper implements Serializable{
 	}
 	public void setCmmtCount(long cmmtCount) {
 		this.cmmtCount = cmmtCount;
+	}
+	public long getFavoriteCount() {
+		return favoriteCount;
+	}
+	public void setFavoriteCount(long favoriteCount) {
+		this.favoriteCount = favoriteCount;
 	}
 	public boolean getInIndexShow(){
 		return hasModule("首页-展示区");

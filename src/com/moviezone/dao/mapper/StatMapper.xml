@@ -23,8 +23,20 @@
     limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
-  <update id="updateIp" parameterType="com.moviezone.domain.IP" >
-    update ip set start_ip_str = #{start_ip_str,jdbcType=VARCHAR},end_ip_str = #{end_ip_str,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
+  <update id="updateMoviestat" parameterType="com.moviezone.domain.Movie" >
+    update movie set movieid = #{movieid,jdbcType=BIGINT}
+    <if test="approve >0">,approve = approve + #{approve,jdbcType=BIGINT}</if>
+    <if test="broswer >0">,broswer =  broswer + #{broswer,jdbcType=BIGINT}</if>
+    <if test="download >0">,download = download + #{download,jdbcType=BIGINT}</if>
+    where movieid = #{movieid,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateModulestat" parameterType="map" >
+    update modulestat set statCount = statCount + #{statCount,jdbcType=BIGINT} where stat_id = #{stat_id,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateIpstat" parameterType="map" >
+    update ip set statCount = statCount + #{statCount,jdbcType=BIGINT} where #{ip,jdbcType=BIGINT} between start_ip and end_ip
   </update>
   
 </mapper>

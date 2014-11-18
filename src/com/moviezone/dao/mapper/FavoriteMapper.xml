@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moviezone.dao.FavoriteDao" >
+  <resultMap id="FavoriteResultMap" type="com.moviezone.domain.Favorite" >
+    <id column="favoriteid" property="favoriteid" jdbcType="BIGINT" />
+    <result column="userid" property="userid" jdbcType="BIGINT" />
+    <result column="movieid" property="movieid" jdbcType="BIGINT" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectFavorite" resultMap="FavoriteResultMap" parameterType="map"  >
+    select 'false' as QUERYID, favoriteid, userid,movieid,createtime from favorite where 1=1
+    <if test="favoriteid >0">  and favoriteid = #{favoriteid,jdbcType=BIGINT} </if>
+    <if test="userid >0">  and userid = #{userid,jdbcType=BIGINT} </if>
+    <if test="movieid >0">  and movieid = #{movieid,jdbcType=BIGINT} </if>
+    order by createtime desc
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <insert id="insertFavorite" parameterType="com.moviezone.domain.Favorite" >
+  	 insert into favorite
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="favoriteid >0" >favoriteid,</if>
+      <if test="userid >0" >userid,</if>
+      <if test="movieid >0" >movieid,</if>
+      createtime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="favoriteid >0" >#{favoriteid,jdbcType=BIGINT},</if>
+      <if test="userid >0" >#{userid,jdbcType=BIGINT},</if>
+      <if test="movieid >0" >#{movieid,jdbcType=BIGINT},</if>
+      sysdate()
+    </trim>
+  </insert>
+  
+  <update id="updateFavorite" parameterType="com.moviezone.domain.Favorite" >
+    update favorite
+    <set>
+      <if test="userid >0" >userid = #{userid,jdbcType=VARCHAR},</if>
+      <if test="movieid >0" >movieid = #{movieid,jdbcType=VARCHAR},</if>
+      createtime = sysdate()
+    </set>
+    where favoriteid = #{favoriteid,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteFavorite" parameterType="com.moviezone.domain.Favorite" >
+    delete from favorite where favoriteid = #{favoriteid,jdbcType=BIGINT}
+  </delete>
+  
+</mapper>

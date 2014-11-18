@@ -248,7 +248,7 @@
 	<ul class="guestLabels">
 		<li class="guestLabel guestLClick" hoverClass="guestLabelHover" otherClass="guestLClick" onclick="guestLClick(this)">猜你喜欢</li>
 		<li class="guestLabel" hoverClass="guestLabelHover" otherClass="guestLClick" onclick="guestLClick(this)">最近浏览</li>
-		<li class="guestLabel" hoverClass="guestLabelHover" otherClass="guestLClick" onclick="guestLClick(this)">个人收藏</li>
+		<c:if test="${fn:length(favoriteMovies)>0}"><li class="guestLabel" hoverClass="guestLabelHover" otherClass="guestLClick" onclick="guestLClick(this)">个人收藏</li></c:if>
 		<li style="clear:both"></li>
 	</ul>
 	<div class="guestLine"></div>
@@ -271,12 +271,9 @@
 		<li style="clear:both"></li>
 	</ul>
 	<ul class="guestItems" style="display:none">
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
-		<li class="guestItem" title="变形金刚"><span class="rankScore">9.1</span><a href="content.html?id=1" class="guestDes"><img src="./img/blank150x220.gif" />变形金刚4</a></li>
+		<c:forEach var="mv" items="${favoriteMovies}"  varStatus="status">
+		<li class="guestItem" title="${mv.name}"><span class="rankScore">${mv.score}</span><a href="${base}/content.do?id=${mv.movieid}" class="guestDes"><img src="${static}${mv.face150x220}" />${mv.name}</a></li>
+		</c:forEach>
 		<li style="clear:both"></li>
 	</ul>
 	<div class="clear"></div>

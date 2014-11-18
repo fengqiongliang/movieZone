@@ -61,7 +61,7 @@ function init(){
 
 /* 搜索窗口支持 */
 function goSearch(){
-	var sText = $('.search').val().replace(/\s/g,'');
+	var sText = $.trim($('.search').val());
 	if(sText.length<1){
 		if($(".searchE").attr('isHiding') == 'true')return;
 		$(".searchE").text('请输入搜索内容').css('display','inline-block').attr('isHiding','true');
@@ -712,7 +712,7 @@ function submitCmmt(){
 	var isReply       = $('.cmmtSubmit').attr('isReply')=='true';
 	var movieid      = !isReply?submitText.attr('movieid').replace(/\s/g,''):undefined;
 	var commentid = isReply?submitText.attr('commentid').replace(/\s/g,''):undefined;
-	var content       = submitText.val().replace(/\s/g,'');
+	var content       = $.trim(submitText.val());
 	var captcha       = sureInput.val().replace(/\s/g,'');
 	if(captcha.length!=4){
 		alert('请输入四位的验证码');

@@ -12,6 +12,8 @@ public interface MovieDao {
 	public Movie select(long movieid);
 	public Module selectModuleById(long modmvid);
 	public List<Movie> select(Movie movie,int pageNo,int pageSize);
+	public long selectFavoriteMovieCount(long movieid);
+	public List<Movie> selectFavoriteMovie(long userid,int pageNo,int pageSize);
 	public List<Movie> select(Movie movie,Boolean isPublish,int pageNo,int pageSize);
 	public Page<Movie> selectPage(Movie movie,int pageNo,int pageSize);
 	public Page<Movie> selectPage(Movie movie,Boolean isPublish,int pageNo,int pageSize);

@@ -38,8 +38,15 @@
 		<property name="keyService" ref="keyService" />
 	</bean>
 	
+	<bean id="favoriteService" class="com.moviezone.service.support.FavoriteServiceImpl">
+		<property name="favoriteDao" ref="favoriteDao" />
+		<property name="keyService" ref="keyService" />
+	</bean>
+	
+	
 	<bean id="statService" class="com.moviezone.service.support.StatServiceImpl">
 		<property name="statDao" ref="statDao" />
+		<property name="keyService" ref="keyService" />
 	</bean>
 	
 	

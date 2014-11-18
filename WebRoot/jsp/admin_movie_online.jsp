@@ -10,7 +10,7 @@
 	<td style="text-align:left;padding-left:10px"><a href="${base}/content.do?id=${wrapper.movie.movieid}"  target="_blank">${wrapper.movie.name}</a></td>
 	<td>${wrapper.movie.type}</td>
 	<td>${wrapper.movie.score}</td>
-	<td>${wrapper.movie.favorite}</td>
+	<td>${wrapper.favoriteCount}</td>
 	<td>${wrapper.movie.download}</td>
 	<td>${wrapper.movie.broswer}</td>
 	<td>${wrapper.movie.approve}</td>

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 
 
+
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -37,10 +38,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.moviezone.constant.Constants;
 import com.moviezone.constant.HttpCode;
 import com.moviezone.domain.Attach;
 import com.moviezone.domain.Module;
 import com.moviezone.domain.Movie;
+import com.moviezone.domain.User;
 import com.moviezone.service.MovieService;
 import com.moviezone.service.UserService;
 
@@ -55,6 +58,11 @@ public class IndexController extends BaseController {
 												 HttpServletRequest request,
 												 HttpServletResponse response,
 												 HttpSession session)throws Exception{
+		List<Movie> favoriteMovies = new ArrayList<Movie>();
+		User user = (User)request.getAttribute(Constants.USER);
+		if(user != null ){
+			favoriteMovies = movieService.selectFavoriteMovie(user.getUserid(), 1, 6);
+		}
 		List<Object> sceneCmmts  = new ArrayList<Object>();
 		sceneCmmts.add(new Object());
 		mv.addObject("sceneCmmts", sceneCmmts);
@@ -71,6 +79,7 @@ public class IndexController extends BaseController {
 		mv.addObject("hongkongMovies",movieService.selectByModule("首页-电视剧-港台", true, 1, 7));
 		mv.addObject("chinaMovies",movieService.selectByModule("首页-电视剧-内地", true, 1, 7));
 		mv.addObject("rankTVMovies",movieService.selectByModule("首页-电视剧-排行榜", true, 1, 12));
+		mv.addObject("favoriteMovies",favoriteMovies);
 		mv.addObject("fromModule", "indexShow");
 		mv.setViewName("/index");
 		return mv; 

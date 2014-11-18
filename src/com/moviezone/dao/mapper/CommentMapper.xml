@@ -24,7 +24,7 @@
   <sql id="cmmtColumns" >
     cmmt.commentid,cmmt.userid,cmmt.movieid,cmmt.content,cmmt.createarea,cmmt.createtime,
     u.userid as user_userid,u.username as user_username,u.password as user_password,u.nickname as user_nickname,u.faceurl as user_faceurl,u.cookie_id as user_cookie_id,u.role as user_role,u.lastlogtime as user_lastlogtime,u.updatetime as user_updatetime,u.createip as user_createip,u.createtime as user_createtime,u.createarea as user_createarea,u.nextnick as user_nextnick,u.nextface as user_nextface,u.isForbit as  user_isForbit,
-    mv.movieid as mv_movieid,mv.name as mv_name,mv.type as mv_type,mv.shortdesc as mv_shortdesc,mv.longdesc as mv_longdesc,mv.face650x500 as mv_face650x500,mv.face400x308 as mv_face400x308,mv.face220x169 as mv_face220x169,mv.face150x220 as mv_face150x220,mv.face80x80 as mv_face80x80,mv.picture as mv_picture,mv.score as mv_score,mv.approve as mv_approve,mv.favorite as mv_favorite,mv.download as mv_download,mv.broswer as mv_broswer,mv.createtime as mv_createtime,mv.publishtime as mv_publishtime
+    mv.movieid as mv_movieid,mv.name as mv_name,mv.type as mv_type,mv.shortdesc as mv_shortdesc,mv.longdesc as mv_longdesc,mv.face650x500 as mv_face650x500,mv.face400x308 as mv_face400x308,mv.face220x169 as mv_face220x169,mv.face150x220 as mv_face150x220,mv.face80x80 as mv_face80x80,mv.picture as mv_picture,mv.score as mv_score,mv.approve as mv_approve,mv.download as mv_download,mv.broswer as mv_broswer,mv.createtime as mv_createtime,mv.publishtime as mv_publishtime
   </sql>
   <sql id="replyColumns" >
     r.replyid,r.commentid,r.userid,r.content,r.createarea,r.createtime,

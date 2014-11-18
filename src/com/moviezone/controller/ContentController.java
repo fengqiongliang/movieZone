@@ -31,6 +31,7 @@ import javax.servlet.http.HttpSession;
 
 
 
+
 import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
@@ -59,6 +60,7 @@ import com.moviezone.domain.Movie;
 import com.moviezone.domain.Reply;
 import com.moviezone.domain.User;
 import com.moviezone.service.CommentService;
+import com.moviezone.service.FavoriteService;
 import com.moviezone.service.MovieService;
 import com.moviezone.service.StatService;
 import com.moviezone.util.HttpUtil;
@@ -72,6 +74,9 @@ public class ContentController extends BaseController {
 	private CommentService commentService;
 	@Autowired
 	private StatService statService;
+	@Autowired
+	private FavoriteService favoriteService;
+	
 	
 	@RequestMapping(value="/content.do",method=RequestMethod.GET)
 	public ModelAndView content(ModelAndView mv,
@@ -225,7 +230,7 @@ public class ContentController extends BaseController {
 		if(user == null)return;
 		Movie movie = movieService.select(movieid);
 		if(movie == null)return;
-		statService.addFavorite(movieid,user.getUserid());
+		favoriteService.saveFavorite(user.getUserid(), movie.getMovieid());
 	}
 	
 	private String getType(List<Module> modules){

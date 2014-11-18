@@ -28,10 +28,9 @@ public class Movie implements Serializable{
 	private String face80x80;
 	private String picture;
 	private float score;
-	private int approve;
-	private int favorite;
-	private int download;
-	private int broswer;
+	private long approve;
+	private long download;
+	private long broswer;
 	private Date createtime;
 	private Date publishtime;
 	public long getModmvid() {
@@ -120,28 +119,22 @@ public class Movie implements Serializable{
 	public void setScore(float score) {
 		this.score = score;
 	}
-	public int getApprove() {
+	public long getApprove() {
 		return approve;
 	}
-	public void setApprove(int approve) {
+	public void setApprove(long approve) {
 		this.approve = approve;
 	}
-	public int getFavorite() {
-		return favorite;
-	}
-	public void setFavorite(int favorite) {
-		this.favorite = favorite;
-	}
-	public int getDownload() {
+	public long getDownload() {
 		return download;
 	}
-	public void setDownload(int download) {
+	public void setDownload(long download) {
 		this.download = download;
 	}
-	public int getBroswer() {
+	public long getBroswer() {
 		return broswer;
 	}
-	public void setBroswer(int broswer) {
+	public void setBroswer(long broswer) {
 		this.broswer = broswer;
 	}
 	public float getRecommand(){
@@ -150,8 +143,7 @@ public class Movie implements Serializable{
 		if(score>=8)                        recommand = recommand + 2;
 		if(download > 10)                recommand = recommand + 1;
 		if(broswer > 100)                recommand = recommand + 1;
-		if(favorite>0)                       recommand = recommand + 0.5f;
-		if(approve>0)                      recommand = recommand + 0.5f;
+		if(approve>0)                      recommand = recommand + 1;
 		return recommand;
 	}
 	public Date getCreatetime() {

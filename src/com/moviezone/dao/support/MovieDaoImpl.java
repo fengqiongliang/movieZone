@@ -184,7 +184,6 @@ public class MovieDaoImpl implements MovieDao{
 		param.put("picture", movie.getPicture());
 		param.put("score", movie.getScore());
 		param.put("approve", movie.getApprove());
-		param.put("favorite", movie.getFavorite());
 		param.put("download", movie.getDownload());
 		param.put("broswer", movie.getBroswer());
 		param.put("createtime", movie.getCreatetime());
@@ -206,10 +205,23 @@ public class MovieDaoImpl implements MovieDao{
 		param.put("size", pageSize);
 		return param;
 	}
-
 	
+	@Override
+	public long selectFavoriteMovieCount(long movieid) {
+		Map<String,Object> param = new HashMap<String,Object>();
+		param.put("movieid", movieid);
+		Map<String,Object>  result = session.selectOne("selectFavoriteMovieCount",param);
+		return (Long)result.get("total");
+	}
 
-	
+	@Override
+	public List<Movie> selectFavoriteMovie(long userid, int pageNo, int pageSize) {
+		Map<String,Object> param = new HashMap<String,Object>();
+		param.put("userid", userid);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectFavoriteMovie", param);
+	}
 
 
 
