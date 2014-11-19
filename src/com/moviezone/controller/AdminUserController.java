@@ -1,11 +1,15 @@
 package com.moviezone.controller;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+
 
 
 
@@ -37,7 +41,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.HttpCode;
 import com.moviezone.domain.Page;
+import com.moviezone.domain.Stat;
 import com.moviezone.domain.User;
+import com.moviezone.service.StatService;
 import com.moviezone.service.UserService;
 
 @Controller
@@ -45,6 +51,8 @@ public class AdminUserController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(AdminUserController.class);
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private StatService statService;
 	
 	@RequestMapping(value="/admin_user.do",method=RequestMethod.GET)
 	public ModelAndView userView(ModelAndView mv,
@@ -122,6 +130,7 @@ public class AdminUserController extends BaseController {
 	@RequestMapping(value="/statActiveUser.json",method=RequestMethod.GET)
 	public void statActiveUser(	HttpServletRequest request,
 												HttpServletResponse response)throws Exception{
+		
 		Random rand = new Random();
 		JSONObject result = new JSONObject();
 		JSONArray   data   = new JSONArray();
@@ -172,50 +181,18 @@ public class AdminUserController extends BaseController {
 	@RequestMapping(value="/statArea.json",method=RequestMethod.GET)
 	public void statArea(	HttpServletRequest request,
 										HttpServletResponse response)throws Exception{
-		Random rand = new Random();
 		JSONObject result = new JSONObject();
+		List<Stat> stats     = statService.selectAreaStat(1, 13);
+		
 		JSONArray   data   = new JSONArray();
-		JSONObject o1 = new JSONObject();
-		o1.put("name", "北京");
-		o1.put("value",rand.nextInt(10) );
-		JSONObject o2 = new JSONObject();
-		o2.put("name", "上海");
-		o2.put("value",rand.nextInt(10) );
-		JSONObject o3 = new JSONObject();
-		o3.put("name", "广东");
-		o3.put("value",rand.nextInt(10) );
-		JSONObject o4 = new JSONObject();
-		o4.put("name", "广西");
-		o4.put("value",rand.nextInt(10) );
-		JSONObject o5 = new JSONObject();
-		o5.put("name", "辽宁");
-		o5.put("value",rand.nextInt(10) );
-		JSONObject o6 = new JSONObject();
-		o6.put("name", "黑龙江");
-		o6.put("value",rand.nextInt(10) );
-		JSONObject o7 = new JSONObject();
-		o7.put("name", "浙江");
-		o7.put("value",rand.nextInt(10) );
-		JSONObject o8 = new JSONObject();
-		o8.put("name", "江苏");
-		o8.put("value",rand.nextInt(10) );
-		JSONObject o9 = new JSONObject();
-		o9.put("name", "内蒙古");
-		o9.put("value",rand.nextInt(10) );
-		JSONObject o10 = new JSONObject();
-		o10.put("name", "香港");
-		o10.put("value",rand.nextInt(10) );
-		data.add(o1);
-		data.add(o2);
-		data.add(o3);
-		data.add(o4);
-		data.add(o5);
-		data.add(o6);
-		data.add(o7);
-		data.add(o8);
-		data.add(o9);
-		data.add(o10);
+		for(Stat stat:stats){
+			JSONObject o = new JSONObject();
+			o.put("name", stat.getName());
+			o.put("value",stat.getValue());
+			data.add(o);
+		}
 		result.put("result", data);
+		
 		response.getWriter().write(result.toString());
 	}
 	

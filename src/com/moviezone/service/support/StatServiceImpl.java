@@ -1,5 +1,6 @@
 package com.moviezone.service.support;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.moviezone.dao.StatDao;
 import com.moviezone.domain.IP;
 import com.moviezone.domain.Movie;
 import com.moviezone.domain.Page;
+import com.moviezone.domain.Stat;
 import com.moviezone.domain.User;
 import com.moviezone.service.KeyService;
 import com.moviezone.service.StatService;
@@ -43,6 +45,8 @@ public class StatServiceImpl implements StatService{
 	private Map<String,Long> downloadMap   = new HashMap<String,Long>();  //下载量统计保存
 	private Map<String,Long> browserMap      = new HashMap<String,Long>();  //浏览量统计保存
 	private Map<String,Long> ipMap                = new HashMap<String,Long>();  //ip统计保存
+	private Map<String,Long> moduleMap       = new HashMap<String,Long>();  //模块统计保存
+	private List<String>           moduleIds          = new ArrayList<String>();            //模块的统计id
 	private StatDao statDao;
 	private KeyService keyService;
 	 
@@ -52,9 +56,41 @@ public class StatServiceImpl implements StatService{
 	}
 	
 	@Override
+	public List<Stat> selectApproveStat(int pageNo, int pageSize) {
+		return statDao.selectApproveStat(pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectDownloadStat(int pageNo, int pageSize) {
+		return statDao.selectDownloadStat(pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectBrowserStat(int pageNo, int pageSize) {
+		return statDao.selectBrowserStat(pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectCommentStat(int pageNo, int pageSize) {
+		return statDao.selectCommentStat(pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectModuleStat(int pageNo, int pageSize) {
+		return statDao.selectModuleStat(pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectAreaStat(int pageNo, int pageSize) {
+		return statDao.selectAreaStat(pageNo, pageSize);
+	}
+	
+	@Override
 	public void addModuleStat(String fromModule) {
-		System.out.println("======addModuleStat=========");
-		
+		if(StringUtils.isBlank(fromModule))return;
+		if(moduleIds.size()<1)moduleIds = statDao.moduleIds();
+		if(!moduleIds.contains(fromModule))return;
+		executor.execute(addCmmd(moduleMap,fromModule));
 	}
 
 	@Override
@@ -114,6 +150,7 @@ public class StatServiceImpl implements StatService{
 					downloadMap.clear();
 					browserMap.clear();
 					ipMap.clear();
+					moduleMap.clear();
 				}
 			}
 		};
@@ -154,7 +191,16 @@ public class StatServiceImpl implements StatService{
 			}
 			logger.debug("end  clear ip count . . .");
 		}
+		if(!moduleMap.isEmpty()){ //模块
+			logger.debug("start clear module count . . .");
+			for(Entry<String,Long>entry:moduleMap.entrySet()){
+				statDao.updateModulestat(entry.getKey(), entry.getValue());
+			}
+			logger.debug("end  clear module count . . .");
+		}
 	}
+
+	
 	
 	
 

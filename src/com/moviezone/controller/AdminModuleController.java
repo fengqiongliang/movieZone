@@ -27,6 +27,8 @@ import javax.servlet.http.HttpSession;
 
 
 
+
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -50,8 +52,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.moviezone.constant.HttpCode;
 import com.moviezone.domain.Movie;
 import com.moviezone.domain.Page;
+import com.moviezone.domain.Stat;
 import com.moviezone.domain.User;
 import com.moviezone.service.MovieService;
+import com.moviezone.service.StatService;
 import com.moviezone.service.UserService;
 
 @Controller
@@ -60,6 +64,8 @@ public class AdminModuleController extends BaseController {
 	private static final int pageSize = 20;
 	@Autowired
 	private MovieService movieService;
+	@Autowired
+	private StatService statService;
 	private String[] modnames = {
 													"首页-展示区","首页-论播区","首页-站长区","首页-电影-480p","首页-电影-720p","首页-电影-1080p","首页-电影-其它","首页-电影-排行榜","首页-电视剧-英美","首页-电视剧-日韩","首页-电视剧-港台","首页-电视剧-内地","首页-电视剧-排行榜",
 													"电影-展示区","电影-480p","电影-720p","电影-1080p","电影-其它",
@@ -118,50 +124,18 @@ public class AdminModuleController extends BaseController {
 	@RequestMapping(value="/statModule.json",method=RequestMethod.GET)
 	public void statModule(HttpServletRequest request,
 										  HttpServletResponse response)throws Exception{
-		Random rand = new Random();
 		JSONObject result = new JSONObject();
+		List<Stat> stats     = statService.selectModuleStat(1, 13);
+
 		JSONArray   data   = new JSONArray();
-		JSONObject o1 = new JSONObject();
-		o1.put("name", "首页-展示区");
-		o1.put("value",rand.nextInt(10) );
-		JSONObject o2 = new JSONObject();
-		o2.put("name", "首页-论播区");
-		o2.put("value",rand.nextInt(10) );
-		JSONObject o3 = new JSONObject();
-		o3.put("name", "首页-站长区");
-		o3.put("value",rand.nextInt(10) );
-		JSONObject o4 = new JSONObject();
-		o4.put("name", "首页-电影-480p");
-		o4.put("value",rand.nextInt(10) );
-		JSONObject o5 = new JSONObject();
-		o5.put("name", "首页-电影-720p");
-		o5.put("value",rand.nextInt(10) );
-		JSONObject o6 = new JSONObject();
-		o6.put("name", "首页-电影-1080p");
-		o6.put("value",rand.nextInt(10) );
-		JSONObject o7 = new JSONObject();
-		o7.put("name", "首页-电影-其它");
-		o7.put("value",rand.nextInt(10) );
-		JSONObject o8 = new JSONObject();
-		o8.put("name", "电影-展示区");
-		o8.put("value",rand.nextInt(10) );
-		JSONObject o9 = new JSONObject();
-		o9.put("name", "电视剧-展示区");
-		o9.put("value",rand.nextInt(10) );
-		JSONObject o10 = new JSONObject();
-		o10.put("name", "电视剧-港台");
-		o10.put("value",rand.nextInt(10) );
-		data.add(o1);
-		data.add(o2);
-		data.add(o3);
-		data.add(o4);
-		data.add(o5);
-		data.add(o6);
-		data.add(o7);
-		data.add(o8);
-		data.add(o9);
-		data.add(o10);
+		for(Stat stat:stats){
+			JSONObject o = new JSONObject();
+			o.put("name", stat.getName());
+			o.put("value",stat.getValue());
+			data.add(o);
+		}
 		result.put("result", data);
+		
 		response.getWriter().write(result.toString());
 	}
 	

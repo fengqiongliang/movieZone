@@ -10,6 +10,11 @@
     <result column="Province" property="Province" jdbcType="VARCHAR" />
     <result column="City" property="City" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="StatResultMap" type="com.moviezone.domain.Stat" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="BIGINT" />
+  </resultMap>
   
   <select id="selectIp" resultMap="IpResultMap" parameterType="map"  >
     select 'false' as QUERYID, id, start_ip,end_ip,start_ip_str,end_ip_str,Province,City from ip where 1=1 
@@ -21,6 +26,34 @@
     <if test="Province != null"> and Province = #{Province,jdbcType=VARCHAR} </if>
     <if test="City != null"> and City = #{City,jdbcType=VARCHAR} </if>
     limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectModuleIds" resultType="string" >
+    select stat_id from modulestat limit 0,10000
+  </select>
+  
+  <select id="selectApproveStat" resultMap="StatResultMap" parameterType="map"  >
+    select 'false' as QUERYID, movieid id,name,approve value from movie order by approve desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectDownloadStat" resultMap="StatResultMap" parameterType="map"  >
+    select 'false' as QUERYID, movieid id,name,download value from movie order by download desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectBrowserStat" resultMap="StatResultMap" parameterType="map"  >
+    select 'false' as QUERYID, movieid id,name,broswer value from movie order by broswer desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectCommentStat" resultMap="StatResultMap" parameterType="map"  >
+    select 'false' as QUERYID,mv.movieid id,mv.name,count(mv.movieid) value from movie mv inner join comment cmmt on mv.movieid = cmmt.movieid group by mv.movieid,mv.name order by value desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectModuleStat" resultMap="StatResultMap" parameterType="map"  >
+    select 'false' as QUERYID,stat_id id,mod_name name,statCount value from modulestat order by statCount desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAreaStat" resultMap="StatResultMap" parameterType="map"  >
+    select 'false' as QUERYID,'1' id,Province name,sum(statCount) value from ip group by Province order by value desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
   <update id="updateMoviestat" parameterType="com.moviezone.domain.Movie" >

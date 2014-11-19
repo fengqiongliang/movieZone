@@ -14,12 +14,66 @@ import org.slf4j.LoggerFactory;
 import com.moviezone.dao.StatDao;
 import com.moviezone.domain.IP;
 import com.moviezone.domain.Movie;
+import com.moviezone.domain.Stat;
 
 public class StatDaoImpl implements StatDao{
 	private static final Logger logger = LoggerFactory.getLogger(StatDaoImpl.class);
 	
 	private SqlSession session;
+	
+	@Override
+	public List<Stat> selectApproveStat(int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectApproveStat", param);
+	}
 
+	@Override
+	public List<Stat> selectDownloadStat(int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectDownloadStat", param);
+	}
+
+	@Override
+	public List<Stat> selectBrowserStat(int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectBrowserStat", param);
+	}
+
+	@Override
+	public List<Stat> selectCommentStat(int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectCommentStat", param);
+	}
+
+	@Override
+	public List<Stat> selectModuleStat(int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectModuleStat", param);
+	}
+
+	@Override
+	public List<Stat> selectAreaStat(int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectAreaStat", param);
+	}
+	
+	@Override
+	public List<String> moduleIds() {
+		return session.selectList("selectModuleIds");
+	}
+	
 	@Override
 	public boolean addBrowserStat(long movieid,long broswer){
 		if(movieid<1)return false;
@@ -73,6 +127,10 @@ public class StatDaoImpl implements StatDao{
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
+
+	
+
+	
 
 	
 	

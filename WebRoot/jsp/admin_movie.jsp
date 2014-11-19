@@ -26,7 +26,7 @@
 			<p class="adminPicTitle">按点赞数进行排名</p>
 		</div>
 		<div class="adminPicContainer" style="margin-left:30px">
-			<div class="adminPic" url="${base}/statMovie.json?sort=comment" interval="100000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=comment" interval="1000"></div>
 			<p class="adminPicTitle">按留言数进行排名</p>
 		</div>
 		<div class="adminTableContainer">
