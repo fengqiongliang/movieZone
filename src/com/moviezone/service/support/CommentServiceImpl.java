@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.moviezone.dao.CommentDao;
+import com.moviezone.dao.StatDao;
 import com.moviezone.domain.CmmtReply;
 import com.moviezone.domain.Page;
 import com.moviezone.domain.Comment;
@@ -19,6 +20,7 @@ public class CommentServiceImpl implements CommentService{
 	private static final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
 	private CommentDao commentDao;
 	private KeyService keyService;
+	private StatDao statDao;
 
 	@Override
 	public Comment select(long commentid) {
@@ -63,6 +65,12 @@ public class CommentServiceImpl implements CommentService{
 		return commentDao.selectPage(comment, pageNo, pageSize);
 	}
 	
+
+	@Override
+	public Page<Comment> selectPage(Long commentid, Long movieid, Long userid,String type, int pageNo) {
+		return commentDao.selectPage(commentid, movieid,userid,type,pageNo, 10);
+	}
+	
 	@Override
 	public long insert(Comment comment) {
 		comment.setCommentid(keyService.getCommentid());
@@ -98,6 +106,10 @@ public class CommentServiceImpl implements CommentService{
 		this.keyService = keyService;
 	}
 	
+	public void setStatDao(StatDao statDao) {
+		this.statDao = statDao;
+	}
+
 	@Override
 	public List<CmmtReply> selectCmmtReply(long movieid, int pageNo,int pageSize) {
 		return selectCmmtReply(movieid,pageNo,pageSize,5);
@@ -115,15 +127,45 @@ public class CommentServiceImpl implements CommentService{
 		return cmmtReplys;
 	}
 
-	
+	@Override
+	public List<Comment> selectRecmmdCmmt(String type,int pageNo, int pageSize) {
+		return commentDao.selectRecmmdCmmt(type,pageNo, pageSize);
+	}
 
-	
+	@Override
+	public Page<Comment> selectRecmmdCmmtPage(String type, int pageNo) {
+		return commentDao.selectRecmmdCmmtPage(type,pageNo, 10);
+	}
 
-	
+	@Override
+	public void sceneCmmt(long commentid) {
+		commentDao.sceneCmmt(commentid);
+	}
 
-	
+	@Override
+	public void unSceneCmmt(long commentid) {
+		if(commentid<1)return;
+		Comment param = commentDao.select(commentid);
+		param.setOrderseq(-1);
+		commentDao.update(param);
+	}
 
-	
+	@Override
+	public boolean mvCmmt(long fromCmmtid, long toCmmtid) {
+		if(fromCmmtid<1||toCmmtid<1)return false;
+		Comment fromCmmt = commentDao.select(fromCmmtid);
+		if(fromCmmt == null)return false;
+		Comment toCmmt     = commentDao.select(toCmmtid);
+		if(toCmmt==null)return false;
+		long fromOrderseq = fromCmmt.getOrderseq();
+		long toOrderseq     = toCmmt.getOrderseq();
+		fromCmmt.setOrderseq(toOrderseq);
+		toCmmt.setOrderseq(fromOrderseq);
+		commentDao.update(fromCmmt);
+		commentDao.update(toCmmt);
+		return true;
+	}
+
 
 	
 

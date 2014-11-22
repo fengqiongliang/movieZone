@@ -112,7 +112,7 @@ CREATE TABLE `module_movie` (
   `modmvid` bigint NOT NULL                  COMMENT '主键id',
   `modname` varchar(30) NOT NULL       COMMENT '模块名称' ,
   `movieid` bigint NOT NULL                     COMMENT '电影/电视id(外)' ,
-  `orderseq` int default  0                         COMMENT '排列顺序',
+  `orderseq` bigint default  0                     COMMENT '排列顺序',
   `createtime` datetime NOT NULL            COMMENT '创建时间',
   PRIMARY KEY  (`modmvid`),
   FOREIGN KEY   (`movieid`) REFERENCES `movie` (`movieid`) ON DELETE CASCADE
@@ -393,6 +393,7 @@ CREATE TABLE `comment` (
   `userid` bigint NOT NULL                  COMMENT '用户id(外)',
   `movieid` bigint NOT NULL               COMMENT '电影/电视id(外)',
   `content` varchar(300) NOT NULL   COMMENT '留言内容',
+  `orderseq` bigint default '-1'             COMMENT '推荐留言排序位置，小于0表示不推荐',
   `createarea` varchar(15) default NULL  COMMENT '创建地区：北京、上海、广州等',
   `createtime` datetime NOT NULL      COMMENT '创建时间',
   PRIMARY KEY  (`commentid`),
@@ -400,23 +401,23 @@ CREATE TABLE `comment` (
   FOREIGN KEY   (`movieid`) REFERENCES `movie` (`movieid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `comment` VALUES ('1', '1','1','男主角我很喜欢，喜欢楼主多发发这类动画影片','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('2', '1','1','很好很强大','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('3', '1','1','感谢楼主的分享','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('4', '2','2','终于等到高清版本的了，不容易啊','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('5', '3','3','张三到此一游','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('6', '3','3','Thank you for your sharing ~~','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('7', '5','5','有没有别的片源啊~~','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('8', '5','5','跪求更加高清的影片','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('9', '7','7','期待变形金刚4的上映','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('10', '7','7','今夜你会不会来','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('11', '8','8','影集网搞得不错，我挺喜欢的','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('12', '1','3','突然有一种很冲动想打人的感觉','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('13', '2','2','哈哈，不知道该写什么好','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('14', '3','3','什么时候外星人攻打地球，地球才能和平统一','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('15', '4','4','扫地的阿姨又来了','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('16', '8','1','你在哪里高就啊，先生','海口','2012-10-21 22:18:56');
-INSERT INTO `comment` VALUES ('17', '8','1','我不要再继续抱怨了~~','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('1', '1','1','男主角我很喜欢，喜欢楼主多发发这类动画影片','1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('2', '1','1','很好很强大','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('3', '1','1','感谢楼主的分享','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('4', '2','2','终于等到高清版本的了，不容易啊','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('5', '3','3','张三到此一游','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('6', '3','3','Thank you for your sharing ~~','2','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('7', '5','5','有没有别的片源啊~~','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('8', '5','5','跪求更加高清的影片','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('9', '7','7','期待变形金刚4的上映','3','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('10', '7','7','今夜你会不会来','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('11', '8','8','影集网搞得不错，我挺喜欢的','4','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('12', '1','3','突然有一种很冲动想打人的感觉','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('13', '2','2','哈哈，不知道该写什么好','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('14', '3','3','什么时候外星人攻打地球，地球才能和平统一','5','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('15', '4','4','扫地的阿姨又来了','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('16', '8','1','你在哪里高就啊，先生','-1','海口','2012-10-21 22:18:56');
+INSERT INTO `comment` VALUES ('17', '8','1','我不要再继续抱怨了~~','6','海口','2012-10-21 22:18:56');
 
 -- ----------------------------
 -- 回复表

@@ -2,6 +2,7 @@ package com.moviezone.dao.support;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import com.moviezone.dao.StatDao;
 import com.moviezone.domain.IP;
 import com.moviezone.domain.Movie;
 import com.moviezone.domain.Stat;
+import com.moviezone.util.HttpUtil;
 
 public class StatDaoImpl implements StatDao{
 	private static final Logger logger = LoggerFactory.getLogger(StatDaoImpl.class);
@@ -67,6 +69,26 @@ public class StatDaoImpl implements StatDao{
 		param.put("start", (pageNo-1)*pageSize);
 		param.put("size", pageSize);
 		return session.selectList("selectAreaStat", param);
+	}
+	
+	@Override
+	public List<Stat> selectCmmtUserStat(Date startTime,Date endTime,int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("startTime", startTime);
+		param.put("endTime", endTime);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectCmmtUserStat", param);
+	}
+
+	@Override
+	public List<Stat> selectCmmtMvStat(Date startTime,Date endTime,int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("startTime", startTime);
+		param.put("endTime", endTime);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectCmmtMvStat", param);
 	}
 	
 	@Override
@@ -127,6 +149,17 @@ public class StatDaoImpl implements StatDao{
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
+
+	@Override
+	public IP selectAreaOf(String ip) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("betweenip", HttpUtil.ipToLong(ip));
+		param.put("start", 0);
+		param.put("size", 1);
+		return session.selectOne("selectIp", param);
+	}
+
+	
 
 	
 

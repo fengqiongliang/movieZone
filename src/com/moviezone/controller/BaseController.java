@@ -6,9 +6,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -22,11 +25,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.HttpCode;
+import com.moviezone.domain.IP;
+import com.moviezone.service.StatService;
 
 @Controller
 public abstract class BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
-	
+	@Autowired
+	private StatService statService;
 	/**
 	@RequestMapping(value="/helloWorld.do",method=RequestMethod.GET)
 	public ModelAndView helloDo(HttpServletRequest request,
@@ -64,8 +70,18 @@ public abstract class BaseController {
 	 * @return
 	 */
 	protected String getFrom(HttpServletRequest request){
-		String ip = request.getRemoteAddr();
-		return "海口";
+		return getFrom(request.getRemoteAddr());
+	}
+	
+	/**
+	 * 获得ip属于哪个地区：海口、北京等地方
+	 * @param request
+	 * @return
+	 */
+	protected String getFrom(String ip){
+		IP IP = statService.selectAreaOf(ip);
+		if(IP == null)return "未知";
+		return IP.getProvince()+(!IP.getProvince().equals(IP.getCity())?IP.getCity():"");
 	}
 	
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)

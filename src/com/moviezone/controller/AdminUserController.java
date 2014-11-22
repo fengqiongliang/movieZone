@@ -124,7 +124,7 @@ public class AdminUserController extends BaseController {
 	public void addSystemForbit(	HttpServletRequest request,
 													HttpServletResponse response,
 													@RequestParam(value="createip") String createip)throws Exception{
-		userService.addSystemForbit(createip);
+		userService.addSystemForbit(createip,getFrom(createip));
 	}
 	
 	@RequestMapping(value="/statActiveUser.json",method=RequestMethod.GET)

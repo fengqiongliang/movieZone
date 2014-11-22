@@ -25,6 +25,7 @@
     <if test="end_ip_str != null"> and end_ip_str = #{end_ip_str,jdbcType=VARCHAR} </if>
     <if test="Province != null"> and Province = #{Province,jdbcType=VARCHAR} </if>
     <if test="City != null"> and City = #{City,jdbcType=VARCHAR} </if>
+    <if test="betweenip > 0"> and #{betweenip,jdbcType=BIGINT} between start_ip and end_ip </if>
     limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
@@ -54,6 +55,26 @@
   
   <select id="selectAreaStat" resultMap="StatResultMap" parameterType="map"  >
     select 'false' as QUERYID,'1' id,Province name,sum(statCount) value from ip group by Province order by value desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectCmmtUserStat" resultMap="StatResultMap" parameterType="map"  >
+  	select 'false' as QUERYID,u.userid id,u.nickname name,cmmt.value from (
+		select userid,count(userid) value from comment
+		where 1=1
+		<if test="startTime != null"> and createtime &gt;= #{startTime,jdbcType=TIMESTAMP}  </if>
+		<if test="endTime != null">  and createtime  &lt;= #{endTime,jdbcType=TIMESTAMP}    </if>
+		group by userid order by value desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+	) cmmt inner join user u on cmmt.userid = u.userid 
+  </select>
+  
+  <select id="selectCmmtMvStat" resultMap="StatResultMap" parameterType="map"  >
+  	select 'false' as QUERYID,mv.movieid id,mv.name name,cmmt.value from (
+		select movieid,count(movieid) value from comment
+		where 1=1
+		<if test="startTime != null"> and createtime &gt;= #{startTime,jdbcType=TIMESTAMP}  </if>
+		<if test="endTime != null">  and createtime  &lt;= #{endTime,jdbcType=TIMESTAMP}    </if>
+		group by movieid order by value desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+	) cmmt inner join movie mv on cmmt.movieid = mv.movieid 
   </select>
   
   <update id="updateMoviestat" parameterType="com.moviezone.domain.Movie" >

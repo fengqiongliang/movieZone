@@ -71,12 +71,12 @@
 	</div>
 	<div class="showRight">
 		<ul onmouseover="cmmtOver()" onmouseout="moveCmmt()">
-			<c:forEach var="mv" items="1,2,3,4,5,6,7,8,9" begin="0" end="9" varStatus="status">
+			<c:forEach var="cmmt" items="${sceneCmmts}" begin="0" end="9" varStatus="status">
 			<li class="cmmtLi">
-				<img class="nickImg" src="${static}/img/blank92x71.gif" title="风之恋人1"/>
+				<img class="nickImg" src="${static}${cmmt.user.faceurl}" title="${cmmt.user.nickname}"/>
 				<div class="commentCont">
-					<p class="cmmtTitle"><span style="color:#71b775">风之恋人1</span> 评 <a href="content.html?id=1" class="movieName" title="《澳门风云》">《澳门风云》</a> <span class="movieScore">8.0</span></p>
-					<a href="${base}/content.do?id=${mv}" class="cmmtSpeak" title="这是我见过最好看的电影了">这是我见过最好看的电影了，男主人公帅，女主人公美！这是我见过最好看的电影了，男主人公帅，女主人公美abcccccccccc！这是我见过最好看的电影了，男主人公帅，女主人公美abcccccccccc！这是我见过最好看的电影了，男主人公帅，女主人公美abcccccccccc！这是我见过最好看的电影了，男主人公帅，女主人公美abcccccccccc！这是我见过最好看的电影了，男主人公帅，女主人公美abcccccccccc！</a>
+					<p class="cmmtTitle"><span style="color:#71b775">${cmmt.user.nickname}</span> 评 <a href="${base}/content.do?id=${cmmt.movie.movieid}" class="movieName" title="《${cmmt.movie.name}》">《${cmmt.movie.name}》</a> <span class="movieScore">${cmmt.movie.score}</span></p>
+					<a href="${base}/content.do?id=${cmmt.movie.movieid}" class="cmmtSpeak" title="${cmmt.content}">${cmmt.content}</a>
 				</div>
 			</li>
 			</c:forEach>

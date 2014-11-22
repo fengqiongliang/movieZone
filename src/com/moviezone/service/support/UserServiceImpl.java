@@ -165,12 +165,12 @@ public class UserServiceImpl implements UserService{
 
 
 	@Override
-	public void addSystemForbit(String createip) {
+	public void addSystemForbit(String createip,String createarea) {
 		User user = new User();
 		user.setUserid(keyService.getUserid());
 		user.setNickname("系统禁用ip-"+user.getUserid());
 		user.setCreateip(createip);
-		user.setCreatearea("未知");
+		user.setCreatearea(createarea);
 		userDao.insertForbit(user);
 	}
 

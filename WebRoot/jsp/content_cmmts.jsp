@@ -8,7 +8,7 @@
 	<div class="cmmtHead">
 		<p class="nickname">${cmmtReply.cmmt.user.nickname}</p>
 		<img class="cmmtImg" src="${static}${cmmtReply.cmmt.user.faceurl}">
-		<p class="from">来自:${cmmtReply.cmmt.createarea}</p>
+		<p class="from">${cmmtReply.cmmt.createarea}</p>
 	</div>
 	<div class="cmntCont">
 		<span class="cmntArrow">◀</span>

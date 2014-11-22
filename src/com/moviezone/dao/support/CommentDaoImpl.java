@@ -50,16 +50,26 @@ public class CommentDaoImpl implements CommentDao{
 	@Override
 	public List<Comment> select(Comment comment,int pageNo,int pageSize) {
 		if(comment == null)return new ArrayList<Comment>();
-		Map<String,Object> param = new  HashMap<String,Object>();
-		param.put("commentid", comment.getCommentid());
-		param.put("userid", comment.getUserid());
-		param.put("movieid", comment.getMovieid());
-		param.put("content", comment.getContent());
-		param.put("createarea", comment.getCreatearea());
-		param.put("createtime", comment.getCreatetime());
-		param.put("start", (pageNo-1)*pageSize);
-		param.put("size", pageSize);
-		return session.selectList("selectComment", param);
+		return session.selectList("selectComment", getParamMap(comment,pageNo,pageSize));
+	}
+	
+	@Override
+	public List<Comment> selectRecmmdCmmt(String type,int pageNo, int pageSize) {
+		return session.selectList("selectComment", getRecmmdParamMap(type,pageNo,pageSize));
+	}
+	
+	@Override
+	public Page<Comment> selectRecmmdCmmtPage(String type, int pageNo,int pageSize) {
+		Map<String,Object>  result = session.selectOne("selectCmmtCount",getRecmmdParamMap(type,null,null));
+		
+		Page<Comment> page = new Page<Comment>();
+		page.setTotal((Long)result.get("total"));
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setData(selectRecmmdCmmt(type,pageNo,pageSize));
+		
+		return page;
+		
 	}
 	
 	@Override
@@ -80,7 +90,7 @@ public class CommentDaoImpl implements CommentDao{
 	@Override
 	public long selectCount(Comment comment) {
 		if(comment == null)return 0;
-		Map<String,Object>  result = session.selectOne("selectCmmtCount",comment);
+		Map<String,Object>  result = session.selectOne("selectCmmtCount",getParamMap(comment,null,null));
 		return (Long)result.get("total");
 	}
 	
@@ -104,6 +114,19 @@ public class CommentDaoImpl implements CommentDao{
 	}
 	
 	@Override
+	public Page<Comment> selectPage(Long commentid, Long movieid, Long userid,String type, int pageNo, int pageSize) {
+		Map<String,Object> param = getParamMap(commentid,movieid,userid,type,pageNo,pageSize);
+		Map<String,Object> count  = session.selectOne("selectCmmtCount",param);
+		List<Comment>        data    = session.selectList("selectComment", param);
+		Page<Comment> page = new Page<Comment>();
+		page.setTotal((Long)count.get("total"));
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setData(data);
+		return page;
+	}
+	
+	@Override
 	public Page<Reply> selectReplyPage(Reply reply, int pageNo, int pageSize) {
 		Page<Reply> page = new Page<Reply>();
 		if(reply == null)return page;
@@ -121,6 +144,8 @@ public class CommentDaoImpl implements CommentDao{
 		return session.update("updateComment", comment)>0;
 	}
 	
+	
+	
 	@Override
 	public boolean updateReply(Reply reply) {
 		if(reply.getReplyid()<1)return false;
@@ -137,7 +162,7 @@ public class CommentDaoImpl implements CommentDao{
 	public boolean delete(long commentid) {
 		if(commentid<1)return false;
 		Comment comment = new Comment();
-		comment.setMovieid(commentid);
+		comment.setCommentid(commentid);
 		return delete(comment);
 	}
 	
@@ -158,6 +183,49 @@ public class CommentDaoImpl implements CommentDao{
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
+	
+	private Map<String,Object> getParamMap(Comment comment,Integer pageNo,Integer pageSize){
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("commentid", comment.getCommentid());
+		param.put("userid", comment.getUserid());
+		param.put("movieid", comment.getMovieid());
+		param.put("content", comment.getContent());
+		param.put("createarea", comment.getCreatearea());
+		param.put("createtime", comment.getCreatetime());
+		if(pageNo!=null&&pageSize!=null)param.put("start", (pageNo-1)*pageSize);
+		if(pageNo!=null&&pageSize!=null)param.put("size", pageSize);
+		return param;
+	}
+	
+	private Map<String,Object> getParamMap(Long commentid, Long movieid, Long userid,String type,Integer pageNo,Integer pageSize){
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("commentid", commentid);
+		param.put("movieid", movieid);
+		param.put("userid", userid);
+		param.put("type", type);
+		if(pageNo!=null&&pageSize!=null)param.put("start", (pageNo-1)*pageSize);
+		if(pageNo!=null&&pageSize!=null)param.put("size", pageSize);
+		return param;
+	}
+	
+	private Map<String,Object> getRecmmdParamMap(String type,Integer pageNo,Integer pageSize){
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("type", type);
+		param.put("isRecmmd", true);
+		if(pageNo!=null&&pageSize!=null)param.put("start", (pageNo-1)*pageSize);
+		if(pageNo!=null&&pageSize!=null)param.put("size", pageSize);
+		return param;
+	}
+	
+	@Override
+	public void sceneCmmt(long commentid) {
+		if(commentid<1)return;
+		Comment param = new Comment();
+		param.setCommentid(commentid);
+		session.update("updateCmmtOrderSeq", param);
+	}
+	
+	
 	
 
 }

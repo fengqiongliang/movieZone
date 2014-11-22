@@ -6,6 +6,7 @@
     <result column="userid" property="userid" jdbcType="BIGINT" />
     <result column="movieid" property="movieid" jdbcType="BIGINT" />
     <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="orderseq" property="orderseq" jdbcType="BIGINT" />
     <result column="createarea" property="createarea" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
     <association property="user"  resultMap="com.moviezone.dao.UserDao.UserResultMap" columnPrefix="user_"   />
@@ -22,7 +23,7 @@
   </resultMap>
   
   <sql id="cmmtColumns" >
-    cmmt.commentid,cmmt.userid,cmmt.movieid,cmmt.content,cmmt.createarea,cmmt.createtime,
+    cmmt.commentid,cmmt.userid,cmmt.movieid,cmmt.content,cmmt.orderseq,cmmt.createarea,cmmt.createtime,
     u.userid as user_userid,u.username as user_username,u.password as user_password,u.nickname as user_nickname,u.faceurl as user_faceurl,u.cookie_id as user_cookie_id,u.role as user_role,u.lastlogtime as user_lastlogtime,u.updatetime as user_updatetime,u.createip as user_createip,u.createtime as user_createtime,u.createarea as user_createarea,u.nextnick as user_nextnick,u.nextface as user_nextface,u.isForbit as  user_isForbit,
     mv.movieid as mv_movieid,mv.name as mv_name,mv.type as mv_type,mv.shortdesc as mv_shortdesc,mv.longdesc as mv_longdesc,mv.face650x500 as mv_face650x500,mv.face400x308 as mv_face400x308,mv.face220x169 as mv_face220x169,mv.face150x220 as mv_face150x220,mv.face80x80 as mv_face80x80,mv.picture as mv_picture,mv.score as mv_score,mv.approve as mv_approve,mv.download as mv_download,mv.broswer as mv_broswer,mv.createtime as mv_createtime,mv.publishtime as mv_publishtime
   </sql>
@@ -35,6 +36,8 @@
   	<if test="userid >0">  and cmmt.userid = #{userid,jdbcType=BIGINT} </if>
   	<if test="movieid >0">  and cmmt.movieid = #{movieid,jdbcType=BIGINT} </if>
     <if test="content != null">  and cmmt.content = #{content,jdbcType=VARCHAR} </if>
+    <if test="isRecmmd == true">  and cmmt.orderseq >0 </if>
+    <if test="type != null">  and mv.type =  #{type,jdbcType=VARCHAR} </if>
     <if test="createarea != null">  and cmmt.createarea = #{createarea,jdbcType=VARCHAR} </if>
     <if test="createtime != null">  and cmmt.createtime = #{createtime,jdbcType=TIMESTAMP} </if>
   </sql>
@@ -51,8 +54,8 @@
     select 'false' as QUERYID, 
     count(cmmt.commentid) as total
     from comment cmmt
-    left join user u on cmmt.userid = u.userid
-    left join movie mv on cmmt.movieid = mv.movieid  
+    inner join user u on cmmt.userid = u.userid
+    inner join movie mv on cmmt.movieid = mv.movieid  
     where 1=1 
     <include refid="selectCmmtIFCol" />
   </select>
@@ -61,11 +64,13 @@
     select 'false' as QUERYID, 
     <include refid="cmmtColumns" /> 
     from comment cmmt
-    left join user u on cmmt.userid = u.userid
-    left join movie mv on cmmt.movieid = mv.movieid 
+    inner join user u on cmmt.userid = u.userid
+    inner join movie mv on cmmt.movieid = mv.movieid 
     where 1=1 
     <include refid="selectCmmtIFCol" />
-    order by QUERYID asc,cmmt.createtime asc
+    order by QUERYID asc,
+    <if test="isRecmmd == true">  orderseq desc, </if>
+    cmmt.createtime asc
     limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
@@ -73,7 +78,7 @@
     select 'false' as QUERYID, 
     count(r.replyid) as total
     from reply r
-    left join user u on r.userid = u.userid
+    inner join user u on r.userid = u.userid
     where 1=1 
     <include refid="selectReplyIFCol" />
   </select>
@@ -82,7 +87,7 @@
     select 'false' as QUERYID, 
     <include refid="replyColumns" /> 
     from reply r
-    left join user u on r.userid = u.userid
+    inner join user u on r.userid = u.userid
     where 1=1 
     <include refid="selectReplyIFCol" />
     order by QUERYID asc,r.createtime desc
@@ -97,6 +102,7 @@
       <if test="movieid >0" >movieid,</if>
       <if test="content != null" >content,</if>
       <if test="createarea != null" >createarea,</if>
+      orderseq,
       createtime
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -105,6 +111,7 @@
       <if test="movieid >0" >#{movieid,jdbcType=BIGINT},</if>
       <if test="content != null" >#{content,jdbcType=VARCHAR},</if>
       <if test="createarea != null" >#{createarea,jdbcType=VARCHAR},</if>
+      -1,
       sysdate()
     </trim>
   </insert>
@@ -135,8 +142,16 @@
       <if test="userid >0" >userid = #{userid,jdbcType=BIGINT},</if>
       <if test="movieid >0" >movieid = #{movieid,jdbcType=BIGINT},</if>
       <if test="content != null" >content = #{content,jdbcType=VARCHAR},</if>
+      <if test="orderseq != 0" >orderseq = #{orderseq,jdbcType=BIGINT},</if>
     </set>
     where commentid = #{commentid,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateCmmtOrderSeq" parameterType="com.moviezone.domain.Comment" >
+  	<selectKey keyProperty="orderseq"  resultType="long" order="BEFORE">
+  		select ifnull(max(orderseq)+1,1) from comment 
+  	</selectKey>
+    update comment set orderseq = #{orderseq,jdbcType=BIGINT} where commentid = #{commentid,jdbcType=BIGINT}
   </update>
   
   <update id="updateReply" parameterType="com.moviezone.domain.Reply" >

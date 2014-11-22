@@ -32,7 +32,7 @@
     <id column="modmvid" property="modmvid" jdbcType="BIGINT" />
     <result column="movieid" property="movieid" jdbcType="BIGINT" />
     <result column="modname" property="modname" jdbcType="VARCHAR" />
-    <result column="orderseq" property="orderseq" jdbcType="INTEGER" />
+    <result column="orderseq" property="orderseq" jdbcType="BIGINT" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
   
@@ -79,7 +79,7 @@
   <select id="selectFavoriteMovieCount" resultType="map" parameterType="map"  >
     select 'false' as QUERYID, 
     count(mv.movieid) as total
-    from favorite f left join movie mv  on f.movieid = mv.movieid where 1=1  
+    from favorite f inner join movie mv  on f.movieid = mv.movieid where 1=1  
     <if test="movieid >0 "> and f.movieid = #{movieid,jdbcType=BIGINT} </if>
     <if test="userid >0 "> and f.userid = #{userid,jdbcType=BIGINT} </if>
   </select>
@@ -87,7 +87,7 @@
   <select id="selectFavoriteMovie" resultMap="movieResultMap" parameterType="map"  >
     select 'false' as QUERYID, 
     <include refid="movieColumns" /> 
-    from favorite f left join movie mv  on f.movieid = mv.movieid where 1=1 
+    from favorite f inner join movie mv  on f.movieid = mv.movieid where 1=1 
     <if test="movieid >0 "> and f.movieid = #{movieid,jdbcType=BIGINT} </if>
     <if test="userid >0 "> and f.userid = #{userid,jdbcType=BIGINT} </if>
     order by f.createtime desc
@@ -97,7 +97,7 @@
   <select id="selectMovieByModuleCount" resultType="map" parameterType="map"  >
     select 'false' as QUERYID, 
     count(mv.movieid) as total 
-    from module_movie mm left join movie mv on mm.movieid = mv.movieid where 1=1 
+    from module_movie mm inner join movie mv on mm.movieid = mv.movieid where 1=1 
     <if test="movieid >0">  and mv.movieid = #{movieid,jdbcType=BIGINT} </if>
     <if test="modname != null">  and mm.modname = #{modname,jdbcType=VARCHAR} </if>
     <if test="isPublish == true">  and mv.publishtime &lt;  sysdate()  </if> 
@@ -107,7 +107,7 @@
   <select id="selectMovieByModule" resultMap="movieResultMap" parameterType="map"  >
     select 'false' as QUERYID, 
     <include refid="movieColumns" />,mm.modmvid 
-    from module_movie mm left join movie mv on mm.movieid = mv.movieid where 1=1 
+    from module_movie mm inner join movie mv on mm.movieid = mv.movieid where 1=1 
     <if test="modmvid > 0">  and mm.modmvid = #{modmvid,jdbcType=BIGINT} </if>
     <if test="modname != null">  and mm.modname = #{modname,jdbcType=VARCHAR} </if>
     <if test="isPublish == true">  and mv.publishtime &lt;  sysdate()  </if> 
@@ -201,7 +201,7 @@
     <set>
       <if test="modname != null" >modname = #{modname,jdbcType=VARCHAR},</if>
       <if test="movieid >0" >movieid = #{movieid,jdbcType=VARCHAR},</if>
-      <if test="orderseq >0" >orderseq = #{orderseq,jdbcType=VARCHAR},</if>
+      <if test="orderseq >0" >orderseq = #{orderseq,jdbcType=BIGINT},</if>
     </set>
     where modmvid = #{modmvid,jdbcType=BIGINT}
   </update>
@@ -227,7 +227,7 @@
   </insert>
   
   <insert id="insertModule" parameterType="com.moviezone.domain.Module" >
-  	<selectKey keyProperty="orderseq"  resultType="int" order="BEFORE">
+  	<selectKey keyProperty="orderseq"  resultType="long" order="BEFORE">
   		select ifnull(max(orderseq)+1,1) from module_movie where modname = #{modname,jdbcType=VARCHAR}
   	</selectKey>
     insert into module_movie

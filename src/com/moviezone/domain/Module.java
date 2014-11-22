@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Module implements Serializable{
-	private static final long serialVersionUID = -6913859738467569563L;
+	private static final long serialVersionUID = 5068524979623315680L;
 	private long modmvid;
 	private long movieid;
 	private String modname;
-	private int orderseq;
+	private long orderseq;
 	private Date createtime;
 	public long getModmvid() {
 		return modmvid;
@@ -30,10 +30,10 @@ public class Module implements Serializable{
 	public void setModname(String modname) {
 		this.modname = modname;
 	}
-	public int getOrderseq() {
+	public long getOrderseq() {
 		return orderseq;
 	}
-	public void setOrderseq(int orderseq) {
+	public void setOrderseq(long orderseq) {
 		this.orderseq = orderseq;
 	}
 	public Date getCreatetime() {

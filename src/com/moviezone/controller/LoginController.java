@@ -145,7 +145,7 @@ public class LoginController extends BaseController {
 			user.setFaceurl("/img/92x71/"+(rand.nextInt(50)+5)+".gif");      //设置随机头像
 			user.setRole("user");                                                                    //设置一般的用户角色
 			user.setCreateip(request.getRemoteAddr());                                //设置注册ip
-			user.setCreatearea("海口");                                                         //设置注册地址
+			user.setCreatearea(getFrom(request));                                        //设置注册地址
 			if(userService.insert(user)<1){
 				json.put("resultCode", -1);
 				json.put("resultInfo", "保存数据库失败");

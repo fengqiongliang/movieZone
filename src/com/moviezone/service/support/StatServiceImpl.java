@@ -1,6 +1,8 @@
 package com.moviezone.service.support;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +85,34 @@ public class StatServiceImpl implements StatService{
 	@Override
 	public List<Stat> selectAreaStat(int pageNo, int pageSize) {
 		return statDao.selectAreaStat(pageNo, pageSize);
+	}
+	
+	@Override
+	public List<Stat> selectCmmtUserStat(int pageNo, int pageSize) {
+		return statDao.selectCmmtUserStat(null,null,pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectCmmtMvStat(int pageNo, int pageSize) {
+		return statDao.selectCmmtMvStat(null,null,pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectCmmtUserMonthStat(int pageNo, int pageSize) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, -1);
+		Date startTime = c.getTime();
+		Date endTime   = new Date();
+		return statDao.selectCmmtUserStat(startTime,endTime,pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectCmmtMvMonthStat(int pageNo, int pageSize) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, -1);
+		Date startTime = c.getTime();
+		Date endTime   = new Date();
+		return statDao.selectCmmtMvStat(startTime,endTime,pageNo, pageSize);
 	}
 	
 	@Override
@@ -199,6 +229,13 @@ public class StatServiceImpl implements StatService{
 			logger.debug("end  clear module count . . .");
 		}
 	}
+
+	@Override
+	public IP selectAreaOf(String ip) {
+		return statDao.selectAreaOf(ip);
+	}
+
+	
 
 	
 	

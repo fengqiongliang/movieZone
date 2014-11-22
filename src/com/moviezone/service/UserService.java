@@ -25,6 +25,6 @@ public interface UserService {
 	public Page<User> selectNormalUser(String userid,String nickname,String createarea,String createip,int pageNo);
 	public void permitModify(long userid);
 	public void addNormalForbit(long userid);
-	public void addSystemForbit(String createip);
+	public void addSystemForbit(String createip,String createarea);
 	public void testTransaction()throws Exception;
 }

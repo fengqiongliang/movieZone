@@ -46,7 +46,7 @@
 			</c:if>
 			<c:if test="${!empty user}">
 				<img class="nickImgLoading" src="${static}/img/loading.gif" />
-				<p class="from">来自:${createarea}</p>
+				<p class="from">${createarea}</p>
 			</c:if>
 		</div>
 		<div class="cmntCont">

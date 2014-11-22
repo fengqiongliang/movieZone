@@ -6,6 +6,7 @@
 	<div class="adminLeft" style="height:12710px;_height:12900px">
 		<a href="${base}/admin_movie.do"  class="adminLeftA">影片管理</a>
 		<a href="${base}/admin_module.do" class="adminLeftA adminLeftAClick">版块管理</a>
+		<a href="${base}/admin_cmmt.do"   class="adminLeftA">留言管理</a>
 		<a href="${base}/admin_user.do"   class="adminLeftA">用户管理</a>
 		<a href="${base}/admin_data.do"   class="adminLeftA">数据分析</a>
 		<div class="clear"></div>

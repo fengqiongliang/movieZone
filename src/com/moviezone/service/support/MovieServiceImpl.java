@@ -235,8 +235,8 @@ public class MovieServiceImpl implements MovieService{
 		if(fromModule == null)return false;
 		Module toModule = movieDao.selectModuleById(toModmvid);
 		if(toModule==null)return false;
-		int fromOrderseq = fromModule.getOrderseq();
-		int toOrderseq      = toModule.getOrderseq();
+		long fromOrderseq = fromModule.getOrderseq();
+		long toOrderseq      = toModule.getOrderseq();
 		fromModule.setOrderseq(toOrderseq);
 		toModule.setOrderseq(fromOrderseq);
 		movieDao.update(fromModule);

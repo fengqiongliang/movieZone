@@ -9,8 +9,10 @@ import net.sf.json.JSONArray;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.moviezone.constant.Constants;
 import com.moviezone.service.MovieService;
 import com.moviezone.util.HttpUtil;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 public class Comment implements Serializable{
 	private static final long serialVersionUID = 494845959575546516L;
@@ -18,10 +20,12 @@ public class Comment implements Serializable{
 	private long userid;
 	private long movieid;
 	private String content;
+	private long orderseq;
 	private String createarea;
 	private Date createtime;
 	private User user;
 	private Movie movie;
+	private long betweenip;
 	public long getCommentid() {
 		return commentid;
 	}
@@ -45,6 +49,12 @@ public class Comment implements Serializable{
 	}
 	public void setContent(String content) {
 		this.content = HttpUtil.filterEmotion(content);
+	}
+	public long getOrderseq() {
+		return orderseq;
+	}
+	public void setOrderseq(long orderseq) {
+		this.orderseq = orderseq;
 	}
 	public String getCreatearea() {
 		return createarea;
@@ -70,5 +80,16 @@ public class Comment implements Serializable{
 	public void setMovie(Movie movie) {
 		this.movie = movie;
 	}
+	public long getBetweenip() {
+		return betweenip;
+	}
+	public void setBetweenip(long betweenip) {
+		this.betweenip = betweenip;
+	}
+	public String getStrCreatetime(){
+		if(createtime == null)return "";
+		return Constants.formater.format(createtime);
+	}
+	
 	
 }

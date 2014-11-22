@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 
 
+
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -44,6 +45,7 @@ import com.moviezone.domain.Attach;
 import com.moviezone.domain.Module;
 import com.moviezone.domain.Movie;
 import com.moviezone.domain.User;
+import com.moviezone.service.CommentService;
 import com.moviezone.service.MovieService;
 import com.moviezone.service.UserService;
 
@@ -52,6 +54,8 @@ public class IndexController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 	@Autowired
 	private MovieService movieService;
+	@Autowired
+	private CommentService commentService;
 	
 	@RequestMapping(value="/index.do",method=RequestMethod.GET)
 	public ModelAndView index(ModelAndView mv,
@@ -63,9 +67,7 @@ public class IndexController extends BaseController {
 		if(user != null ){
 			favoriteMovies = movieService.selectFavoriteMovie(user.getUserid(), 1, 6);
 		}
-		List<Object> sceneCmmts  = new ArrayList<Object>();
-		sceneCmmts.add(new Object());
-		mv.addObject("sceneCmmts", sceneCmmts);
+		mv.addObject("sceneCmmts", commentService.selectRecmmdCmmt(null, 1, 10));
 		mv.addObject("sceneMovies",movieService.selectByModule("首页-展示区", true, 1, 5));
 		mv.addObject("circuitMovies",movieService.selectByModule("首页-论播区", true, 1, 13));
 		mv.addObject("siterMovies",movieService.selectByModule("首页-站长区", true, 1, 6));

@@ -12,6 +12,7 @@ import com.moviezone.domain.Stat;
 import com.moviezone.domain.User;
 
 public interface StatService {
+	public IP selectAreaOf(String ip);
 	public List<Stat> selectApproveStat(int pageNo,int pageSize);
 	public List<Stat> selectDownloadStat(int pageNo,int pageSize);
 	public List<Stat> selectBrowserStat(int pageNo,int pageSize);
@@ -23,4 +24,10 @@ public interface StatService {
 	public void addApproveStat(long movieid);
 	public void addModuleStat(String fromModule);
 	public void addAreaStat(String ip,long userid);
+	public List<Stat> selectCmmtUserStat(int pageNo,int pageSize);
+	public List<Stat> selectCmmtMvStat(int pageNo,int pageSize);
+	public List<Stat> selectCmmtUserMonthStat(int pageNo,int pageSize);
+	public List<Stat> selectCmmtMvMonthStat(int pageNo,int pageSize);
+	
+	
 }

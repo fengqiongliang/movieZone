@@ -1021,6 +1021,8 @@ function adminQuery(source,action){
 	nameDoms.each(function(){
 		var nameVal = $(this).attr('name');
 		var val     = $(this).val();
+		if($(this).is(':radio') && !$(this).is(':checked'))return true;
+		if($(this).is(':checkbox') && !$(this).is(':checked'))return true;
 		if(val == undefined)return true;
 		if(val.length<1)return true;
 		if(val.replace && "" == val.replace(/\s/g,''))return true;
@@ -1252,8 +1254,61 @@ function addSystemForbit(source){
 		location.reload();
     }).fail(function(){alert('添加失败');});
 }
-
-
+function delCmmt(source,commentid){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'delCmmt.json?commentid='+commentid,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$(source).parent().parent().remove();
+    }).fail(function(){alert('删除失败');});
+}
+function sceneCmmt(source,commentid){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'sceneCmmt.json?commentid='+commentid,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$(source).removeAttr('onclick').removeAttr('class').css('color','gray');
+    }).fail(function(){alert('操作失败');});
+}
+function unSceneCmmt(source,commentid){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'unSceneCmmt.json?commentid='+commentid,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$(source).parent().parent().remove();
+    }).fail(function(){alert('操作失败');});
+}
+function mvCmmt(source,direction){
+	var isUp   = direction == 'up'?true:false;
+	var tr     = $(source).parent().parent();
+	var prevTr = tr.prev().is('tr')?tr.prev():undefined;
+	var nextTr = tr.next().is('tr')&&tr.next().next().is('tr')?tr.next():undefined;
+	if(isUp  && !prevTr)return;
+	if(!isUp && !nextTr)return;
+	var fromid = tr.children('td:eq(0)').text().replace(/\s/g,'');
+	var toid     = isUp?prevTr.children('td:eq(0)').text().replace(/\s/g,''):nextTr.children('td:eq(0)').text().replace(/\s/g,'');
+	$.ajax({
+        type:'POST',
+        url:'mvCmmt.json',
+        data:{'fromCmmtid':fromid,'toCmmtid':toid},
+		dataType:'html'
+    }).done(function(data){
+		if(isUp  && prevTr)tr.after(prevTr);
+		if(!isUp && nextTr)tr.before(nextTr);
+    }).fail(function(){alert('移动失败');});
+}
 
 
 
