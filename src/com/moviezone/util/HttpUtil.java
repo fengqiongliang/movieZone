@@ -11,6 +11,9 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 public class HttpUtil {
+	private final static String[] searchStr  = new String[]{"+","-", "&&","||","!", "(" ,")","{","}","[","]","^", "~", "*","?",":","\\","/"};
+	private final static String[] replaceStr = new String[]{"\\+","\\-", "\\&&","\\||","\\!", "\\(","\\)","\\{","\\}","\\[","\\]","\\^", "\\~", "\\*","\\?","\\:","\\\\","\\/"};
+	
 	private final static String raplceHtmlForEmotion = "<img src='./img/qqemotion/$1.gif'></img>";
 	private final static Pattern regexForEmotion = Pattern.compile("\\{emotion:([0-9]+)\\}");
 	private final static String regxpForHtml = "<([^>]*)>";
@@ -50,6 +53,20 @@ public class HttpUtil {
 		}
 		m.appendTail(sb);
 		return sb.toString();
+	}
+	
+	public static String filterSearchForLucene(String str) {
+		if (StringUtils.isBlank(str)) {
+			return null;
+		}
+		/*
+		System.out.println("=======================");
+		System.out.println(str);
+		System.out.println(StringUtils.join(searchStr, "    "));
+		System.out.println(StringUtils.join(replaceStr, "    "));
+		System.out.println(StringUtils.replaceEach(str, searchStr, replaceStr));
+		*/
+		return StringUtils.replaceEach(str, searchStr, replaceStr);
 	}
 	
 	public static String getCookie(HttpServletRequest request,String name){

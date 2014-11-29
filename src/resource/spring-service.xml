@@ -43,6 +43,9 @@
 		<property name="keyService" ref="keyService" />
 	</bean>
 	
+	<bean id="searchService" class="com.moviezone.service.support.SearchServiceImpl">
+		<property name="searchDao" ref="searchDao" />
+	</bean>
 	
 	<bean id="statService" class="com.moviezone.service.support.StatServiceImpl">
 		<property name="statDao" ref="statDao" />

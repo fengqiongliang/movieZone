@@ -39,6 +39,10 @@
 		<property name="session" ref="sqlSession" />
 	</bean>
 	
+	<bean id="searchDao" class="com.moviezone.dao.support.SearchDaoImpl">
+		<property name="session" ref="sqlSession" />
+	</bean>
+	
 	<bean id="statDao" class="com.moviezone.dao.support.StatDaoImpl">
 		<property name="session" ref="sqlSession" />
 	</bean>

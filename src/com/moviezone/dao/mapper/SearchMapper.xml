@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moviezone.dao.SearchDao" >
+  <resultMap id="MovieIndexResultMap" type="com.moviezone.domain.MovieIndex" >
+    <id column="modmvid" property="modmvid" jdbcType="BIGINT" />
+    <result column="modname" property="modname" jdbcType="VARCHAR" />
+    <result column="movieid" property="movieid" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="shortdesc" property="shortdesc" jdbcType="VARCHAR" />
+    <result column="longdesc" property="longdesc" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectMovieIndex" resultMap="MovieIndexResultMap" parameterType="map">
+  	select max(mm.modmvid) modmvid,mm.modname,mv.movieid,mv.name,mv.shortdesc,mv.longdesc,mv.createtime from (
+		select case 
+						when modname = '首页-电影-480p'    then '480p'
+						when modname = '电影-480p'            then '480p'
+						when modname = '首页-电影-720p'    then '720p'
+						when modname = '电影-720p'            then '720p'
+						when modname = '首页-电影-1080p'  then '1080p'
+						when modname = '电影-1080p'          then '1080p'
+						when modname = '首页-电影-其它'      then '其它'
+						when modname = '电影-其它'              then '其它'
+						when modname = '首页-电视剧-英美'   then '英美'
+						when modname = '电视剧-英美'           then '英美'
+						when modname = '首页-电视剧-日韩'   then '日韩'
+						when modname = '电视剧-日韩'           then '日韩'
+						when modname = '首页-电视剧-港台'   then '港台'
+						when modname = '电视剧-港台'           then '港台'
+						when modname = '首页-电视剧-内地'   then '内地'
+						when modname = '电视剧-内地'           then '内地'
+					 else 
+						modname
+					 end as modname,
+					 modmvid,
+					 movieid
+		from module_movie 
+		where modname != '首页-展示区'
+		and    modname != '首页-论播区'
+		and    modname != '首页-站长区'
+		and    modname != '首页-电影-排行榜'
+		and    modname != '首页-电视剧-排行榜'
+		and    modname != '电影-展示区'
+		and    modname != '电视剧-展示区'
+	) mm inner join movie mv on mm.movieid = mv.movieid
+	group by mm.modname,mv.movieid,mv.name,mv.shortdesc,mv.longdesc,mv.createtime
+	order by modmvid asc
+	limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="selectSearchMovie" resultMap="com.moviezone.dao.MovieDao.movieResultMap" parameterType="map"  >
+    select 'false' as QUERYID, 
+    <include refid="com.moviezone.dao.MovieDao.movieColumns" /> 
+    from movie mv where mv.movieid in (${movieids})  order by find_in_set(movieid,'${movieids}') limit 0,10000
+  </select>
+  
+  
+  
+</mapper>
