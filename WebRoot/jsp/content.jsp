@@ -5,7 +5,7 @@
 <div class="contentH">
 	 <img class="cntImg" src="${static}${movie.face400x308}" />
 	 <ul class="cntR">
-		<li class="cntRli">【推荐】：<c:forEach begin="1" end="${fullStarCount}" ><span class="starFull"></span></c:forEach><c:forEach begin="1" end="${partStarCount}" ><span class="starPart"></span></c:forEach><c:forEach begin="1" end="${blankStarCount}" ><span class="starBlank"></span></c:forEach><span class="cntScore">${movie.score}</span></li>
+		<li class="cntRli">【推荐】：<c:forEach begin="1" end="${movie.fullStarCount}" ><span class="starFull"></span></c:forEach><c:forEach begin="1" end="${movie.partStarCount}" ><span class="starPart"></span></c:forEach><c:forEach begin="1" end="${movie.blankStarCount}" ><span class="starBlank"></span></c:forEach><span class="cntScore">${movie.score}</span></li>
 		<c:if test="${fn:length(type)>1}">
 		<li class="cntRli">【类型】：<span class="liDes" style="font-size:16px;">${type}</span></li>
 		</c:if>

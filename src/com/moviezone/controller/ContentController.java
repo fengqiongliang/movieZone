@@ -94,15 +94,6 @@ public class ContentController extends BaseController {
 		if(StringUtils.isNotBlank(fromModule))statService.addModuleStat(fromModule);
 		if(movie != null)statService.addBrowserStat(movie.getMovieid());
 				
-		//计算推荐星级
-		float f =  movie.getRecommand();
-		int fullStarCount    = (int)f;
-		int partStarCount   = (int)(f/0.5)-(int)(fullStarCount*2);
-		int blankStarCount = 5-fullStarCount-partStarCount;
-
-		mv.addObject("fullStarCount",fullStarCount);
-		mv.addObject("partStarCount",partStarCount);
-		mv.addObject("blankStarCount",blankStarCount);
 		mv.addObject("type",getType(movieService.selectModule(movieid)));
 		mv.addObject("attachs",movieService.selectAttach(movieid));
 		mv.addObject("cmmtReplys",commentService.selectCmmtReply(movieid, 1, 10, 5));

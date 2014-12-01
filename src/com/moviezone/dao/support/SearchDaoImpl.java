@@ -102,10 +102,10 @@ public class SearchDaoImpl implements SearchDao{
 		facetsConfig = new FacetsConfig();
 		nullDoc         = new Document();nullDoc.add(new SortedSetDocValuesFacetField(FieldType,"null"));
 		iWriter          = new IndexWriter(directory, writerConfig);iWriter.addDocument(facetsConfig.build(nullDoc));iWriter.commit();
-		iReader         = DirectoryReader.open(directory);
-		iSearcher      = new IndexSearcher(iReader);
+		
+		
 		parser           = new MultiFieldQueryParser(new String[]{FieldName,FieldShortDesc,FieldLongDesc},analyzer);
-		readerState   = new DefaultSortedSetDocValuesReaderState(iReader);
+		
 		sortFields      = new Sort(SortField.FIELD_SCORE,new SortField(FieldCreateTime,SortField.Type.LONG,true)); //先按score排序，再按时间排序
 		
 		dictionary.addWords(Collections.EMPTY_LIST);         //加入主字典（扩展字典）
@@ -119,8 +119,8 @@ public class SearchDaoImpl implements SearchDao{
 			public void run() {
 				try{
 					int total =0;
-					int start = -1000;
-					int size  = 1000;
+					int start = -10000;
+					int size  = 10000;
 					logger.debug("后台创建lucenu线程开始执行...size："+size);
 					while(true){
 						Thread.sleep(500);
@@ -157,7 +157,9 @@ public class SearchDaoImpl implements SearchDao{
 		}
 	    iWriter.commit();
 		//重新打开reader否则新加入的索引不会被搜索到
-		iReader = DirectoryReader.openIfChanged(iReader); 
+	    iReader         = DirectoryReader.open(directory);
+		iSearcher      = new IndexSearcher(iReader);
+		readerState   = new DefaultSortedSetDocValuesReaderState(iReader);
 	}
 	
 	private void index(String type,String movieid,String name,Date createTime,String shortDesc,String longDesc) throws Exception{
@@ -175,34 +177,6 @@ public class SearchDaoImpl implements SearchDao{
 	    iWriter.addDocument(facetsConfig.build(doc));
 	}
 	
-	public List<Movie> search(String search,int pageNo,int pageSize) throws Exception{
-		if(StringUtils.isBlank(search))return new ArrayList<Movie>();
-		logger.debug("【Search】 keyoword ："+search);
-		long before = System.currentTimeMillis();
-		
-		Query query           = parser.parse(HttpUtil.filterSearchForLucene(search));
-		FacetsCollector fc   = new FacetsCollector();
-	    ScoreDoc[] hitDocs = FacetsCollector.search(iSearcher, query, null, pageNo*pageSize, sortFields,true,true,fc).scoreDocs;
-	    Facets facets           = new SortedSetDocValuesFacetCounts(readerState, fc);
-	    List<FacetResult> results = new ArrayList<FacetResult>();
-	    
-	    int start = Math.max((pageNo-1)*pageSize, 0);
-	    int end  = Math.min(pageNo*pageSize, hitDocs.length);
-	    for (int i = start; i < end; i++) {
-		      Document hitDoc = iSearcher.doc(hitDocs[i].doc);
-		      System.out.println(hitDoc.get("id")+" ---> "+hitDocs[i].score);
-		}
-	    
-	    results.add(facets.getTopChildren(100, FieldType));
-	    
-	    long cost = System.currentTimeMillis()-before;
-	    logger.debug("【Search Over】cost:"+cost+" keyoword ："+search);
-	    
-	    System.out.println(results);
-	    
-		return new ArrayList<Movie>();
-	}
-	
 	@Override
 	public SearchResult search(String keyword,String type,int pageNo,int pageSize) throws Exception{
 		SearchResult sr = new SearchResult();
@@ -217,7 +191,7 @@ public class SearchDaoImpl implements SearchDao{
 		if(facets.size()<1)return sr;
 		String matchType = facets.get(0)[0];
 		for(String[] facet:facets){
-			if(facet[0].endsWith(type))matchType = facet[0];
+			if(facet[0].equals(type))matchType = facet[0];
 		}
 		//查出所有数据
 		sr.setKeyword(keyword);
@@ -257,6 +231,7 @@ public class SearchDaoImpl implements SearchDao{
 	private List<String[]> getAllFacet(Query query) throws Exception{
 		List<String[]> datas = new ArrayList<String[]>();
 		FacetsCollector fc = new FacetsCollector();
+		FacetsCollector.search(iSearcher, query, null, 1, sortFields,true,true,fc);
 		Facets facets = new SortedSetDocValuesFacetCounts(readerState, fc);
 		FacetResult  fr = facets.getTopChildren(1000, FieldType);
 		if(fr==null)return datas;
@@ -265,7 +240,7 @@ public class SearchDaoImpl implements SearchDao{
 		    	String[] data = new String[]{labelValue.label,labelValue.value+""};
 		    	datas.add(data);
 		}
-		FacetsCollector.search(iSearcher, query, null, 1, sortFields,true,true,fc);
+		
 		return datas;
 	}
 	

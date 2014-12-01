@@ -221,8 +221,9 @@ a:hover{text-decoration:underline;}
 .searchLeftAClick {background:#53b2f0;color:#ffffff;text-shadow:1px 1px 1px #333;}
 .searchLeftA:hover {background:#53b2f0;color:#ffffff;text-shadow:1px 1px 1px #333;opacity:0.7;filter:alpha(opacity=70);}
 .matchCount {color:#f0538e;font-size:12px;font-family:'微软雅黑'}
-.searchBtns {clear:both;padding:15px 0 30px 0;text-align:right;}
+.searchBtns {clear:both;padding:15px 20px 30px 0;text-align:right;}
 .searchLoading {margin:100px 0 0 300px;}
+.searchNotFound {text-align:center;font-family:microsoft yahei;font-size:18px;color:#000;padding-top:50px;}
 
 /* 后台 */
 .adminWrap {width:1024px;margin:20px auto;}

@@ -14,7 +14,7 @@ import com.moviezone.constant.Constants;
 import com.moviezone.service.MovieService;
 
 public class Movie implements Serializable{
-	private static final long serialVersionUID = 6250419173507014081L;
+	private static final long serialVersionUID = 6581274685981927890L;
 	private long modmvid;   /*有可能为空,即0*/
 	private long movieid;
 	private String name;
@@ -172,4 +172,14 @@ public class Movie implements Serializable{
 		if(getPublishtime() == null)return "";
 		return Constants.formater.format(getPublishtime());
 	}
+	public int getFullStarCount() {
+		return (int)getRecommand();
+	}
+	public int getPartStarCount() {
+		return (int)(getRecommand()/0.5)-(int)(getFullStarCount()*2);
+	}
+	public int getBlankStarCount() {
+		return 5-getFullStarCount()-getPartStarCount();
+	}
+	
 }
