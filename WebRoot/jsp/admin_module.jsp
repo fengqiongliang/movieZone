@@ -7,6 +7,7 @@
 		<a href="${base}/admin_movie.do"  class="adminLeftA">影片管理</a>
 		<a href="${base}/admin_module.do" class="adminLeftA adminLeftAClick">版块管理</a>
 		<a href="${base}/admin_cmmt.do"   class="adminLeftA">留言管理</a>
+		<a href="${base}/admin_search.do"   class="adminLeftA">搜索管理</a>
 		<a href="${base}/admin_user.do"   class="adminLeftA">用户管理</a>
 		<a href="${base}/admin_data.do"   class="adminLeftA">数据分析</a>
 		<div class="clear"></div>
@@ -14,7 +15,7 @@
 	
 	<div class="adminRight" style="height:12720px;_height:12910px">
 		<div class="adminPicContainer">
-			<div class="adminPic" url="${base}/statModule.json" interval="1000"></div>
+			<div class="adminPic" url="${base}/statModule.json" interval="5000"></div>
 			<p class="adminPicTitle">版块浏览量</p>
 		</div>
 		<div class="clear"></div>

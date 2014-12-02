@@ -14,9 +14,11 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.moviezone.constant.Constants;
 import com.moviezone.dao.StatDao;
 import com.moviezone.domain.IP;
 import com.moviezone.domain.Movie;
@@ -26,6 +28,7 @@ import com.moviezone.domain.User;
 import com.moviezone.service.KeyService;
 import com.moviezone.service.StatService;
 import com.moviezone.util.HttpUtil;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 
 public class StatServiceImpl implements StatService{
@@ -99,18 +102,14 @@ public class StatServiceImpl implements StatService{
 
 	@Override
 	public List<Stat> selectCmmtUserMonthStat(int pageNo, int pageSize) {
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.MONTH, -1);
-		Date startTime = c.getTime();
+		Date startTime = DateUtils.addMonths(new Date(), -1);
 		Date endTime   = new Date();
 		return statDao.selectCmmtUserStat(startTime,endTime,pageNo, pageSize);
 	}
 
 	@Override
 	public List<Stat> selectCmmtMvMonthStat(int pageNo, int pageSize) {
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.MONTH, -1);
-		Date startTime = c.getTime();
+		Date startTime = DateUtils.addMonths(new Date(), -1);
 		Date endTime   = new Date();
 		return statDao.selectCmmtMvStat(startTime,endTime,pageNo, pageSize);
 	}
@@ -122,7 +121,7 @@ public class StatServiceImpl implements StatService{
 		if(!moduleIds.contains(fromModule))return;
 		executor.execute(addCmmd(moduleMap,fromModule));
 	}
-
+	
 	@Override
 	public void addBrowserStat(long movieid) {
 		executor.execute(addCmmd(browserMap,movieid+""));

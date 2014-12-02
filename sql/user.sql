@@ -75,7 +75,7 @@ CREATE TABLE `movie` (
   `name` varchar(30) NOT NULL                 COMMENT '名称' ,
   `type`  varchar(2) NOT NULL                    COMMENT '类型：mv、tv',
   `shortdesc` varchar(50) NOT NULL            COMMENT '精短简介',
-  `longdesc` varchar(380) NOT NULL           COMMENT '详细简介',
+  `longdesc` varchar(1000) NOT NULL           COMMENT '详细简介',
   `face650x500` varchar(90) NOT NULL    COMMENT '电影/电视头像650x500',
   `face400x308` varchar(90) NOT NULL    COMMENT '电影/电视头像400x308',
   `face220x169` varchar(90) NOT NULL    COMMENT '电影/电视头像220x169',
@@ -575,6 +575,72 @@ INSERT INTO `moduleStat` VALUES ('tvAmerica', '电视剧-英美', 0);
 INSERT INTO `moduleStat` VALUES ('tvJapan', '电视剧-日韩', 0);
 INSERT INTO `moduleStat` VALUES ('tvHongkong', '电视剧-港台', 0);
 INSERT INTO `moduleStat` VALUES ('tvChina', '电视剧-内地', 0);
+
+
+-- ----------------------------
+-- 搜索关键词统计表
+-- ----------------------------
+DROP TABLE IF EXISTS `keywordStat`;
+CREATE TABLE `keywordStat` (
+  `id` bigint  NOT NULL  PRIMARY KEY AUTO_INCREMENT COMMENT 'id' ,
+  `keyword` varchar(35) NOT NULL                     				COMMENT '一个词作为一个字处理',
+  `createtime` datetime NOT NULL     									COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			
+INSERT INTO `keywordStat` VALUES (null, '武林圣手', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '你好吗', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '你在哪里', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '苹果', sysdate());
+
+
+-- ----------------------------
+-- 搜索热门关键词
+-- ----------------------------
+DROP TABLE IF EXISTS `search_hot`;
+CREATE TABLE `search_hot` (
+  `id` bigint  NOT NULL  PRIMARY KEY AUTO_INCREMENT COMMENT 'id' ,
+  `keyword` varchar(35) NOT NULL  UNIQUE KEY  				COMMENT '一个词作为一个字处理',
+  `createtime` datetime NOT NULL     									COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			
+INSERT INTO `search_hot` VALUES (null, '驯龙高手', sysdate());
+INSERT INTO `search_hot` VALUES (null, '精灵旅社', sysdate());
+INSERT INTO `search_hot` VALUES (null, '心花怒放', sysdate());
+INSERT INTO `search_hot` VALUES (null, '飞虎', sysdate());
+
+
+-- ----------------------------
+-- 搜索整词字典（一个词作为一个字处理）
+-- ----------------------------
+DROP TABLE IF EXISTS `search_word`;
+CREATE TABLE `search_word` (
+  `id` bigint  NOT NULL  PRIMARY KEY AUTO_INCREMENT COMMENT 'id' ,
+  `keyword` varchar(35) NOT NULL   UNIQUE KEY				COMMENT '一个词作为一个字处理',
+  `createtime` datetime NOT NULL     									COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `search_word` VALUES (null, 'QQ',sysdate());
+INSERT INTO `search_word` VALUES (null, '习近平',sysdate());
+
+-- ----------------------------
+-- 搜索禁词字典（一个词作为一个字处理）
+-- ----------------------------
+DROP TABLE IF EXISTS `search_unword`;
+CREATE TABLE `search_unword` (
+  `id` bigint  NOT NULL  PRIMARY KEY AUTO_INCREMENT COMMENT 'id' ,
+  `keyword` varchar(35) NOT NULL UNIQUE KEY 				COMMENT '一个词作为一个字处理',
+  `createtime` datetime NOT NULL     									COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `search_unword` VALUES (null, '啊',sysdate());
+INSERT INTO `search_unword` VALUES (null, '阿',sysdate());
+INSERT INTO `search_unword` VALUES (null, '哦',sysdate());
+INSERT INTO `search_unword` VALUES (null, '吗',sysdate());
+INSERT INTO `search_unword` VALUES (null, 'fuck',sysdate());
+
+
+
+
 
 
 SET FOREIGN_KEY_CHECKS=1;

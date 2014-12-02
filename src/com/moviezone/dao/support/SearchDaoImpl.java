@@ -52,16 +52,20 @@ import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.wltea.analyzer.cfg.DefaultConfig;
 import org.wltea.analyzer.dic.Dictionary;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.moviezone.dao.MovieDao;
 import com.moviezone.dao.SearchDao;
+import com.moviezone.domain.Hotword;
 import com.moviezone.domain.Movie;
 import com.moviezone.domain.MovieIndex;
 import com.moviezone.domain.Page;
 import com.moviezone.domain.SearchResult;
+import com.moviezone.domain.Unword;
+import com.moviezone.domain.Word;
 import com.moviezone.service.KeyService;
 import com.moviezone.service.SearchService;
 import com.moviezone.util.HttpUtil;
@@ -89,10 +93,9 @@ public class SearchDaoImpl implements SearchDao{
 	private FacetsConfig facetsConfig;
 	private Sort sortFields;
 	private Document nullDoc = new Document();
-	
 	private SqlSession session;
 	
-	public SearchDaoImpl() throws Exception{
+	public void init() throws Exception{
 		logger.debug("正在初始化lucene字典 . . .");
 		Dictionary.initial(DefaultConfig.getInstance());          //IKAnalyzer数据字典初始化
 		
@@ -107,16 +110,34 @@ public class SearchDaoImpl implements SearchDao{
 		parser           = new MultiFieldQueryParser(new String[]{FieldName,FieldShortDesc,FieldLongDesc},analyzer);
 		sortFields      = new Sort(SortField.FIELD_SCORE,new SortField(FieldCreateTime,SortField.Type.LONG,true)); //先按score排序，再按时间排序
 		
-		dictionary.addWords(Collections.EMPTY_LIST);         //加入主字典（扩展字典）
-		dictionary.disableWords(Collections.EMPTY_LIST);    //加入stop字典
+		List<String> normalWords = new ArrayList<String>();
+		for(Word word:selectWord(null, null, 1, Integer.MAX_VALUE).getData()){
+			normalWords.add(word.getKeyword());
+		}
+		List<String> disableWords = new ArrayList<String>();
+		for(Unword word:selectUnword(null, null, 1, Integer.MAX_VALUE).getData()){
+			disableWords.add(word.getKeyword());
+		}
+		
+		dictionary.addWords(normalWords);         //加入主字典（扩展字典）
+		dictionary.disableWords(disableWords);    //加入stop字典
+		logger.debug("完成录入【整词】字典 ----> 一共 ： "+normalWords.size());
+		logger.debug("完成录入【禁词】字典 ----> 一共 ： "+disableWords.size());
 		logger.debug("完成初始化lucene字典 . . .");
 		
+		reCreateIndex();   //生成索引
 		
+	}
+	
+	@Override
+	public void reCreateIndex(){
 		logger.debug("创建后台线程将movie表加入lucene内存索引中...");
 		Thread cmmd = new Thread(new Runnable(){
 			@Override
 			public void run() {
 				try{
+					//删除现在已存在的索引
+					iWriter.deleteAll();    
 					int total =0;
 					int start = -10000;
 					int size  = 10000;
@@ -141,36 +162,6 @@ public class SearchDaoImpl implements SearchDao{
 		});
 		cmmd.setDaemon(true);
 		cmmd.start();
-		
-	}
-	
-	
-	
-	public void index(List<MovieIndex> movieIndexes) throws Exception{
-		for(MovieIndex i:movieIndexes){
-			index(i.getModname(),i.getMovieid()+"",i.getName(),i.getCreatetime(),i.getShortdesc(),i.getLongdesc());
-		}
-	    iWriter.commit();
-		//重新打开reader否则新加入的索引不会被搜索到
-	    iReader         = DirectoryReader.open(directory);
-		iSearcher      = new IndexSearcher(iReader);
-		readerState   = new DefaultSortedSetDocValuesReaderState(iReader);
-	}
-	
-	private void index(String type,String movieid,String name,Date createTime,String shortDesc,String longDesc) throws Exception{
-		if(StringUtils.isBlank(type))return ;
-		if(StringUtils.isBlank(movieid))return ;
-		if(StringUtils.isBlank(name))return ;
-		if(createTime==null)return;
-		Document doc = new Document();
-	    doc.add(new SortedSetDocValuesFacetField(FieldType,type));
-	    doc.add(new StringField(FieldID, movieid, Field.Store.YES));
-	    doc.add(new Field(FieldName, name, TextField.TYPE_NOT_STORED));
-	    doc.add(new LongField(FieldCreateTime,createTime.getTime(),LongField.TYPE_NOT_STORED));
-	    if(StringUtils.isNotBlank(shortDesc))doc.add(new Field(FieldShortDesc, shortDesc, TextField.TYPE_NOT_STORED));
-	    if(StringUtils.isNotBlank(longDesc))doc.add(new Field(FieldLongDesc, longDesc, TextField.TYPE_NOT_STORED));
-	    logger.debug("type:"+type+" movieid:"+movieid+" name:"+name);    
-	    iWriter.addDocument(facetsConfig.build(doc));
 	}
 	
 	@Override
@@ -223,11 +214,171 @@ public class SearchDaoImpl implements SearchDao{
 		Query query = parser.parse(HttpUtil.filterSearchForLucene(keyword));
 		return searchAsPage(query,type,pageNo,pageSize);
 	}
+
+	@Override
+	public Page<Word> selectWord(Long id,String keyword,int pageNo,int pageSize) {
+		Map<String,Object> param = new HashMap<String,Object>();
+		if(id !=null && id>0)param.put("id", id);
+		if(StringUtils.isNotBlank(keyword))param.put("keyword", keyword);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		Page<Word> page = new Page<Word>();
+		Map<String,Object>  countResult = session.selectOne("selectWordCount",param);
+		List<Word> data = session.selectList("selectWord", param);
+		page.setTotal((Long)countResult.get("total"));
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setData(data);
+		return page;
+	}
+
+	@Override
+	public Page<Unword> selectUnword(Long id,String keyword,int pageNo,int pageSize) {
+		Map<String,Object> param = new HashMap<String,Object>();
+		if(id !=null && id>0)param.put("id", id);
+		if(StringUtils.isNotBlank(keyword))param.put("keyword", keyword);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		Page<Unword> page = new Page<Unword>();
+		Map<String,Object>  countResult = session.selectOne("selectUnwordCount",param);
+		List<Unword> data = session.selectList("selectUnword", param);
+		page.setTotal((Long)countResult.get("total"));
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setData(data);
+		return page;
+	}
+	
+	@Override
+	public Page<Hotword> selectHotword(Long id,String keyword,int pageNo,int pageSize) {
+		Map<String,Object> param = new HashMap<String,Object>();
+		if(id !=null && id>0)param.put("id", id);
+		if(StringUtils.isNotBlank(keyword))param.put("keyword", keyword);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		Page<Hotword> page = new Page<Hotword>();
+		Map<String,Object>  countResult = session.selectOne("selectHotWordCount",param);
+		List<Hotword> data = session.selectList("selectHotWord", param);
+		page.setTotal((Long)countResult.get("total"));
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setData(data);
+		return page;
+	}
+
+	@Override
+	public void insert(Word word) {
+		if(word==null)return;
+		if(StringUtils.isBlank(word.getKeyword()))return;
+		session.insert("insertWord", word);
+	}
+
+	@Override
+	public void insert(Unword unword) {
+		if(unword==null)return;
+		if(StringUtils.isBlank(unword.getKeyword()))return;
+		session.insert("insertUnWord", unword);
+	}
+	
+	@Override
+	public void insert(Hotword hotword) {
+		if(hotword==null)return;
+		if(StringUtils.isBlank(hotword.getKeyword()))return;
+		session.insert("insertHotWord", hotword);
+	}
+	
+	@Override
+	public void update(Word word) {
+		if(word==null)return;
+		if(word.getId()<1)return;
+		if(StringUtils.isBlank(word.getKeyword()))return;
+		session.update("updateWord", word);
+	}
+
+	@Override
+	public void update(Unword unword) {
+		if(unword==null)return;
+		if(unword.getId()<1)return;
+		if(StringUtils.isBlank(unword.getKeyword()))return;
+		session.update("updateUnword", unword);
+	}
+	
+	@Override
+	public void deleteWord(Word word) {
+		if(word==null)return;
+		if(word.getId()<1)return;
+		session.delete("deleteWord", word);
+	}
+	
+	@Override
+	public void deleteUnword(Unword unword) {
+		if(unword==null)return;
+		if(unword.getId()<1)return;
+		session.delete("deleteUnword", unword);
+	}
+	
+	@Override
+	public void deleteHotword(Hotword hotword) {
+		if(hotword==null)return;
+		if(hotword.getId()<1)return;
+		session.delete("deleteHotword", hotword);
+	}
+	
+	@Override
+	public void deleteWord(long wordid) {
+		if(wordid<1)return;
+		Word word = new Word();
+		word.setId(wordid);
+		deleteWord(word);
+	}
+	
+	@Override
+	public void deleteUnword(long unwordid) {
+		if(unwordid<1)return;
+		Unword unword = new Unword();
+		unword.setId(unwordid);
+		deleteUnword(unword);
+	}
+	
+	@Override
+	public void deleteHotword(long hotwordid) {
+		if(hotwordid<1)return;
+		Hotword hotword = new Hotword();
+		hotword.setId(hotwordid);
+		deleteHotword(hotword);
+	}
 	
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
-
+	
+	private void index(List<MovieIndex> movieIndexes) throws Exception{
+		for(MovieIndex i:movieIndexes){
+			index(i.getModname(),i.getMovieid()+"",i.getName(),i.getCreatetime(),i.getShortdesc(),i.getLongdesc());
+		}
+	    iWriter.commit();
+		//重新打开reader否则新加入的索引不会被搜索到
+	    iReader         = DirectoryReader.open(directory);
+		iSearcher      = new IndexSearcher(iReader);
+		readerState   = new DefaultSortedSetDocValuesReaderState(iReader);
+	}
+	
+	private void index(String type,String movieid,String name,Date createTime,String shortDesc,String longDesc) throws Exception{
+		if(StringUtils.isBlank(type))return ;
+		if(StringUtils.isBlank(movieid))return ;
+		if(StringUtils.isBlank(name))return ;
+		if(createTime==null)return;
+		Document doc = new Document();
+	    doc.add(new SortedSetDocValuesFacetField(FieldType,type));
+	    doc.add(new StringField(FieldID, movieid, Field.Store.YES));
+	    doc.add(new Field(FieldName, name, TextField.TYPE_NOT_STORED));
+	    doc.add(new LongField(FieldCreateTime,createTime.getTime(),LongField.TYPE_NOT_STORED));
+	    if(StringUtils.isNotBlank(shortDesc))doc.add(new Field(FieldShortDesc, shortDesc, TextField.TYPE_NOT_STORED));
+	    if(StringUtils.isNotBlank(longDesc))doc.add(new Field(FieldLongDesc, longDesc, TextField.TYPE_NOT_STORED));
+	    logger.debug("type:"+type+" movieid:"+movieid+" name:"+name);    
+	    iWriter.addDocument(facetsConfig.build(doc));
+	}
+	
 	private Page<Movie> searchAsPage(Query query,String type,int pageNo,int pageSize) throws Exception{
 		Page<Movie> page   = new Page<Movie>();
 		Object[] allMovieids    = getAllMovieid(query,type,pageNo,pageSize);
@@ -282,4 +433,7 @@ public class SearchDaoImpl implements SearchDao{
 		param.put("movieids", movieids);
 		return session.selectList("selectSearchMovie", param);
 	}
+	
+
+
 }

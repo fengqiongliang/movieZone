@@ -8,6 +8,7 @@
 		<a href="${base}/admin_movie.do"  class="adminLeftA">影片管理</a>
 		<a href="${base}/admin_module.do" class="adminLeftA">版块管理</a>
 		<a href="${base}/admin_cmmt.do"   class="adminLeftA adminLeftAClick">留言管理</a>
+		<a href="${base}/admin_search.do"   class="adminLeftA">搜索管理</a>
 		<a href="${base}/admin_user.do"   class="adminLeftA">用户管理</a>
 		<a href="${base}/admin_data.do"   class="adminLeftA">数据分析</a>
 		<div class="clear"></div>
@@ -15,19 +16,19 @@
 	
 	<div class="adminRight">
 		<div class="adminPicContainer">
-			<div class="adminPic" url="${base}/statComment.json?sort=user" interval="1000000"></div>
+			<div class="adminPic" url="${base}/statComment.json?sort=user" interval="5000"></div>
 			<p class="adminPicTitle">活跃留言用户排名</p>
 		</div>
 		<div class="adminPicContainer" style="margin-left:30px">
-			<div class="adminPic" url="${base}/statComment.json?sort=movie" interval="100000"></div>
+			<div class="adminPic" url="${base}/statComment.json?sort=movie" interval="5000"></div>
 			<p class="adminPicTitle">活跃留言影片排名</p>
 		</div>
 		<div class="adminPicContainer">
-			<div class="adminPic" url="${base}/statComment.json?sort=userMonth" interval="100000"></div>
+			<div class="adminPic" url="${base}/statComment.json?sort=userMonth" interval="5000"></div>
 			<p class="adminPicTitle">活跃留言用户排名（近一月）</p>
 		</div>
 		<div class="adminPicContainer" style="margin-left:30px">
-			<div class="adminPic" url="${base}/statComment.json?sort=movieMonth" interval="100000"></div>
+			<div class="adminPic" url="${base}/statComment.json?sort=movieMonth" interval="5000"></div>
 			<p class="adminPicTitle">活跃留言影片排名（近一月）</p>
 		</div>
 		<div class="adminTableContainer">

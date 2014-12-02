@@ -8,6 +8,7 @@
 		<a href="${base}/admin_movie.do"  class="adminLeftA adminLeftAClick">影片管理</a>
 		<a href="${base}/admin_module.do" class="adminLeftA">版块管理</a>
 		<a href="${base}/admin_cmmt.do"   class="adminLeftA">留言管理</a>
+		<a href="${base}/admin_search.do"   class="adminLeftA">搜索管理</a>
 		<a href="${base}/admin_user.do"   class="adminLeftA">用户管理</a>
 		<a href="${base}/admin_data.do"   class="adminLeftA">数据分析</a>
 		<div class="clear"></div>
@@ -15,19 +16,19 @@
 	
 	<div class="adminRight">
 		<div class="adminPicContainer">
-			<div class="adminPic" url="${base}/statMovie.json?sort=broswer" interval="1000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=broswer" interval="5000"></div>
 			<p class="adminPicTitle">按浏览量进行排名</p>
 		</div>
 		<div class="adminPicContainer" style="margin-left:30px">
-			<div class="adminPic" url="${base}/statMovie.json?sort=down" interval="1000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=down" interval="5000"></div>
 			<p class="adminPicTitle">按下载量进行排名</p>
 		</div>
 		<div class="adminPicContainer">
-			<div class="adminPic" url="${base}/statMovie.json?sort=approve" interval="1000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=approve" interval="5000"></div>
 			<p class="adminPicTitle">按点赞数进行排名</p>
 		</div>
 		<div class="adminPicContainer" style="margin-left:30px">
-			<div class="adminPic" url="${base}/statMovie.json?sort=comment" interval="1000"></div>
+			<div class="adminPic" url="${base}/statMovie.json?sort=comment" interval="5000"></div>
 			<p class="adminPicTitle">按留言数进行排名</p>
 		</div>
 		<div class="adminTableContainer">

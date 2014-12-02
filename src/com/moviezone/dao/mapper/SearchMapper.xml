@@ -10,9 +10,26 @@
     <result column="longdesc" property="longdesc" jdbcType="VARCHAR" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="WordResultMap" type="com.moviezone.domain.Word" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="keyword" property="keyword" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="UnwordResultMap" type="com.moviezone.domain.Unword" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="keyword" property="keyword" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="HotwordResultMap" type="com.moviezone.domain.Hotword" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="keyword" property="keyword" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  
   
   <select id="selectMovieIndex" resultMap="MovieIndexResultMap" parameterType="map">
-  	select max(mm.modmvid) modmvid,mm.modname,mv.movieid,mv.name,mv.shortdesc,mv.longdesc,mv.createtime from (
+  	select 'false' as QUERYID,max(mm.modmvid) modmvid,mm.modname,mv.movieid,mv.name,mv.shortdesc,mv.longdesc,mv.createtime from (
 		select case 
 						when modname = '首页-电影-480p'    then '480p'
 						when modname = '电影-480p'            then '480p'
@@ -50,6 +67,85 @@
 	limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
+  <select id="selectWordCount" resultType="map" parameterType="map">
+  	select 'false' as QUERYID, count(id) as total from search_word
+  	where 1=1
+  	<if test="id >0">  and id = #{id,jdbcType=BIGINT} </if>
+  	<if test="keyword != null">  and keyword like #{keyword,jdbcType=VARCHAR} </if>
+  </select>
+  
+  <select id="selectUnwordCount" resultType="map" parameterType="map">
+  	select 'false' as QUERYID, count(id) as total from search_unword
+  	where 1=1
+  	<if test="id >0">  and id = #{id,jdbcType=BIGINT} </if>
+  	<if test="keyword != null">  and keyword like #{keyword,jdbcType=VARCHAR} </if>
+  </select>
+  
+  <select id="selectHotWordCount" resultType="map" parameterType="map">
+  	select 'false' as QUERYID, count(id) as total from search_hot
+  	where 1=1
+  	<if test="id >0">  and id = #{id,jdbcType=BIGINT} </if>
+  	<if test="keyword != null">  and keyword like #{keyword,jdbcType=VARCHAR} </if>
+  </select>
+  
+  <select id="selectWord" resultMap="WordResultMap" parameterType="map">
+  	select 'false' as QUERYID,id,keyword from search_word
+  	where 1=1
+  	<if test="id >0">  and id = #{id,jdbcType=BIGINT} </if>
+  	<if test="keyword != null">  and keyword like #{keyword,jdbcType=VARCHAR} </if>
+  	order by keyword,createtime 
+  	limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectUnword" resultMap="UnwordResultMap" parameterType="map">
+  	select 'false' as QUERYID,id,keyword from search_unword
+  	where 1=1
+  	<if test="id >0">  and id = #{id,jdbcType=BIGINT} </if>
+  	<if test="keyword != null">  and keyword like #{keyword,jdbcType=VARCHAR} </if>
+  	order by keyword,createtime 
+  	limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+ 
+ <select id="selectHotWord" resultMap="HotwordResultMap" parameterType="map">
+  	select 'false' as QUERYID,id,keyword from search_hot
+  	where 1=1
+  	<if test="id >0">  and id = #{id,jdbcType=BIGINT} </if>
+  	<if test="keyword != null">  and keyword like #{keyword,jdbcType=VARCHAR} </if>
+  	order by  createtime desc 
+  	limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+   
+  <insert id="insertWord" parameterType="com.moviezone.domain.Word" >
+    insert into search_word(id,keyword,createtime) values (null,#{keyword,jdbcType=VARCHAR},sysdate())
+  </insert>
+  
+   <insert id="insertUnWord" parameterType="com.moviezone.domain.Unword" >
+    insert into search_unword(id,keyword,createtime) values (null,#{keyword,jdbcType=VARCHAR},sysdate())
+  </insert>
+  
+  <insert id="insertHotWord" parameterType="com.moviezone.domain.Hotword" >
+    insert into search_hot(id,keyword,createtime) values (null,#{keyword,jdbcType=VARCHAR},sysdate())
+  </insert>
+  
+  <update id="updateWord" parameterType="com.moviezone.domain.Word">
+  	update search_word set keyword = #{keyword,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateUnword" parameterType="com.moviezone.domain.Unword">
+  	update search_unword set keyword = #{keyword,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteWord" parameterType="com.moviezone.domain.Word" >
+    delete from search_word where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <delete id="deleteUnword" parameterType="com.moviezone.domain.Unword" >
+    delete from search_unword where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <delete id="deleteHotword" parameterType="com.moviezone.domain.Hotword" >
+    delete from search_hot where id = #{id,jdbcType=BIGINT}
+  </delete>
   
   <select id="selectSearchMovie" resultMap="com.moviezone.dao.MovieDao.movieResultMap" parameterType="map"  >
     select 'false' as QUERYID, 
