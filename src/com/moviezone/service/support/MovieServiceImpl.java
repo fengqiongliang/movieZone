@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.moviezone.constant.Constants;
 import com.moviezone.dao.CommentDao;
 import com.moviezone.dao.MovieDao;
+import com.moviezone.dao.SearchDao;
 import com.moviezone.domain.Attach;
 import com.moviezone.domain.Module;
 import com.moviezone.domain.MovieWrapper;
@@ -27,6 +28,7 @@ public class MovieServiceImpl implements MovieService{
 	private MovieDao movieDao;
 	private KeyService keyService;
 	private CommentDao commentDao;
+	private SearchDao searchDao; 
 	
 	@Override
 	public Movie select(long movieid) {
@@ -100,12 +102,26 @@ public class MovieServiceImpl implements MovieService{
 	@Override
 	public long insert(Movie movie) {
 		movie.setMovieid(keyService.getMovieid());
-		return movieDao.insert(movie);
+		long movieid = movieDao.insert(movie);
+		try {
+			searchDao.saveMoiveIndex(movieid);
+		} catch (Exception e) {
+			logger.error("",e);
+			logger.error("增加新电影时，更新全文索引失败 . . . movieid : "+movieid);
+		}
+		return movieid;
 	}
 
 	@Override
 	public boolean update(Movie movie) {
-		return movieDao.update(movie);
+		boolean result = movieDao.update(movie);
+		try {
+			searchDao.saveMoiveIndex(movie.getMovieid());
+		} catch (Exception e) {
+			logger.error("",e);
+			logger.error("更新新电影时，更新全文索引失败 . . . movieid : "+movie.getMovieid());
+		}
+		return result;
 	}
 
 	@Override
@@ -128,6 +144,10 @@ public class MovieServiceImpl implements MovieService{
 
 	public void setCommentDao(CommentDao commentDao) {
 		this.commentDao = commentDao;
+	}
+	
+	public void setSearchDao(SearchDao searchDao) {
+		this.searchDao = searchDao;
 	}
 
 	private Page<MovieWrapper> getMovieWraper(Page<Movie> movies){
@@ -193,6 +213,7 @@ public class MovieServiceImpl implements MovieService{
 		}else{              //新增
 			movieDao.insert(movie);
 		}
+		
 		//附件
 		if(movieid>0)movieDao.deleteAttach(movieid);
 		for(int i=0;attachInfos!=null && i<attachInfos.length;i++){
@@ -220,6 +241,13 @@ public class MovieServiceImpl implements MovieService{
 			movieDao.insert(module);
 		}
 		
+		//全文索引
+		try {
+			searchDao.saveMoiveIndex(movie.getMovieid());
+		} catch (Exception e) {
+			logger.error("",e);
+			logger.error("保存电影时，更新全文索引失败 . . . movieid : "+movie.getMovieid());
+		}
 		
 	}
 

@@ -43,6 +43,7 @@
 		and    modname != '首页-电视剧-排行榜'
 		and    modname != '电影-展示区'
 		and    modname != '电视剧-展示区'
+		<if test="movieid >0">  and movieid = #{movieid,jdbcType=BIGINT} </if>
 	) mm inner join movie mv on mm.movieid = mv.movieid
 	group by mm.modname,mv.movieid,mv.name,mv.shortdesc,mv.longdesc,mv.createtime
 	order by modmvid asc

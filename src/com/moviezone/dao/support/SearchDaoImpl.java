@@ -35,6 +35,7 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
@@ -42,6 +43,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopFieldDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -102,10 +104,7 @@ public class SearchDaoImpl implements SearchDao{
 		facetsConfig = new FacetsConfig();
 		nullDoc         = new Document();nullDoc.add(new SortedSetDocValuesFacetField(FieldType,"null"));
 		iWriter          = new IndexWriter(directory, writerConfig);iWriter.addDocument(facetsConfig.build(nullDoc));iWriter.commit();
-		
-		
 		parser           = new MultiFieldQueryParser(new String[]{FieldName,FieldShortDesc,FieldLongDesc},analyzer);
-		
 		sortFields      = new Sort(SortField.FIELD_SCORE,new SortField(FieldCreateTime,SortField.Type.LONG,true)); //先按score排序，再按时间排序
 		
 		dictionary.addWords(Collections.EMPTY_LIST);         //加入主字典（扩展字典）
@@ -145,11 +144,7 @@ public class SearchDaoImpl implements SearchDao{
 		
 	}
 	
-	public void index(Movie movie) throws Exception{
 	
-	    iWriter.commit();
-	    
-	}
 	
 	public void index(List<MovieIndex> movieIndexes) throws Exception{
 		for(MovieIndex i:movieIndexes){
@@ -174,7 +169,24 @@ public class SearchDaoImpl implements SearchDao{
 	    doc.add(new LongField(FieldCreateTime,createTime.getTime(),LongField.TYPE_NOT_STORED));
 	    if(StringUtils.isNotBlank(shortDesc))doc.add(new Field(FieldShortDesc, shortDesc, TextField.TYPE_NOT_STORED));
 	    if(StringUtils.isNotBlank(longDesc))doc.add(new Field(FieldLongDesc, longDesc, TextField.TYPE_NOT_STORED));
+	    logger.debug("type:"+type+" movieid:"+movieid+" name:"+name);    
 	    iWriter.addDocument(facetsConfig.build(doc));
+	}
+	
+	@Override
+	public void saveMoiveIndex(long movieid) throws Exception{
+		//电影新增、更新时，更新全文索引
+		if(movieid<1)return ;
+		Query query = new TermQuery(new Term(FieldID,""+movieid));
+		iWriter.deleteDocuments(query); //删除索引
+		  
+		Map<String,Object> param = new HashMap<String,Object>();
+		param.put("movieid", movieid);
+		param.put("start", 0);
+		param.put("size", 1000);
+		List<MovieIndex> movies = session.selectList("selectMovieIndex", param);
+		index(movies);   //增加索引
+		 
 	}
 	
 	@Override
@@ -249,8 +261,9 @@ public class SearchDaoImpl implements SearchDao{
 		Set<String> datas = new LinkedHashSet<String>();
 		FacetsCollector fc = new FacetsCollector();
 		DrillDownQuery dataQuery = new DrillDownQuery(facetsConfig,query);
+		if(StringUtils.isNotBlank(type))dataQuery.add(FieldType, type);
 		TopFieldDocs topDocs = FacetsCollector.search(iSearcher, dataQuery, null, pageNo*pageSize, sortFields,true,true,fc);
-		ScoreDoc[] hitDocs      = topDocs.scoreDocs;
+		ScoreDoc[] hitDocs      = topDocs.scoreDocs; 
 		int start = Math.max((pageNo-1)*pageSize, 0);
 		int end  = Math.min(pageNo*pageSize, hitDocs.length);
 		logger.debug("total  ： "+topDocs.totalHits);
