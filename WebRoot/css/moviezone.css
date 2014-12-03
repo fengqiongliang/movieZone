@@ -46,9 +46,9 @@ a:hover{text-decoration:underline;}
 .layerWindow {position:absolute;left:0;top:0;box-shadow:0 0 1px #91BBD9, 1px 1px 2px #E5E5E5 inset;border:2px solid #5CC1DC;overflow:visible;display:none;z-index:12;background:#ffffff;text-align:center}
 
 /* 上部 */
-.top  {width:1024px;height:75px;background:#5cc1dc;margin:auto;margin-top:10px;border-radius:5px 5px 0 0;}
+.top  {width:1024px;height:75px;background:#5cc1dc;margin:auto;margin-top:10px;border-radius:5px 5px 0 0;overflow:visible;z-index:1;}
 .topL{float:left;margin:20px 0 0 20px;}
-.topR{float:right;margin:25px 24px 0 0;}
+.topR{float:right;margin:25px 24px 0 0;overflow:visible;z-index:2;}
 .nav{float:left;padding:6px;display:block;font-size:20px;font-weight:bold;color:#ffffff;text-shadow:1px 1px 1px #333;}
 .reg{font-size:12px;font-weight:bold;color:#ffffff;float:left;margin-top:8px;}
 .nick{font-size:14px;font-weight:bold;color:#ffffff;float:left;margin-top:5px;}
@@ -59,9 +59,13 @@ a:hover{text-decoration:underline;}
 .searchF{box-shadow:0 0 1px #91BBD9, 1px 1px 2px #E5E5E5 inset;border:2px solid #FFB941;margin:0 0 0 18px;}
 .searchE{color:red;margin-top:5px;display:none;float:left;}
 .searchT {font-size:12px;line-height:24px;}
+.searchPop {display:none;position:absolute;top:53px;right:25px;_right:48px;z-index:3;width:269px;background:#ffffff;box-shadow:0 0 1px #91BBD9, 1px 1px 2px #E5E5E5 inset;border:2px solid #FFB941;overflow:visible;}
+.sPopItem {line-height:25px;padding-left:5px;color:#999;cursor:pointer;}
+.sPopItemHover {background:#eeeeee;color:#0066ff;font-weight:bold;font-size:15px;}
 .myFace {width:70px;height:54px;}
 .loadFace {height: 40px;left: 15px;position: absolute;top: 6px;width: 40px;z-index: 2;display:none;}
 .uploadContainer {width:70px;height:54px;margin-top:-60px;z-index:3;}
+
 
 /* 展示区 */
 .show{width:1024px;margin:auto;}

@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.moviezone.constant.Constants;
 import com.moviezone.controller.BaseController;
 import com.moviezone.domain.User;
+import com.moviezone.service.SearchService;
 import com.moviezone.service.StatService;
 import com.moviezone.service.UserService;
 import com.moviezone.util.HttpUtil;
@@ -26,6 +27,8 @@ public class BaseInterceptor implements HandlerInterceptor {
 	private UserService userService;
 	@Autowired
 	private StatService statService;
+	@Autowired
+	private SearchService searchService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(BaseInterceptor.class);
 	
@@ -58,6 +61,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 		}
 		request.setAttribute("base",baseDir);
 		request.setAttribute("static",staticDir);
+		request.setAttribute("searchHot",searchService.selectHotword(null, null, 1));
 		
 		//确定ip是否被禁用
 		if(userService.isForbitIp(request.getRemoteAddr())){

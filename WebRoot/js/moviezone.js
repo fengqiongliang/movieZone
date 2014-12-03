@@ -70,7 +70,10 @@ function goSearch(){
 	}
 	location.href = 'search.do?search='+sText;
 }
-
+function sPopItemSel(source){
+	$('.searchPop').hide();
+	$('.search').val($(source).text());
+}
 
 
 /* 注册/登录窗口 */
