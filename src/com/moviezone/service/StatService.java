@@ -24,10 +24,14 @@ public interface StatService {
 	public void addApproveStat(long movieid);
 	public void addModuleStat(String fromModule);
 	public void addAreaStat(String ip,long userid);
+	public void addKeywordStat(String keyword);
 	public List<Stat> selectCmmtUserStat(int pageNo,int pageSize);
 	public List<Stat> selectCmmtMvStat(int pageNo,int pageSize);
 	public List<Stat> selectCmmtUserMonthStat(int pageNo,int pageSize);
 	public List<Stat> selectCmmtMvMonthStat(int pageNo,int pageSize);
-	
+	public List<Stat> selectKeywordStat(int pageNo,int pageSize);
+	public List<Stat> selectKeywordYearStat(int pageNo,int pageSize);
+	public List<Stat> selectKeywordMonthStat(int pageNo,int pageSize);
+	public List<Stat> selectKeywordWeekStat(int pageNo,int pageSize);
 	
 }

@@ -63,7 +63,7 @@
 		where 1=1
 		<if test="startTime != null"> and createtime &gt;= #{startTime,jdbcType=TIMESTAMP}  </if>
 		<if test="endTime != null">  and createtime  &lt;= #{endTime,jdbcType=TIMESTAMP}    </if>
-		group by userid order by value desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+		group by userid order by value desc,userid asc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
 	) cmmt inner join user u on cmmt.userid = u.userid 
   </select>
   
@@ -73,8 +73,16 @@
 		where 1=1
 		<if test="startTime != null"> and createtime &gt;= #{startTime,jdbcType=TIMESTAMP}  </if>
 		<if test="endTime != null">  and createtime  &lt;= #{endTime,jdbcType=TIMESTAMP}    </if>
-		group by movieid order by value desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+		group by movieid order by value desc,movieid asc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
 	) cmmt inner join movie mv on cmmt.movieid = mv.movieid 
+  </select>
+  
+  <select id="selectKeywordStat" resultMap="StatResultMap" parameterType="map"  >
+  	select 'false' as QUERYID,min(id) id,keyword name,count(keyword) value from keywordstat
+	where 1=1
+	<if test="startTime != null"> and createtime &gt;= #{startTime,jdbcType=TIMESTAMP}  </if>
+	<if test="endTime != null">  and createtime  &lt;= #{endTime,jdbcType=TIMESTAMP}    </if>
+	group by keyword order by value desc,id asc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
   </select>
   
   <update id="updateMoviestat" parameterType="com.moviezone.domain.Movie" >
@@ -92,5 +100,9 @@
   <update id="updateIpstat" parameterType="map" >
     update ip set statCount = statCount + #{statCount,jdbcType=BIGINT} where #{ip,jdbcType=BIGINT} between start_ip and end_ip
   </update>
+  
+  <insert id="insertKeywordStat" parameterType="map">
+  	insert into keywordstat(id,keyword,createtime) values(null,#{keyword,jdbcType=BIGINT},sysdate())
+  </insert>
   
 </mapper>

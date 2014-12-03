@@ -146,6 +146,13 @@ public class StatDaoImpl implements StatDao{
 		return session.update("updateIpstat", param)>0;
 	}
 	
+	@Override
+	public void addKeywordStat(String keyword) {
+		Map<String,Object> param = new HashMap<String,Object>();
+		param.put("keyword", keyword);
+		session.insert("insertKeywordStat", param);
+	}
+	
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
@@ -158,6 +165,17 @@ public class StatDaoImpl implements StatDao{
 		param.put("size", 1);
 		return session.selectOne("selectIp", param);
 	}
+
+	@Override
+	public List<Stat> selectKeywordStat(Date startTime, Date endTime,int pageNo, int pageSize) {
+		Map<String,Object> param = new  HashMap<String,Object>();
+		param.put("startTime", startTime);
+		param.put("endTime", endTime);
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectKeywordStat", param);
+	}
+
 
 	
 

@@ -125,43 +125,43 @@ public class SearchDaoImpl implements SearchDao{
 		logger.debug("完成录入【禁词】字典 ----> 一共 ： "+disableWords.size());
 		logger.debug("完成初始化lucene字典 . . .");
 		
-		reCreateIndex();   //生成索引
-		
-	}
-	
-	@Override
-	public void reCreateIndex(){
 		logger.debug("创建后台线程将movie表加入lucene内存索引中...");
 		Thread cmmd = new Thread(new Runnable(){
 			@Override
 			public void run() {
-				try{
-					//删除现在已存在的索引
-					iWriter.deleteAll();    
-					int total =0;
-					int start = -10000;
-					int size  = 10000;
-					logger.debug("后台创建lucenu线程开始执行...size："+size);
-					while(true){
-						Thread.sleep(500);
-						start = start + size;
-						Map<String,Object> param = new HashMap<String,Object>();
-						param.put("start", start);
-						param.put("size", size);
-						List<MovieIndex> movies = session.selectList("selectMovieIndex", param);
-						total = total + movies.size();
-						index(movies);
-						logger.debug("正在完成lucene索引创建工作...  "+start+"~"+(start+size-1));
-						if(movies.size()<size)break;
-					}
-					logger.debug("全部完成lucene索引创建工作... total："+total);
-				}catch(Exception e){
-					logger.debug("",e);
-				}
+				reCreateIndex();   //生成索引
 			}
 		});
 		cmmd.setDaemon(true);
 		cmmd.start();
+	}
+	
+	@Override
+	public void reCreateIndex(){
+		try{
+			//删除现在已存在的索引
+			iWriter.deleteAll();    
+			int total =0;
+			int start = -10000;
+			int size  = 10000;
+			logger.debug("后台创建lucenu线程开始执行...size："+size);
+			while(true){
+				Thread.sleep(500);
+				start = start + size;
+				Map<String,Object> param = new HashMap<String,Object>();
+				param.put("start", start);
+				param.put("size", size);
+				List<MovieIndex> movies = session.selectList("selectMovieIndex", param);
+				total = total + movies.size();
+				index(movies);
+				logger.debug("正在完成lucene索引创建工作...  "+start+"~"+(start+size-1));
+				if(movies.size()<size)break;
+			}
+			logger.debug("全部完成lucene索引创建工作... total："+total);
+		}catch(Exception e){
+			logger.debug("",e);
+		}
+		
 	}
 	
 	@Override

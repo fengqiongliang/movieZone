@@ -1309,8 +1309,106 @@ function mvCmmt(source,direction){
 		if(!isUp && nextTr)tr.before(nextTr);
     }).fail(function(){alert('移动失败');});
 }
+function delWord(source,id){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'delWord.json?id='+id,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$(source).parent().parent().remove();
+    }).fail(function(){alert('操作失败');});
+}
+function delUnword(source,id){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'delUnword.json?id='+id,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$(source).parent().parent().remove();
+    }).fail(function(){alert('操作失败');});
+}
+function delHot(source,id){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'delHotword.json?id='+id,
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		$(source).parent().parent().remove();
+    }).fail(function(){alert('操作失败');});
+}
 
-
+function addWord(source){
+	var keyword = $('#newWord').val().replace(/\n/g,'lineBreak');
+	if(keyword=="")return;
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'addWord.json',
+        data:{'keyword':keyword},
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		location.reload();
+    }).fail(function(){alert('添加失败');});
+} 
+function addUnword(source){
+	var keyword = $('#newUnword').val().replace(/\n/g,'lineBreak');
+	if(keyword=="")return;
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'addUnword.json',
+        data:{'keyword':keyword},
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		location.reload();
+    }).fail(function(){alert('添加失败');});
+}
+function addHotword(source){
+	var keyword = $('#newHotword').val().replace(/\n/g,'lineBreak');
+	if(keyword=="")return;
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	$.ajax({
+        type:'POST',
+        url:'addHotword.json',
+        data:{'keyword':keyword},
+		dataType:'html'
+    }).done(function(data){
+		$(source).attr('isRunning','false');
+		location.reload();
+    }).fail(function(){alert('添加失败');});
+} 
+function reCreateIndex(source){
+	if($(source).attr('isRunning')=='true')return;
+	$(source).attr('isRunning','true');
+	var before = new Date().getTime();
+	$.ajax({
+        type:'POST',
+        url:'reCreateIndex.json',
+		dataType:'html'
+    }).done(function(data){
+    	var after = new Date().getTime();
+    	var cost  = after - before;
+    	if(cost > 60000)cost = parseInt((cost/60000))+'分';
+    	else if(cost > 1000) cost = parseInt((cost/1000)) + '秒';
+    	else cost = cost+ '毫秒';
+		$(source).attr('isRunning','false');
+		alert("完成生成，耗时："+cost);
+    }).fail(function(){alert('添加失败');});
+}
 
 
 

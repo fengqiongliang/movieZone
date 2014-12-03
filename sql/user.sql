@@ -591,7 +591,15 @@ INSERT INTO `keywordStat` VALUES (null, '武林圣手', sysdate());
 INSERT INTO `keywordStat` VALUES (null, '你好吗', sysdate());
 INSERT INTO `keywordStat` VALUES (null, '你在哪里', sysdate());
 INSERT INTO `keywordStat` VALUES (null, '苹果', sysdate());
-
+INSERT INTO `keywordStat` VALUES (null, '影集网', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '指环王', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '你好吗', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '苹果', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '哥是只是个传说', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '筷子兄弟', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '心花怒放', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '星际穿越', sysdate());
+INSERT INTO `keywordStat` VALUES (null, '筷子兄弟', sysdate());
 
 -- ----------------------------
 -- 搜索热门关键词

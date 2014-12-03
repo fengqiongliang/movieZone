@@ -41,19 +41,19 @@ public class SearchServiceImpl implements SearchService{
 	@Override
 	public Page<Word> selectWord(Long id, String keyword, int pageNo) {
 		keyword = StringUtils.isBlank(keyword)?null:"%"+keyword+"%";
-		return searchDao.selectWord(id, keyword, pageNo, 50);
+		return searchDao.selectWord(id, keyword, pageNo, 20);
 	}
 
 	@Override
 	public Page<Unword> selectUnword(Long id, String keyword, int pageNo) {
 		keyword = StringUtils.isBlank(keyword)?null:"%"+keyword+"%";
-		return searchDao.selectUnword(id, keyword, pageNo, 100);
+		return searchDao.selectUnword(id, keyword, pageNo, 20);
 	}
 	
 	@Override
 	public Page<Hotword> selectHotword(Long id, String keyword, int pageNo) {
 		keyword = StringUtils.isBlank(keyword)?null:"%"+keyword+"%";
-		return searchDao.selectHotword(id, keyword, pageNo, 100);
+		return searchDao.selectHotword(id, keyword, pageNo, 20);
 	}
 	
 	@Override
@@ -89,7 +89,20 @@ public class SearchServiceImpl implements SearchService{
 			searchDao.insert(newWord);
 		}
 	}
-
+	
+	@Override
+	public void saveHotword(String keyword) {
+		if(StringUtils.isBlank(keyword))return;
+		keyword = keyword.trim();
+		Page<Hotword> words = searchDao.selectHotword(null, keyword, 1, 1);
+		for(Hotword word:words.getData()){
+			searchDao.deleteHotword(word);
+		}
+		Hotword newWord = new Hotword();
+		newWord.setKeyword(keyword);
+		searchDao.insert(newWord);
+	}
+	
 	@Override
 	public void deleteWord(long wordid) {
 		searchDao.deleteWord(wordid);
@@ -113,6 +126,8 @@ public class SearchServiceImpl implements SearchService{
 	public void setSearchDao(SearchDao searchDao) {
 		this.searchDao = searchDao;
 	}
+
+	
 
 	
 

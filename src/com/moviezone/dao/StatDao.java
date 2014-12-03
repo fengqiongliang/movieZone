@@ -23,6 +23,9 @@ public interface StatDao {
 	public boolean updateMovie(Movie movie);
 	public boolean updateModulestat(String stat_id,long statCount);
 	public boolean addIpstat(long ip, long statCount);
+	public void addKeywordStat(String keyword);
 	public List<Stat> selectCmmtUserStat(Date startTime,Date endTime,int pageNo, int pageSize);
 	public List<Stat> selectCmmtMvStat(Date startTime,Date endTime,int pageNo, int pageSize);
+	public List<Stat> selectKeywordStat(Date startTime, Date endTime,int pageNo, int pageSize);
+	
 }

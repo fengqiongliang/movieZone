@@ -19,6 +19,7 @@ public interface SearchService {
 	public Page<Hotword> selectHotword(Long id, String keyword, int pageNo);
 	public void saveWord(String keyword);
 	public void saveUnword(String keyword);
+	public void saveHotword(String keyword);
 	public void deleteWord(long wordid);
 	public void deleteUnword(long unwordid);
 	public void deleteHotword(long hotwordid);

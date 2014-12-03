@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 
 
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +36,15 @@ import com.moviezone.domain.Page;
 import com.moviezone.domain.SearchResult;
 import com.moviezone.service.CommentService;
 import com.moviezone.service.SearchService;
+import com.moviezone.service.StatService;
 
 @Controller
 public class SearchController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 	@Autowired
 	private SearchService searchService;
+	@Autowired
+	private StatService statService;
 	
 	
 	@RequestMapping(value="/search.do",method=RequestMethod.GET)
@@ -50,6 +54,10 @@ public class SearchController extends BaseController {
 						 						   HttpSession session,
 						 						   @RequestParam(value="search")String search)throws Exception{
 		if(StringUtils.isBlank(search))search = "空内容";
+		search = search.trim();
+		
+		//加入统计
+		statService.addKeywordStat(search.substring(0,search.length()<30?search.length():30));
 		mv.addObject("searchTitle", search.length()<5?search:search.substring(0, 5)+"...");
 		mv.addObject("search", search);
 		mv.addObject("searchResult", searchService.search(search,null,1));

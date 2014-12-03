@@ -130,6 +130,40 @@ public class AdminSearchController extends BaseController {
 		return mv;
 	}
 	
+	@RequestMapping(value="/addWord.json",method=RequestMethod.POST)
+	public void addWord(HttpServletRequest request,
+							    	   HttpServletResponse response,
+							    	   @RequestParam(value="keyword") String keyword)throws Exception{
+		if(StringUtils.isBlank(keyword))throw new Exception("keyword can not be null");
+		for(String k:keyword.split("lineBreak")){
+			if(StringUtils.isBlank(k))continue;
+			searchService.saveWord(k.trim());
+		}
+	}
+	
+	@RequestMapping(value="/addUnword.json",method=RequestMethod.POST)
+	public void addUnword(HttpServletRequest request,
+							    	   	   HttpServletResponse response,
+							    	   	   @RequestParam(value="keyword") String keyword)throws Exception{
+		if(StringUtils.isBlank(keyword))throw new Exception("keyword can not be null");
+		for(String k:keyword.split("lineBreak")){
+			if(StringUtils.isBlank(k))continue;
+			searchService.saveUnword(k.trim());
+		}
+	}
+	  
+	@RequestMapping(value="/addHotword.json",method=RequestMethod.POST)
+	public void addHotword(HttpServletRequest request,
+							    	  	    HttpServletResponse response,
+							    	  	    @RequestParam(value="keyword") String keyword)throws Exception{
+		if(StringUtils.isBlank(keyword))throw new Exception("keyword can not be null");
+		for(String k:keyword.split("lineBreak")){
+			if(StringUtils.isBlank(k))continue;
+			searchService.saveHotword(k.trim());
+		}
+	}
+	
+	
 	@RequestMapping(value="/delWord.json",method=RequestMethod.POST)
 	public void delWord(HttpServletRequest request,
 							    	  HttpServletResponse response,
@@ -154,21 +188,25 @@ public class AdminSearchController extends BaseController {
 		searchService.deleteHotword(id);
 	}
 	
+	@RequestMapping(value="/reCreateIndex.json",method=RequestMethod.POST)
+	public void reCreateIndex(HttpServletRequest request,HttpServletResponse response)throws Exception{
+		searchService.reCreateIndex();
+	}
+	
 	@RequestMapping(value="/statSearch.json",method=RequestMethod.GET)
 	public void statMovie(HttpServletRequest request,
 										HttpServletResponse response,
 										@RequestParam(value="sort") String sort)throws Exception{
 		JSONObject result = new JSONObject();
 		List<Stat> stats     = new ArrayList<Stat>();
-		if("user".equals(sort))stats = statService.selectCmmtUserStat(1, 13);
-		if("movie".equals(sort))stats = statService.selectCmmtMvStat(1, 13);
-		if("userMonth".equals(sort))stats = statService.selectCmmtUserMonthStat(1, 13);
-		if("movieMonth".equals(sort))stats = statService.selectCmmtMvMonthStat(1, 13);
+		if("total".equals(sort))stats = statService.selectKeywordStat(1, 13);
+		if("year".equals(sort))stats = statService.selectKeywordYearStat(1, 13);
+		if("month".equals(sort))stats = statService.selectKeywordMonthStat(1, 13);
+		if("week".equals(sort))stats = statService.selectKeywordWeekStat(1, 13);
 		
 		JSONArray   data   = new JSONArray();
 		for(Stat stat:stats){
 			JSONObject o = new JSONObject();
-			if(!sort.startsWith("user"))o.put("id", stat.getId());
 			o.put("name", stat.getName());
 			o.put("value",stat.getValue());
 			data.add(o);

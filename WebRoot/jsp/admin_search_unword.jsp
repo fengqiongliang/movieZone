@@ -10,7 +10,7 @@
 	<td style="text-align:left;padding-left:10px">${word.keyword}</td>
 	<td>${word.strCreatetime}</td>
 	<td>
-		<span class="adminAction" onclick="unSceneCmmt(this,${word.id})">删除</span>
+		<span class="adminAction" onclick="delUnword(this,${word.id})">删除</span>
 	</td>
 </tr>
 </c:forEach>

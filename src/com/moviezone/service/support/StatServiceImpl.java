@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -52,6 +54,7 @@ public class StatServiceImpl implements StatService{
 	private Map<String,Long> ipMap                = new HashMap<String,Long>();  //ip统计保存
 	private Map<String,Long> moduleMap       = new HashMap<String,Long>();  //模块统计保存
 	private List<String>           moduleIds          = new ArrayList<String>();            //模块的统计id
+	private Set<String>           keywords            = new HashSet<String>();             //搜索的关键字
 	private StatDao statDao;
 	private KeyService keyService;
 	 
@@ -144,6 +147,18 @@ public class StatServiceImpl implements StatService{
 		executor.execute(addCmmd(ipMap,HttpUtil.ipToLong(ip)+""));
 	}
 	
+	@Override
+	public void addKeywordStat(String keyword) {
+		if(StringUtils.isBlank(keyword))return;
+		final String key = keyword.trim();
+		executor.execute(new Runnable(){
+			@Override
+			public void run() {
+				keywords.add(key);
+			}
+		});
+	}
+	
 	public void setStatDao(StatDao statDao) {
 		this.statDao = statDao;
 	}
@@ -180,6 +195,7 @@ public class StatServiceImpl implements StatService{
 					browserMap.clear();
 					ipMap.clear();
 					moduleMap.clear();
+					keywords.clear();
 				}
 			}
 		};
@@ -227,12 +243,47 @@ public class StatServiceImpl implements StatService{
 			}
 			logger.debug("end  clear module count . . .");
 		}
+		if(!keywords.isEmpty()){ //搜索关键字
+			logger.debug("start clear keyword count . . .");
+			for(String keyword:keywords){
+				statDao.addKeywordStat(keyword);
+			}
+			logger.debug("end  clear keyword count . . .");
+		}
 	}
 
 	@Override
 	public IP selectAreaOf(String ip) {
 		return statDao.selectAreaOf(ip);
 	}
+
+	@Override
+	public List<Stat> selectKeywordStat(int pageNo, int pageSize) {
+		return statDao.selectKeywordStat(null,null,pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectKeywordYearStat(int pageNo, int pageSize) {
+		Date startTime = DateUtils.addYears(new Date(), -1);
+		Date endTime   = new Date();
+		return statDao.selectKeywordStat(startTime,endTime,pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectKeywordMonthStat(int pageNo, int pageSize) {
+		Date startTime = DateUtils.addMonths(new Date(), -1);
+		Date endTime   = new Date();
+		return statDao.selectKeywordStat(startTime,endTime,pageNo, pageSize);
+	}
+
+	@Override
+	public List<Stat> selectKeywordWeekStat(int pageNo, int pageSize) {
+		Date startTime = DateUtils.addWeeks(new Date(), -1);
+		Date endTime   = new Date();
+		return statDao.selectKeywordStat(startTime,endTime,pageNo, pageSize);
+	}
+
+	
 
 	
 
