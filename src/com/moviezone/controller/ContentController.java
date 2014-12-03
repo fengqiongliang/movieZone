@@ -3,13 +3,17 @@ package com.moviezone.controller;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+
 
 
 
@@ -83,17 +87,22 @@ public class ContentController extends BaseController {
 													HttpServletRequest request,
 													HttpServletResponse response,
 													@RequestParam(value="id") long movieid,
-													@RequestParam(value="fromModule",required=false) String fromModule)throws Exception{
+													@RequestParam(value="fromModule",required=false) String fromModule,
+													@CookieValue(value="JSESSIONID",required=false,defaultValue="") String cookie)throws Exception{
 		Movie movie = movieService.select(movieid);
 		if(movie==null){
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.getWriter().write("该影片已经被删除或已不存在");
 			return null;
 		}
+		
 		//统计模块、电影浏览量
 		if(StringUtils.isNotBlank(fromModule))statService.addModuleStat(fromModule);
-		if(movie != null)statService.addBrowserStat(movie.getMovieid());
-				
+		statService.addBrowserStat(movie.getMovieid());
+		
+		//记录浏览历史
+		saveBroswerHistory(request,response,movie.getMovieid());
+		
 		mv.addObject("type",getType(movieService.selectModule(movieid)));
 		mv.addObject("attachs",movieService.selectAttach(movieid));
 		mv.addObject("cmmtReplys",commentService.selectCmmtReply(movieid, 1, 10, 5));
@@ -222,6 +231,19 @@ public class ContentController extends BaseController {
 		Movie movie = movieService.select(movieid);
 		if(movie == null)return;
 		favoriteService.saveFavorite(user.getUserid(), movie.getMovieid());
+	}
+	
+	private void saveBroswerHistory(HttpServletRequest request,HttpServletResponse response,long movieid){
+		String movieids = HttpUtil.getCookie(request, Constants.COOKIE_MOVIE);
+		if(movieids==null)movieids = "";
+		Set<String> ids = new LinkedHashSet<String>();
+		ids.add(movieid+"");
+		for(String id:movieids.split(Constants.COOKIE_MOVIE_SPLITOR)){
+			if(!StringUtils.isNumeric(id))continue;
+			ids.add(id);
+			if(ids.size()>Constants.broswerMovieSize)break;
+		}
+		HttpUtil.setCookie(response, Constants.COOKIE_MOVIE, StringUtils.join(ids,Constants.COOKIE_MOVIE_SPLITOR));
 	}
 	
 	private String getType(List<Module> modules){

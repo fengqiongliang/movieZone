@@ -223,6 +223,14 @@ public class MovieDaoImpl implements MovieDao{
 		return session.selectList("selectFavoriteMovie", param);
 	}
 
+	@Override
+	public List<Movie> selectYourLikeMovie(int pageNo, int pageSize) {
+		Map<String,Object> param = new HashMap<String,Object>();
+		param.put("start", (pageNo-1)*pageSize);
+		param.put("size", pageSize);
+		return session.selectList("selectYourLikeMovie", param);
+	}
+
 
 
 	

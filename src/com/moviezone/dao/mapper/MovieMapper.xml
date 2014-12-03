@@ -132,6 +132,13 @@
     order by modname asc,orderseq asc,movieid asc
   </select>
   
+  <select id="selectYourLikeMovie" resultMap="movieResultMap" parameterType="map"  >
+    select 'false' as QUERYID, 
+    <include refid="movieColumns" /> 
+    from movie mv where movieid >= (select rand()*(select max(movieid)-min(movieid) from movie)) 
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+
   <insert id="insertMovie" parameterType="com.moviezone.domain.Movie" >
     insert into movie
     <trim prefix="(" suffix=")" suffixOverrides="," >

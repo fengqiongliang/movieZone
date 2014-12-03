@@ -278,4 +278,14 @@ public class MovieServiceImpl implements MovieService{
 		return movieDao.selectFavoriteMovie(userid, pageNo, pageSize);
 	}
 
+	@Override
+	public List<Movie> selectYourLikeMovie(int pageNo) {
+		return movieDao.selectYourLikeMovie(pageNo, 6);
+	}
+
+	@Override
+	public List<Movie> selectRecentMovie(String movieids) {
+		return searchDao.selectMovie(movieids);
+	}
+
 }

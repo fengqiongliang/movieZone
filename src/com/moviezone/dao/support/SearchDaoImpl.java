@@ -348,6 +348,13 @@ public class SearchDaoImpl implements SearchDao{
 		deleteHotword(hotword);
 	}
 	
+	@Override
+	public List<Movie> selectMovie(String movieids) {
+		Map<String,Object> param = new HashMap<String,Object>();
+		param.put("movieids", movieids);
+		return session.selectList("selectSearchMovie", param);
+	}
+	
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
@@ -428,11 +435,7 @@ public class SearchDaoImpl implements SearchDao{
 		return result;
 	}
 	
-	private List<Movie> selectMovie(String movieids) {
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("movieids", movieids);
-		return session.selectList("selectSearchMovie", param);
-	}
+
 	
 
 

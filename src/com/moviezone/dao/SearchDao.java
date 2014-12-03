@@ -30,6 +30,6 @@ public interface SearchDao {
 	public void deleteUnword(long unwordid);
 	public void deleteHotword(Hotword hotword);
 	public void deleteHotword(long hotwordid);
-	
+	public List<Movie> selectMovie(String movieids);
 	
 }

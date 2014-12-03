@@ -21,6 +21,7 @@ public interface MovieDao {
 	public Page<Movie> selectPageByModule(Long modmvid,String modname,Boolean isPublish,Boolean isSortCreateTimeUp,Boolean isScoreUp,int pageNo,int pageSize);
 	public List<Module> selectModule(long movieid);
 	public List<Attach> selectAttach(long movieid);
+	public List<Movie> selectYourLikeMovie(int pageNo,int pageSize);
 	public long insert(Movie movie);
 	public long insert(Attach attach);
 	public long insert(Module module);

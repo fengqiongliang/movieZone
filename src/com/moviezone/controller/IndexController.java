@@ -2,11 +2,15 @@ package com.moviezone.controller;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+
 
 
 
@@ -48,6 +52,7 @@ import com.moviezone.domain.User;
 import com.moviezone.service.CommentService;
 import com.moviezone.service.MovieService;
 import com.moviezone.service.UserService;
+import com.moviezone.util.HttpUtil;
 
 @Controller
 public class IndexController extends BaseController {
@@ -81,9 +86,23 @@ public class IndexController extends BaseController {
 		mv.addObject("hongkongMovies",movieService.selectByModule("首页-电视剧-港台", true, 1, 7));
 		mv.addObject("chinaMovies",movieService.selectByModule("首页-电视剧-内地", true, 1, 7));
 		mv.addObject("rankTVMovies",movieService.selectByModule("首页-电视剧-排行榜", true, 1, 12));
+		mv.addObject("youLikeMovies",movieService.selectYourLikeMovie(1));
+		mv.addObject("recentMovies",getRecentMovies(request));
 		mv.addObject("favoriteMovies",favoriteMovies);
 		mv.addObject("fromModule", "indexShow");
 		mv.setViewName("/index");
 		return mv; 
+	}
+	
+	private List<Movie> getRecentMovies(HttpServletRequest request){
+		String movieids = HttpUtil.getCookie(request, Constants.COOKIE_MOVIE);
+		if(StringUtils.isBlank(movieids))return new ArrayList<Movie>();
+		Set<String> ids = new LinkedHashSet<String>();
+		for(String id:movieids.split(Constants.COOKIE_MOVIE_SPLITOR)){
+			if(!StringUtils.isNumeric(id))continue;
+			ids.add(id);
+			if(ids.size()>Constants.broswerMovieSize)break;
+		}
+		return movieService.selectRecentMovie(StringUtils.join(ids, ','));
 	}
 }
