@@ -19,7 +19,10 @@
     <servlet-name>spring</servlet-name>
     <url-pattern>*.do</url-pattern>
     <url-pattern>*.json</url-pattern>
+    <url-pattern>/sitemap.xml</url-pattern>
+    <url-pattern>/robots.txt</url-pattern>
   </servlet-mapping>
+  
   <listener>
     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
   </listener>
@@ -27,14 +30,23 @@
     <param-name>log4jConfigLocation</param-name>
     <param-value>/WEB-INF/classes/resource/log4j.properties</param-value>
   </context-param>
+  
   <filter>
-    <filter-name>MyFilter</filter-name>
-    <filter-class>com.moviezone.filter.MyFilter</filter-class>
+    <filter-name>CacheFileFilter</filter-name>
+    <filter-class>com.moviezone.filter.CacheFileFilter</filter-class>
+    <init-param>
+    	<description>to cache the file for rapid response when next request come</description>
+    	<param-name>dir</param-name>
+    	<param-value>/css,/img,/js,/swf</param-value>
+    </init-param>
   </filter>
   <filter-mapping>
-    <filter-name>MyFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <filter-name>CacheFileFilter</filter-name>
+    <url-pattern>/css/*</url-pattern>
+    <url-pattern>/img/*</url-pattern>
+    <url-pattern>/js/*</url-pattern>
   </filter-mapping>
+  
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>

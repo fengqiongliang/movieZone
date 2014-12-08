@@ -14,6 +14,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.moviezone.constant.Constants;
+import com.moviezone.controller.AdminCommentController;
+import com.moviezone.controller.AdminModuleController;
+import com.moviezone.controller.AdminMovieController;
+import com.moviezone.controller.AdminSearchController;
+import com.moviezone.controller.AdminUserController;
 import com.moviezone.controller.BaseController;
 import com.moviezone.domain.User;
 import com.moviezone.service.SearchService;
@@ -70,6 +75,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 			return false;
 		}
 		
+		User dbUser          = null;
 		String strUserid     = HttpUtil.getCookie(request,Constants.USERID);
 		String strCookieid  = HttpUtil.getCookie(request,Constants.COOKIEID);
 		long   userid          = 0;
@@ -80,7 +86,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 			param.setUserid(userid);
 			param.setCookie_id(strCookieid);
 			List<User> users = userService.select(param);
-			User dbUser = users.size()>0?users.get(0):null;
+			dbUser = users.size()>0?users.get(0):null;
 			//禁用用户
 			if(dbUser != null && dbUser.getForbit()){
 				logger.debug("发现禁用用户【"+dbUser.getUsername()+"】登陆，【"+(dbUser.getRole().endsWith("admin")?"管理员":"非管理员")+"】");
@@ -91,6 +97,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 			}
 			//正常用户
 			if(dbUser != null && !dbUser.getForbit()){
+				if(isForbitUrl(request,response,controller,dbUser))return false;
 				logger.debug("用户登陆【"+dbUser.getUsername()+"】登陆，【"+(dbUser.getRole().endsWith("admin")?"管理员":"非管理员")+"】");
 				request.setAttribute(Constants.USER, dbUser);
 				//统计区域访问量
@@ -98,6 +105,8 @@ public class BaseInterceptor implements HandlerInterceptor {
 				return true;
 			}
 		}
+		
+		if(isForbitUrl(request,response,controller,dbUser))return false;
 		
 		statService.addAreaStat(request.getRemoteAddr(),-1);
 		
@@ -125,5 +134,39 @@ public class BaseInterceptor implements HandlerInterceptor {
 		logger.info("["+controller+"] cost:["+jspCost+"] in parse jsp");
 		logger.info("["+controller+"] cost:["+fullCost+"] finish request");
 	}
+	
+	/**是否是禁用的url访问 */
+	private boolean isForbitUrl(HttpServletRequest request, 
+			   									 HttpServletResponse response,
+			   									 Object controller,
+			   									 User dbUser){
+		if(controller instanceof AdminCommentController && (dbUser == null || !"admin".equals(dbUser.getRole()))){
+			logger.debug("发现违法用户访问【"+request.getRemoteAddr()+" -- > AdminCommentController】");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return true;
+		}
+		if(controller instanceof AdminModuleController && (dbUser == null || !"admin".equals(dbUser.getRole()))){
+			logger.debug("发现违法用户访问【"+request.getRemoteAddr()+" -- > AdminModuleController】");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return true;
+		}
+		if(controller instanceof AdminMovieController && (dbUser == null || !"admin".equals(dbUser.getRole()))){
+			logger.debug("发现违法用户访问【"+request.getRemoteAddr()+" -- > AdminMovieController】");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return true;
+		}
+		if(controller instanceof AdminSearchController && (dbUser == null || !"admin".equals(dbUser.getRole()))){
+			logger.debug("发现违法用户访问【"+request.getRemoteAddr()+" -- > AdminSearchController】");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return true;
+		}
+		if(controller instanceof AdminUserController && (dbUser == null || !"admin".equals(dbUser.getRole()))){
+			logger.debug("发现违法用户访问【"+request.getRemoteAddr()+" -- > AdminUserController】");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return true;
+		}
+		return false;
+	}
+	
 	
 }
