@@ -375,6 +375,7 @@ function initSWFUpload(){
 			flash_url : "./swf/swfupload.swf",
 			upload_url: $(span).attr("uploadUrl")+";jsessionid="+getCookie("JSESSIONID"),
 			file_post_name: "upFile",
+			prevent_swf_caching:false,
 			
 			//选择文件窗口事件处理
 			file_queued_handler : function(selFile){

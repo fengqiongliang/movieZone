@@ -1,4 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" import="com.moviezone.domain.Movie" %>
+<% Movie movie = (Movie)request.getAttribute("movie"); %>
+<% pageContext.setAttribute("keywords", movie.getName()+"480p高清下载,"+movie.getName()+"720p高清下载,"+movie.getName()+"1080p高清下载");  %>
+<% pageContext.setAttribute("description","风火影视内容-提供"+movie.getName()+"480p高清下载,"+movie.getName()+"720p高清下载,"+movie.getName()+"1080p高清下载");  %>
+<% pageContext.setAttribute("title","风火影视内容_"+movie.getName()+"高清下载");  %>
 <%@ include file="head.jsp" %>
 
 

@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <% pageContext.setAttribute("focusIndex", 3);  %>
+<% pageContext.setAttribute("keywords", "英美电视剧,日韩电视剧,港台电视剧,内地电视剧");  %>
+<% pageContext.setAttribute("description","风火影视电视剧-提供英美、日韩、港台、内地等高清电视剧下载,是您追剧的好帮手");  %>
+<% pageContext.setAttribute("title","风火影视电视剧_您追剧的好帮手");  %>
 <%@ include file="head.jsp" %>
 
 <div class="movieDetail">

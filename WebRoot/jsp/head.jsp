@@ -2,10 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"  %>
+<c:if test="${empty keywords }"><c:set var="keywords"  value="风火影视,风火影院,高清影视论坛,高清电影下载" /></c:if>
+<c:if test="${empty description }"><c:set var="description"  value="风火影视-国内知名的高清影视论坛,提供480p、720p、1080p及蓝光等高清电影下载,打造互联网最优秀的高清影视收集站" /></c:if>
+<c:if test="${empty title }"><c:set var="title"  value="风火影视_高清电影下载_打造互联网最优秀的高清影视收集站" /></c:if>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="zh-CN"/>
+	<meta name="keywords"  content="${keywords}" />
+	<meta name="description"  content="${description}" />
+	<meta name="Author"  content="艺笔之光" />
 	<link type="image/x-icon" href="${static}/img/favicon.ico" rel="shortcut icon" />
 	<link type="text/css" rel="stylesheet" href="${static}/css/moviezone.css"></link>
 	<script type="text/javascript" src="${static}/js/jquery-1.11.1.min.js"></script>
@@ -15,10 +22,10 @@
 	<script type="text/javascript" src="${static}/js/swfupload.js"></script>
 	<script type="text/javascript" src="${static}/js/moviezone.js"></script>
 	<script type="text/javascript" src="${static}/js/My97DatePicker/WdatePicker.js"></script> 
-	<title>影集网</title>
+	<title>${title}-Power by 艺笔之光</title>
 </head>
 <body>
-<div class="layer"></div>
+<div class="layer"></div> 
 <div class="layerWindow">
 	<a class="closeReg" hoverClass="closeRegHover" href="javascript:closeLayerWnd();"></a>
 	<img src="${static}/img/loading.gif">
@@ -41,7 +48,7 @@
 <div class="top">
 	<div class="topL">
 		<a class="logo"  href="${base}/index.do" ></a>
-		<a class="nav"   href="${base}/index.do"   ${focusIndex==1?"style='background:#055078'":""} >影集网</a>
+		<a class="nav"   href="${base}/index.do"   ${focusIndex==1?"style='background:#055078'":""} >风火影视</a> 
 		<a class="nav"   href="${base}/movie.do"  ${focusIndex==2?"style='background:#055078'":""} >电影</a>
 		<a class="nav"   href="${base}/tv.do"        ${focusIndex==3?"style='background:#055078'":""} >电视剧</a>
 		<c:if test='${user.role =="admin" && empty searchTitle && empty movie}'><a class="nav"   href="${base}/admin_movie.do"  ${focusIndex==4?"style='background:#055078'":""} >管理后台</a></c:if>

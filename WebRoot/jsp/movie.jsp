@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <% pageContext.setAttribute("focusIndex", 2);  %>
+<% pageContext.setAttribute("keywords", "480p高清电影,720p高清电影,1080p高清电影,蓝光电影下载");  %>
+<% pageContext.setAttribute("description","风火影视电影-网罗互联网480p、720p、1080p等高清电影下载,是影视爱好者的天堂,也是您必不可少的高清管家");  %>
+<% pageContext.setAttribute("title","风火影视电影_您必不可少的高清管家");  %>
 <%@ include file="head.jsp" %>
 
 <div class="movieDetail">
