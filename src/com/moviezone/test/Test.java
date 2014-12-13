@@ -50,7 +50,9 @@ import org.apache.lucene.facet.sortedset.SortedSetDocValuesReaderState;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.DocIdSet;
@@ -61,6 +63,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopFieldDocs;
 import org.apache.lucene.store.Directory;
@@ -94,121 +97,46 @@ public class Test {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-
-		Dictionary.initial(DefaultConfig.getInstance());
-		Dictionary dictionary = Dictionary.getSingleton();
+		String keyForIndex = "视点之窗,高清影视论坛,高清电影下载,蓝光电影下载";
+		String desForIndex = "视点之窗-国内知名的高清影视论坛,提供480p、720p、1080p及蓝光等高清电影下载,打造互联网最优秀的高清影视收集站";
+		String titleForIndex = "视点之窗_高清电影下载_打造互联网最优秀的高清影视收集站";
 		
-		List<String> normalWords = new ArrayList<String>();
-		List<String> stopWords     = new ArrayList<String>();
-		normalWords.add("习近平");
-		normalWords.add("习近");
-		stopWords.add("冯琼亮");
-		dictionary.addWords(normalWords);
-		dictionary.disableWords(stopWords);
+		String keyForMv = "480p高清电影,720p高清电影,1080p高清电影,蓝光电影下载";
+		String desForMv = "视点之窗电影-网罗互联网480p、720p、1080p等高清电影下载,是影视爱好者的天堂,也是您必不可少的高清管家";
+		String titleForMv = "视点之窗电影_您必不可少的高清管家";
 		
-		Directory directory = new RAMDirectory();
-		Analyzer analyzer = new IKAnalyzer();
+		String keyForTv = "英美电视剧,日韩电视剧,港台电视剧,内地电视剧";
+		String desForTv = "视点之窗电视剧-提供英美、日韩、港台、内地等高清电视剧下载,是您追剧的好帮手";
+		String titleForTv = "视点之窗电视剧_您追剧的好帮手";
 		
-	    IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LUCENE_4_10_2, analyzer);
-	    writerConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
-	    FacetsConfig         facetsConfig = new FacetsConfig();	
-	    IndexWriter iwriter = new IndexWriter(directory, writerConfig);
-	    
-	    Document doc1 = new Document();
-	    doc1.add(new SortedSetDocValuesFacetField("type","480p"));
-	    doc1.add(new SortedSetDocValuesFacetField("typeName","480p"));
-	    doc1.add(new StringField("id", "1", Field.Store.YES));
-	    //doc1.add(new Field("name", "驯龙高手1~3", TextField.TYPE_NOT_STORED));
-	    doc1.add(new Field("short_desc", "有没有搞错啊1", TextField.TYPE_NOT_STORED));
-	    doc1.add(new Field("long_desc", "习", TextField.TYPE_NOT_STORED));
-	    doc1.add(new LongField("create_time",System.currentTimeMillis(),LongField.TYPE_NOT_STORED));
-	    
-	    Document doc2 = new Document();
-	    doc2.add(new SortedSetDocValuesFacetField("type","720p"));
-	    doc2.add(new SortedSetDocValuesFacetField("typeName","720"));
-	    doc2.add(new StringField("id", "2", Field.Store.YES));
-	    doc2.add(new Field("name", "四大名捕3", TextField.TYPE_NOT_STORED));
-	    doc2.add(new Field("short_desc", "有没捕搞错啊2", TextField.TYPE_NOT_STORED));
-	    doc2.add(new Field("long_desc", "习近", TextField.TYPE_NOT_STORED));
-	    doc2.add(new LongField("create_time",System.currentTimeMillis(),LongField.TYPE_NOT_STORED));
-	    
-	    Document doc3 = new Document();
-	    doc3.add(new SortedSetDocValuesFacetField("type","1080p"));
-	    doc3.add(new SortedSetDocValuesFacetField("typeName","1080p"));
-	    doc3.add(new StringField("id", "3", Field.Store.YES));
-	    doc3.add(new Field("name", "四大名捕3", TextField.TYPE_NOT_STORED));
-	    doc3.add(new Field("short_desc", "有没有搞错啊3", TextField.TYPE_NOT_STORED));
-	    doc3.add(new Field("long_desc", "习近平", TextField.TYPE_NOT_STORED));
-	    doc3.add(new LongField("create_time",System.currentTimeMillis()+10,LongField.TYPE_NOT_STORED));
-	    
-	    Document doc4 = new Document();
-	    doc4.add(new SortedSetDocValuesFacetField("type","1080p"));
-	    doc4.add(new SortedSetDocValuesFacetField("typeName","1080p"));
-	    doc4.add(new StringField("id", "4", Field.Store.YES));
-	    doc4.add(new Field("name", "四大名捕4", TextField.TYPE_NOT_STORED));
-	    doc4.add(new Field("short_desc", "有没有搞错啊4", TextField.TYPE_NOT_STORED));
-	    doc4.add(new Field("long_desc", "习近平", TextField.TYPE_NOT_STORED));
-	    doc4.add(new LongField("create_time",System.currentTimeMillis()+10,LongField.TYPE_NOT_STORED));
-	    
-	    Document doc5 = new Document();
-	    doc5.add(new SortedSetDocValuesFacetField("type","1080p"));
-	    doc5.add(new SortedSetDocValuesFacetField("typeName","港台"));
-	    doc5.add(new StringField("id", "5", Field.Store.YES));
-	    doc5.add(new Field("name", "四大名捕5", TextField.TYPE_NOT_STORED));
-	    doc5.add(new Field("short_desc", "有没有搞错啊5", TextField.TYPE_NOT_STORED));
-	    doc5.add(new Field("long_desc", "习近平", TextField.TYPE_NOT_STORED));
-	    doc5.add(new LongField("create_time",System.currentTimeMillis()+10,LongField.TYPE_NOT_STORED));
-	    
-	    iwriter.addDocument(facetsConfig.build(doc1));
-	    iwriter.addDocument(facetsConfig.build(doc2));
-	    iwriter.addDocument(facetsConfig.build(doc3));
-	    iwriter.addDocument(facetsConfig.build(doc5));
-	    iwriter.close();
-	    
-	    // Now search the index:
-	    DirectoryReader ireader = DirectoryReader.open(directory);
-	    IndexSearcher isearcher = new IndexSearcher(ireader);
-	    MultiFieldQueryParser parser = new MultiFieldQueryParser(new String[]{"name","short_desc","long_desc"},analyzer);
-	    SortedSetDocValuesReaderState state = new DefaultSortedSetDocValuesReaderState(ireader);
-	    Query facetQuery = parser.parse(HttpUtil.filterSearchForLucene("习近平"));
-	    
-	    //查出所有facet
-	    List<String> allTypes = new ArrayList<String>();
-	    List<String> allFacets = new ArrayList<String>();
-	    List<Long> data = new ArrayList<Long>();
-	    FacetsCollector fc = new FacetsCollector();
-	    FacetsCollector.search(isearcher, facetQuery, null, 1, new Sort(SortField.FIELD_SCORE,new SortField("create_time",SortField.Type.LONG,true)),true,true,fc);
-	    Facets facets = new SortedSetDocValuesFacetCounts(state, fc);
-	    FacetResult  fr = facets.getTopChildren(1000, "type");
-	    LabelAndValue[] labelValues = fr.labelValues;
-	    System.out.println(labelValues);
-	    for(LabelAndValue labelValue:facets.getTopChildren(1000, "type").labelValues){
-	    	String facetName =  labelValue.toString();
-	    	System.out.println(facetName);
-	    	allTypes.add(labelValue.label);
-	    	allFacets.add(facetName);
-	    }
-	    System.out.println("=================");
-	    //查找数据值
-	    String type = "72012p";
-	    int pageNo  = 1;
-	    int pageSize = 1;
-	    DrillDownQuery dataQuery = new DrillDownQuery(facetsConfig,facetQuery);
-	    if(allTypes.size()>0)dataQuery.add("type", allTypes.contains(type)?type:allTypes.get(0));
-	    TopFieldDocs topDocs = FacetsCollector.search(isearcher, dataQuery, null, 1, new Sort(SortField.FIELD_SCORE,new SortField("create_time",SortField.Type.LONG,true)),true,true,fc);
-	    ScoreDoc[] hitDocs  = topDocs.scoreDocs;
-	    System.out.println("total  ： "+topDocs.totalHits);
-	    int start = Math.max((pageNo-1)*pageSize, 0);
-	    int end  = Math.min(pageNo*pageSize, hitDocs.length);
-	    for (int i = start; i < end; i++) {
-		      Document hitDoc = isearcher.doc(hitDocs[i].doc);
-		      System.out.println(hitDoc.get("id")+" ---> "+hitDocs[i].score);
-		      //data.add(hitDoc);
-		}
-	    
-	    
-	    ireader.close();
-	    directory.close();
+		String keyForContent = "{心花怒放}480p高清下载,心花怒放720p高清下载,心花怒放1080p高清下载";
+		String desForContent = "视点之窗内容-提供{心花怒放}480p高清下载,心花怒放720p高清下载,心花怒放1080p高清下载";
+		String titleForContent = "视点之窗内容_{心花怒放}高清下载";
+		
+		String keyForSearch = "搜索:{心花怒放}";
+		String desForSearch = "视点之窗搜索-搜索更多有关{心花怒放}高清电影";
+		String titleForSearch = "视点之窗搜索_{心花怒放}";
+		
+		
+		System.out.println("keyForIndex :  "+keyForIndex);
+		System.out.println("desForIndex :  "+desForIndex);
+		System.out.println("titleForIndex :  "+titleForIndex);
+		
+		System.out.println("keyForMv :  "+keyForMv);
+		System.out.println("desForMv :  "+desForMv);
+		System.out.println("titleForMv :  "+titleForMv);
+		
+		System.out.println("keyForTv :  "+keyForTv);
+		System.out.println("desForTv :  "+desForTv);
+		System.out.println("titleForTv :  "+titleForTv);
+		
+		System.out.println("keyForContent :  "+keyForContent);
+		System.out.println("desForContent :  "+desForContent);
+		System.out.println("titleForContent :  "+titleForContent);
+		
+		System.out.println("keyForSearch :  "+keyForSearch);
+		System.out.println("desForSearch :  "+desForSearch);
+		System.out.println("titleForSearch :  "+titleForSearch);
 		
 	}
 	

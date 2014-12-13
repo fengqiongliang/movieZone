@@ -53,17 +53,16 @@ public class BaseInterceptor implements HandlerInterceptor {
 		beforeController = System.currentTimeMillis();
 		response.setContentType("text/html; charset=utf-8");
 		//设置基本变量
-		if(baseDir == null || staticDir == null){
-			String Scheme      = request.getScheme();
-			String ServerName  = request.getServerName();
-			int    ServerPort  = request.getServerPort();
-			String contextPath = request.getContextPath();
-			String webPath = Scheme+"://"+ServerName+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
-			String staticName = Scheme+"://"+"www.movietest.com"+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
-			baseDir = webPath;
-			staticDir = staticName;
-			Constants.base = baseDir;
-		}
+		String Scheme      = request.getScheme();
+		String ServerName  = request.getServerName();
+		int    ServerPort  = request.getServerPort();
+		String contextPath = request.getContextPath();
+		String webPath = Scheme+"://"+ServerName+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
+		String staticName = Scheme+"://"+"www.movietest.com"+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
+		baseDir = webPath;
+		staticDir = staticName;
+		Constants.base = baseDir;
+		
 		request.setAttribute("base",baseDir);
 		request.setAttribute("static",staticDir);
 		request.setAttribute("searchHot",searchService.selectHotword(null, null, 1));

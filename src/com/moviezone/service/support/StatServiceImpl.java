@@ -143,6 +143,7 @@ public class StatServiceImpl implements StatService{
 	@Override
 	public void addAreaStat(String ip,long userid) {
 		if(StringUtils.isBlank(ip))return;
+		if("0:0:0:0:0:0:0:1".equals(ip))return;
 		if(userid>0);
 		executor.execute(addCmmd(ipMap,HttpUtil.ipToLong(ip)+""));
 	}
