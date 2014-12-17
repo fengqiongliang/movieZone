@@ -207,13 +207,13 @@
 		</div>
 		<div class="movieRank">
 			<ul>
-				<c:forEach var="mv" items="${rankMVMovies}" begin="0" end="2" varStatus="status">
+				<c:forEach var="mv" items="${rankTVMovies}" begin="0" end="2" varStatus="status">
 				<li class="topMovie" title="${mv.name}"><span class="rank${status.count}">${status.count}</span><span class="rankScore">${mv.score}</span><a href="${base}/content.do?id=${mv.movieid}&fromModule=indexTvRank"><img src="${static}${mv.face80x80}" /><p class="topMName">${mv.name}</p></a></li>
 				</c:forEach>
 				<li class="clear"></li>
 			</ul>
 			<ul style="margin: 10px 15px 0 20px;">
-				<c:forEach var="mv" items="${rankMVMovies}" begin="3" end="11" varStatus="status">
+				<c:forEach var="mv" items="${rankTVMovies}" begin="3" end="11" varStatus="status">
 				<li class="bottomMovie" title="${mv.name}"><span class="rank${status.count+3}">${status.count+3}</span><span class="btmMName"><a href="${base}/content.do?id=${mv.movieid}&fromModule=indexTvRank">${mv.name}</a></span><span class="btmMScore">${mv.score}</span></li>
 				</c:forEach>
 			</ul>

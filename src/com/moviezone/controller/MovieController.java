@@ -100,7 +100,7 @@ public class MovieController extends BaseController {
 		boolean isScoreUp  = "asc".equals(scoreSort)?true:false;
 		pageNo    = pageNo <1?1:pageNo;
 		int pageSize   =  "14".equals(pageType)?14:28;
-		mv.addObject("movies",movieService.selectPageByModule(modname, true, isSortCreateTimeUp,isScoreUp,pageNo, 2));
+		mv.addObject("movies",movieService.selectPageByModule(modname, true, isSortCreateTimeUp,isScoreUp,pageNo, pageSize));
 		mv.setViewName("/movie_tv_list");
 		return mv; 
 	}
