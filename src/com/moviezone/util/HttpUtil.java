@@ -20,7 +20,30 @@ public class HttpUtil {
 	
 	public static String encoding(String html){
 		if(StringUtils.isBlank(html))return "";
-		return StringEscapeUtils.escapeHtml(html);
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < html.length(); i++) {
+            char c = html.charAt(i);
+            switch (c) {
+            case '<':
+                buffer.append("&lt;");
+                break;
+            case '>':
+                buffer.append("&gt;");
+                break;
+            case '&':
+                buffer.append("&amp;");
+                break;
+            case '"':
+                buffer.append("&quot;");
+                break;
+            case 10:
+            case 13:
+                break;
+            default:
+                buffer.append(c);
+            }
+        }
+        return buffer.toString();
 	}
 	public static String decoding(String html){
 		if(StringUtils.isBlank(html))return "";

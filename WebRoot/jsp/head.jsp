@@ -39,7 +39,7 @@
 		<li style="text-align:left"><span class="errorTip"></span></li>
 		<li><i class="redStar">*</i>用户名：<input class="regInput" focusClass="regInputFocus" type="text" onblur="checkUName(this)" onclick="clickFeild(this)" maxlength="20"></input><img class="loadImg" src="${static}/img/loading.gif" /><span class="iTip">长度大于6，小于20</span><span class="iError"></span><span class="iSuccess">√</span></li>
 		<li><i class="redStar">*</i>密&nbsp&nbsp&nbsp码：<input class="regInput" focusClass="regInputFocus" type="password" onblur="checkPWD(this)" onclick="clickFeild(this)" maxlength="20"></input><span class="iTip">长度大于6，小于20</span><span class="iError"></span><span class="iSuccess">√</span></li>
-		<li><i class="redStar">*</i>验证码：<input class="regCode" focusClass="regInputFocus" type="text" onblur="checkCode(this)" maxlength="4" onclick="clickFeild(this)"></input><img id="validateCode" class="codeImg" title="单击换一换" alt="验证码加载失败" src="http://weibo.com/signup/v5/pincode/pincode.php?lang=zh&sinaId=5a7bb5c5930b3d6e00e0dd972c9c5b6a&r=1403229441" onclick="$('#validateCode').attr('src',$('#validateCode').attr('src')+'&1=1');"/><em style="cursor:pointer;color:blue;" onclick="$('#validateCode').attr('src',$('#validateCode').attr('src')+'&1=1');">换一换</em><span class="iTip">请输入四位验证码</span><span class="iError"></span><span class="iSuccess"></span></li>
+		<li><i class="redStar">*</i>验证码：<input class="regCode" focusClass="regInputFocus" type="text" onblur="checkCode(this)" maxlength="4" onclick="clickFeild(this)"></input><img id="validateCode" class="codeImg" title="单击换一换" alt="验证码加载失败" src="${base}/code.do?1=1" onclick="$('#validateCode').attr('src',$('#validateCode').attr('src')+'&1=1');"/><em style="cursor:pointer;color:blue;" onclick="$('#validateCode').attr('src',$('#validateCode').attr('src')+'&1=1');">换一换</em><span class="iTip">请输入四位验证码</span><span class="iError"></span><span class="iSuccess"></span></li>
 	</ul>
 	<a class="regBut" hoverClass="regButHover" onclick="regOrLogin()">立即注册</a>
 	<img class="loadImg" src="${static}/img/loading.gif" />
@@ -58,7 +58,7 @@
 	<div class="topR">
 		<c:if test='${!empty user}'><span class="nick" style="display:inline"><input class="nickField" type="text" value="${user.nextnick!=null?user.nextnick:user.nickname}"  oldValue="${user.nextnick!=null?user.nextnick:user.nickname}"  onblur="modifyNick(this)" onkeyup="adjustWidth()" maxlength="12" maxWidth="150"  autocomplete="off" ></input><a href="javascript:logout();" class="logout">退出</a></span></c:if>
 		<c:if test='${empty user}'><a class="reg" href="javascript:goReg();" >注册/登录</a></c:if>
-		<input class="search" type="text" searchHover="searchF"  value="${search}" onfocus="$('.searchPop').show();" onblur="$('.searchPop').hide();" on></input><a class="searchIcon" href="javascript:goSearch();"></a><span class='searchE'></span>
+		<input class="search" type="text" searchHover="searchF"  value="${search}" onfocus="$('.searchPop').show();" onblur="setTimeout(function(){$('.searchPop').hide();},200)"></input><a class="searchIcon" href="javascript:goSearch();"></a><span class='searchE'></span>
 	</div>
 	<ul class="searchPop">
 		<c:forEach var="word" items="${searchHot.data}"  varStatus="status">

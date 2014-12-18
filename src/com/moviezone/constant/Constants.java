@@ -16,4 +16,7 @@ public class Constants {
 	public static final String USER = "user";
 	public static String base = "";
 	public static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
+	
+	/** 验证码 */
+	public static final String VALIDATECODE = "ValidateCode";
 }

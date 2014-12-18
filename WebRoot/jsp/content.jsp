@@ -64,7 +64,7 @@
 			</div>
 			<div class="emotion"></div>
 			<div class="subSure">
-				<img class="sureImg" src="http://weibo.com/signup/v5/pincode/pincode.php?lang=zh&sinaId=5a7bb5c5930b3d6e00e0dd972c9c5b6a&r=1403229441" onclick="this.src = this.src+'&1=1'"/>
+				<img class="sureImg" src="${base}/code.do?1=1" onclick="this.src = this.src+'&1=1'"/>
 				<input class="sureInput" type="text" maxLength="4" focusClass="inputF"></input>
 				<a class="tipBtn" hoverClass="tipBtnHover" href="javascript:submitCmmt()">确定</a>
 				<img class="loadCmmt" src="${static}/img/loading.gif" />
