@@ -18,7 +18,10 @@
     <result column="nextface" property="nextface" jdbcType="VARCHAR" />
     <result column="isForbit" property="isForbit" jdbcType="VARCHAR" />
   </resultMap>
-  
+  <resultMap id="UserNickResultMap" type="com.moviezone.domain.UserNick" >
+    <id column="newnick" property="newnick" jdbcType="VARCHAR" />
+    <result column="oldnick" property="oldnick" jdbcType="VARCHAR" />
+  </resultMap>
   
   <sql id="UserColumns" >
     userid, username,password,nickname,faceurl,cookie_id,role,lastlogtime,updatetime,createip,createtime,createarea,nextnick,nextface,isForbit
@@ -84,6 +87,13 @@
 		select userid,nickname,createip,createarea from forbituser where 1 =1 
 		<include refid="forbitUserIFColumns" />
 		 limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectRandomNick" resultMap="UserNickResultMap" parameterType="map"  >
+    select 'false' as QUERYID,a.nickname newnick,b.nickname oldnick from usernick a left join user b on a.nickname = b.nickname
+	where 1=1
+	order by oldnick asc,rand() 
+    limit 0,5
   </select>
   
   <insert id="insertUser" parameterType="com.moviezone.domain.User" >

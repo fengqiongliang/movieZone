@@ -189,6 +189,12 @@ public class UserServiceImpl implements UserService{
 		param.setCreateip(ip);
 		return userDao.selectSystemForbit(param, 1, 1).size()>0;
 	}
+
+
+	@Override
+	public String getRandNick() {
+		return userDao.getRandNick();
+	}
 	
 	
 }

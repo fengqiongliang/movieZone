@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +16,11 @@ import com.moviezone.cache.UserCache;
 import com.moviezone.dao.UserDao;
 import com.moviezone.domain.Page;
 import com.moviezone.domain.User;
+import com.moviezone.domain.UserNick;
 
 public class UserDaoImpl implements UserDao{
 	private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+	private Random rand = new Random();
 	
 	private UserCache userCache;
 	private SqlSession session;
@@ -152,6 +156,16 @@ public class UserDaoImpl implements UserDao{
 		return session.delete("deleteForbitUser", user)>0;
 	}
 	
+	@Override
+	public String getRandNick() {
+		List<UserNick> result = session.selectList("selectRandomNick");
+		UserNick nick0 = result.get(0);
+		UserNick nick1 = result.get(rand.nextInt(result.size()));
+		if(StringUtils.isBlank(nick0.getOldnick()))return nick0.getNewnick();
+		return nick1.getNewnick()+System.currentTimeMillis(); //如果系统昵称满则【随机昵称+系统时间】如：新人求指教1420423305607
+		
+	}
+	
 	public void setSession(SqlSession session) {
 		this.session = session;
 	}
@@ -159,6 +173,8 @@ public class UserDaoImpl implements UserDao{
 	public void setUserCache(UserCache userCache) {
 		this.userCache = userCache;
 	}
+	
+	
 
 
 	

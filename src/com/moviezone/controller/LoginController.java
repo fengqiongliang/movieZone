@@ -2,12 +2,14 @@ package com.moviezone.controller;
 
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 
 
 
@@ -47,14 +49,14 @@ public class LoginController extends BaseController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
-	private String[] nicknames = {"可爱的她","新人求指教","花落满地"};
 	private Random rand = new Random();
 	
 	@RequestMapping(value="/checkUName.json",method=RequestMethod.POST)
 	public void checkUName(HttpServletRequest request,
 										   	 HttpServletResponse response,
 										   	 HttpSession session,
-										   	 @RequestParam(value="username") String username)throws Exception{
+										   	 @RequestParam(value="username") String username,
+										   	 @RequestParam(value="isLogin",required=false,defaultValue="false") Boolean isLogin)throws Exception{
 		JSONObject json = new JSONObject();
 		if(username == null || StringUtils.isBlank(username.trim())){
 			json.put("resultCode", -1);
@@ -64,14 +66,20 @@ public class LoginController extends BaseController {
 		}
 		User user = new User();
 		user.setUsername(username);
-		if(userService.select(user).size()>0){
+		List<User> result = userService.select(user); 
+		if(result.size()>0 && !isLogin){
 			json.put("resultCode", -1);
 			json.put("resultInfo", "用户名已经被占用");
 			response.getWriter().write(json.toString());
 			return;
 		}
+		if(result.size()<1 && isLogin){
+			json.put("resultCode", -1);
+			json.put("resultInfo", "用户名不存在");
+			response.getWriter().write(json.toString());
+			return;
+		}
 		
-		//保存至数据库中
 		json.put("resultCode", 0);
 		json.put("resultInfo", "用户名可以正常使用");
 		response.getWriter().write(json.toString());
@@ -87,6 +95,21 @@ public class LoginController extends BaseController {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}
+		//回复原名
+		if(user.getNickname().equals(nickname)){
+			user.setNextnick(nickname.trim());   
+			userService.update(user);
+			return;
+		}
+		//查询是否昵称已经存在
+		User param = new User();
+		param.setNickname(nickname);
+		List<User> result = userService.select(param, 1, 1);
+		if(result.size()>0){
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+		
 		user.setNextnick(nickname.trim());
 		userService.update(user);
 	}
@@ -120,7 +143,7 @@ public class LoginController extends BaseController {
 			response.getWriter().write(json.toString());
 			return;
 		}
-		if(type == 1 && 1==2){
+		if(type == 1 && !regCode.toLowerCase().equals(session.getAttribute(Constants.VALIDATECODE))){
 			json.put("resultCode", -1);
 			json.put("resultInfo", "验证码不正确");
 			response.getWriter().write(json.toString());
@@ -141,7 +164,7 @@ public class LoginController extends BaseController {
 				response.getWriter().write(json.toString());
 				return;
 			}
-			user.setNickname(nicknames[rand.nextInt(nicknames.length)]);   //设置随机昵称
+			user.setNickname(userService.getRandNick());                             //设置随机昵称
 			user.setFaceurl("/img/92x71/"+(rand.nextInt(50)+5)+".gif");      //设置随机头像
 			user.setRole("user");                                                                    //设置一般的用户角色
 			user.setCreateip(request.getRemoteAddr());                                //设置注册ip
@@ -180,6 +203,5 @@ public class LoginController extends BaseController {
 		
 		logger.debug("用户【"+username+"】成功登陆【"+password+"】 ");
 	}
-	
 	
 }

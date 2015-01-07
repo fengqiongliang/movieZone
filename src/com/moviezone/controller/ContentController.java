@@ -139,6 +139,7 @@ public class ContentController extends BaseController {
 	public ModelAndView comment(ModelAndView mv,
 													   HttpServletRequest request,
 													   HttpServletResponse response,
+													   HttpSession session,
 													   @RequestParam(value="movieid") long movieid,
 													   @RequestParam(value="captcha") String captcha,
 													   @RequestParam(value="content") String content)throws Exception{
@@ -151,7 +152,12 @@ public class ContentController extends BaseController {
 			response.getWriter().write("<div class='error'>评论内容不能为空</div>");
 			return null;
 		}
-		if(1==2){
+		if(StringUtils.isBlank(captcha)){
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.getWriter().write("<div class='error'>请输入正确的验证码</div>");
+			return null;
+		}
+		if(!captcha.toLowerCase().equals(session.getAttribute(Constants.VALIDATECODE))){
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			response.getWriter().write("<div class='error'>请输入正确的验证码</div>");
 			return null;

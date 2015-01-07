@@ -27,4 +27,5 @@ public interface UserService {
 	public void addNormalForbit(long userid);
 	public void addSystemForbit(String createip,String createarea);
 	public void testTransaction()throws Exception;
+	public String getRandNick();
 }

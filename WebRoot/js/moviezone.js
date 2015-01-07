@@ -115,6 +115,8 @@ function tabReg(type,source){
 		$('.regUl > li:eq(3)').hide();
 		$('.regBut').text('登录');
 	}
+	$('.regUl > li:eq(0) > span').hide();
+	checkUName($('.regUl > li:eq(1) > input'));
 }
 function clickFeild(source){
 	$('span',$(source).parent()).hide();
@@ -122,7 +124,8 @@ function clickFeild(source){
 }
 function checkUName(source){
 	//去空格
-	var val = $(source).val().replace(/\s/g,'');
+	var val       = $(source).val().replace(/\s/g,'');
+	var isLogin = $('.regUl > li:eq(3)').css('display') == 'none';
 	$(source).val(val);
 	//用户名长度小于5位
 	if(val.length<6){
@@ -140,7 +143,7 @@ function checkUName(source){
 	$.ajax({
         type:'POST',
         url:'checkUName.json',
-        data:{username:val},
+        data:{'username':val,'isLogin':isLogin},
 		dataType:'json',
         beforeSend:function(){
         	$('span',$(source).parent()).hide();
@@ -322,6 +325,7 @@ function modifyNick(source){
     	$(source).val(nowValue);
     }).fail(function(){
     	$(source).val(oldValue);
+    	alert("昵称已存在");
     });
 }
 function adjustWidth(){

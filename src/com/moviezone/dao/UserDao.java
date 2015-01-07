@@ -22,4 +22,5 @@ public interface UserDao {
 	public boolean delete(User user);
 	public boolean delete(long userid);
 	public boolean delForbit(User user);
+	public String getRandNick();
 }

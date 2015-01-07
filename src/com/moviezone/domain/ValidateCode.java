@@ -122,7 +122,7 @@ public class ValidateCode {
 			randomCode.append(strRand);
 		}
 		// 将四位数字的验证码保存到Session中。
-		code=randomCode.toString();		
+		code=randomCode.toString().toLowerCase();		
 	}
 	
 	public void write(String path) throws IOException {
