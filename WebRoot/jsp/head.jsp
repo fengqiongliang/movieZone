@@ -13,6 +13,7 @@
 	<meta name="keywords"  content="${keywords}" />
 	<meta name="description"  content="${description}" />
 	<meta name="Author"  content="艺笔之光" />
+	<meta name="Copyright" content="艺笔之光" />
 	<link type="image/x-icon" href="${static}/img/favicon.ico" rel="shortcut icon" />
 	<link type="text/css" rel="stylesheet" href="${static}/css/moviezone.css"></link>
 	<script type="text/javascript" src="${static}/js/jquery-1.11.1.min.js"></script>
