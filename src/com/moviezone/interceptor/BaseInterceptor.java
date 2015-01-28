@@ -59,10 +59,11 @@ public class BaseInterceptor implements HandlerInterceptor {
 		String contextPath = request.getContextPath();
 		String webPath = Scheme+"://"+ServerName+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
 		String staticName = Scheme+"://"+"www.movietest.com"+(ServerPort==80?"":":"+ServerPort)+(contextPath.length()>0?contextPath:"");
+		staticName = webPath;  
 		baseDir = webPath;
 		staticDir = staticName;
 		Constants.base = baseDir;
-		
+		 
 		request.setAttribute("base",baseDir);
 		request.setAttribute("static",staticDir);
 		request.setAttribute("searchHot",searchService.selectHotword(null, null, 1));
