@@ -16,7 +16,7 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.dhcp4java;
+package com.dhcp;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -24,7 +24,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.dhcp4java.DHCPConstants.*;
+import static com.dhcp.DHCPConstants.*;
 
 /**
  * General Interface for a "DHCP Servlet"

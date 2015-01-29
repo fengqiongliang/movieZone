@@ -16,14 +16,14 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.dhcp4java.examples;
+package com.dhcp.examples;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.dhcp4java.DHCPPacket;
-import org.dhcp4java.DHCPCoreServer;
-import org.dhcp4java.DHCPServerInitException;
-import org.dhcp4java.DHCPServlet;
+import com.dhcp.DHCPPacket;
+import com.dhcp.DHCPCoreServer;
+import com.dhcp.DHCPServerInitException;
+import com.dhcp.DHCPServlet;
 
 
 /**
@@ -34,12 +34,12 @@ import org.dhcp4java.DHCPServlet;
  */
 public class DHCPSnifferServlet extends DHCPServlet {
 
-    private static final Logger logger = Logger.getLogger("org.dhcp4java.examples.dhcpsnifferservlet");
+    private static final Logger logger = Logger.getLogger("com.dhcp.examples.dhcpsnifferservlet");
     
     /**
      * Print received packet as INFO log, and do not respnd.
      * 
-     * @see org.dhcp4java.DHCPServlet#service(org.dhcp4java.DHCPPacket)
+     * @see com.dhcp.DHCPServlet#service(com.dhcp.DHCPPacket)
      */
     @Override
     public DHCPPacket service(DHCPPacket request) {

@@ -16,44 +16,41 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.dhcp4java;
+package com.dhcp.examples;
+
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+
+import com.dhcp.DHCPConstants;
+import com.dhcp.DHCPPacket;
+
+
 
 /**
- * Thrown to indicate there was a problem starting the DHCP Server.
- * 
+ * A simple DHCP sniffer.
+ *
  * @author Stephan Hadinger
  * @version 1.00
  */
-public class DHCPServerInitException extends Exception {
-	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * 
-	 *
-	 */
-	public DHCPServerInitException() {
-		super();
-	}
-	
-    /**
-     * @param message
-     */
-    public DHCPServerInitException(String message) {
-        super(message);
+public class DHCPSniffer {
+    private DHCPSniffer() {
+    	throw new UnsupportedOperationException();
     }
 
-    /**
-     * @param cause
-     */
-    public DHCPServerInitException(Throwable cause) {
-        super(cause);
-    }
+    public static void main(String[] args) {
+        try {
+            DatagramSocket socket = new DatagramSocket(DHCPConstants.BOOTP_REQUEST_PORT);
 
-    /**
-     * @param message
-     * @param cause
-     */
-    public DHCPServerInitException(String message, Throwable cause) {
-        super(message, cause);
+            while (true) {
+                DatagramPacket pac = new DatagramPacket(new byte[1500], 1500);
+                DHCPPacket     dhcp;
+
+                socket.receive(pac);
+                dhcp = DHCPPacket.getPacket(pac);
+                System.out.println(dhcp.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

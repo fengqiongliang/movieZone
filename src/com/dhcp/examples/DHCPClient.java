@@ -16,14 +16,14 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.dhcp4java.examples;
+package com.dhcp.examples;
 
 import java.util.Random;
 
-import org.dhcp4java.DHCPPacket;
+import com.dhcp.DHCPPacket;
 
 
-import static org.dhcp4java.DHCPConstants.*;
+import static com.dhcp.DHCPConstants.*;
 
 /**
  * Example of DHCP Client (under construction).
