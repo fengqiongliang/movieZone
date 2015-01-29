@@ -40,9 +40,10 @@ public class SystemUtil {
 		if(macAddress==null || macAddress.length!=6)return "";
 		StringBuffer strbuf = new StringBuffer(macAddress.length * 2+5);
 		for (int i = 0; i < macAddress.length; i++) {
-			// 十六进制比较，小于00010000的补0
-			if (((int) macAddress[i] & 0xff) < 0x10)strbuf.append("0");
-			strbuf.append(Integer.toString((int) macAddress[i] & 0xff, 16));
+			int high =  ((macAddress[i] >> 4) & 0x0f);
+			int low   = (macAddress[i]  & 0x0f);
+			strbuf.append(Integer.toHexString(high));
+			strbuf.append(Integer.toHexString(low));
 			if(i!=macAddress.length-1)strbuf.append("-");
 		}
 		return strbuf.toString();
@@ -53,7 +54,11 @@ public class SystemUtil {
 		for(NetworkInterface i:a){
 			System.out.println(SystemUtil.getHardwareAddress(i.getHardwareAddress()));
 		}
-		
+		int    d = 145;
+		byte b = (byte)d;
+		int    q = (int)b;
+		System.out.println(q);
+		System.out.println(Integer.toHexString((int)b & 0xff));
 	}
 	
 	
