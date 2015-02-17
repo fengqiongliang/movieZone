@@ -30,7 +30,6 @@ import com.moviezone.domain.User;
 import com.moviezone.service.KeyService;
 import com.moviezone.service.StatService;
 import com.moviezone.util.HttpUtil;
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 
 public class StatServiceImpl implements StatService{

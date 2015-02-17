@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.moviezone.constant.Constants;
 import com.moviezone.service.MovieService;
 import com.moviezone.util.HttpUtil;
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 public class Comment implements Serializable{
 	private static final long serialVersionUID = 494845959575546516L;
