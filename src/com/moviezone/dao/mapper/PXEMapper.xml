@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.moviezone.dao.PXEDao" >
+  <resultMap id="PxeDhcpResultMap" type="com.moviezone.domain.PxeDhcp" >
+    <id column="client_mac" property="client_mac" jdbcType="VARCHAR" />
+    <result column="client_ip" property="client_ip" jdbcType="VARCHAR" />
+    <result column="client_submask" property="client_submask" jdbcType="VARCHAR" />
+    <result column="client_gateway" property="client_gateway" jdbcType="VARCHAR" />
+    <result column="file_name" property="file_name" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="        " property="invalidtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="PxeDhcpColumns" >
+    client_mac,client_ip,client_submask,client_gateway,file_name,createtime,invalidtime
+  </sql>
+  <sql id="PxeDhcpIFColumns">
+    <if test="client_mac != null">  and client_mac = #{client_mac,jdbcType=VARCHAR} </if>
+    <if test="client_ip != null">  and client_ip = #{client_ip,jdbcType=VARCHAR} </if>
+    <if test="client_submask != null"> and client_submask = #{client_submask,jdbcType=VARCHAR} </if>
+    <if test="client_gateway != null"> and client_gateway = #{client_gateway,jdbcType=VARCHAR} </if>
+    <if test="file_name != null"> and file_name = #{file_name,jdbcType=VARCHAR} </if>
+  </sql>
+  <select id="selectPxeDhcpCount" resultType="map" parameterType="map"  >
+    select 'false' as QUERYID, 
+    count(client_mac) as total
+    from pxe_dhcp where 1=1 
+    <include refid="PxeDhcpIFColumns" />
+  </select>
+  
+  <select id="selectPxeDhcp" resultMap="PxeDhcpResultMap" parameterType="map"  >
+    select 'false' as QUERYID, 
+    <include refid="PxeDhcpColumns" /> 
+    from pxe_dhcp where 1=1 
+    <include refid="PxeDhcpIFColumns" />
+    limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <insert id="insertPxeDhcp" parameterType="com.moviezone.domain.PxeDhcp" >
+    insert into pxe_dhcp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="client_mac != null" >client_mac,</if>
+      <if test="client_ip != null" >client_ip,</if>
+      <if test="client_submask != null" >client_submask,</if>
+      <if test="client_gateway != null" >client_gateway,</if>
+      <if test="file_name != null">file_name,</if>
+      <if test="createtime != null" >createtime,</if>
+      <if test="invalidtime != null" >invalidtime,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="client_mac != null" >#{client_mac,jdbcType=VARCHAR},</if>
+      <if test="client_ip != null" >#{client_ip,jdbcType=VARCHAR},</if>
+      <if test="client_submask != null" >#{client_submask,jdbcType=VARCHAR},</if>
+      <if test="client_gateway != null" >#{client_gateway,jdbcType=VARCHAR},</if>
+      <if test="file_name != null">#{file_name,jdbcType=VARCHAR},</if>
+      <if test="createtime != null" >#{createtime,jdbcType=TIMESTAMP},</if>
+      <if test="invalidtime != null" >#{invalidtime,jdbcType=TIMESTAMP},</if>
+    </trim>
+  </insert>
+  
+  <update id="updatePxeDhcp" parameterType="com.moviezone.domain.PxeDhcp" >
+    update pxe_dhcp
+    <set>
+      <if test="client_ip != null" >client_ip = #{client_ip,jdbcType=VARCHAR},</if>
+      <if test="client_submask != null" >client_submask = #{client_submask,jdbcType=VARCHAR},</if>
+      <if test="client_gateway != null" >client_gateway = #{client_gateway,jdbcType=VARCHAR},</if>
+      <if test="file_name != null">file_name = #{file_name,jdbcType=VARCHAR},</if>
+      <if test="createtime != null" >createtime = #{createtime,jdbcType=TIMESTAMP},</if>
+      <if test="invalidtime != null" >invalidtime = #{invalidtime,jdbcType=TIMESTAMP},</if>
+    </set>
+    where client_mac = #{client_mac,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <delete id="deletePxeDhcp" parameterType="com.moviezone.domain.PxeDhcp" >
+    delete from pxe_dhcp where client_mac = #{client_mac,jdbcType=VARCHAR}
+  </delete>
+  
+  
+</mapper>

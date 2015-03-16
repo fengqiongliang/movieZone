@@ -53,6 +53,11 @@
 		<property name="keyService" ref="keyService" />
 	</bean>
 	
+	<bean id="pxeService" class="com.moviezone.service.support.PXEServiceImpl">
+		<property name="pxeDao" ref="pxeDao" />
+		<property name="keyService" ref="keyService" />
+	</bean>
+	
 	
 	<tx:advice id="txAdvice" transaction-manager="txManager">
 		<tx:attributes>

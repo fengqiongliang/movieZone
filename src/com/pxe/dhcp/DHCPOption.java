@@ -16,9 +16,9 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package com.dhcp;
+package com.pxe.dhcp;
 
-import static com.dhcp.DHCPConstants.*;
+import static com.pxe.dhcp.DHCPConstants.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -240,7 +240,7 @@ public class DHCPOption implements Serializable {
      * 
      * @return the option value, <tt>null</tt> if option is not present.
      * @throws IllegalArgumentException the option code is not in the list above.
-     * @throws DHCPBadPacketException the option value in packet is of wrong size.
+     * @throws IllegalArgumentException the option value in packet is of wrong size.
      */
     public byte getValueAsByte() throws IllegalArgumentException {
         if (!isOptionAsByte(code)) {
@@ -250,7 +250,7 @@ public class DHCPOption implements Serializable {
         	throw new IllegalStateException("value is null");
         }
         if (this.value.length != 1) {
-        	throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 1");
+        	throw new IllegalArgumentException("option " + this.code + " is wrong size:" + this.value.length + " should be 1");
         }
         return this.value[0];
     }
@@ -271,7 +271,7 @@ public class DHCPOption implements Serializable {
      * 
      * @return the option value, <tt>null</tt> if option is not present.
      * @throws IllegalArgumentException the option code is not in the list above.
-     * @throws DHCPBadPacketException the option value in packet is of wrong size.
+     * @throws IllegalArgumentException the option value in packet is of wrong size.
      */
     public short getValueAsShort() throws IllegalArgumentException {
     	if (!isOptionAsShort(code)) {
@@ -281,7 +281,7 @@ public class DHCPOption implements Serializable {
         	throw new IllegalStateException("value is null");
         }
         if (this.value.length != 2) {
-        	throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 2");
+        	throw new IllegalArgumentException("option " + this.code + " is wrong size:" + this.value.length + " should be 2");
         }
 
         return (short) ((this.value[0] & 0xff) << 8 | (this.value[1] & 0xFF));
@@ -306,7 +306,7 @@ public class DHCPOption implements Serializable {
      * 
      * @return the option value, <tt>null</tt> if option is not present.
      * @throws IllegalArgumentException the option code is not in the list above.
-     * @throws DHCPBadPacketException the option value in packet is of wrong size.
+     * @throws IllegalArgumentException the option value in packet is of wrong size.
      */
     public int getValueAsInt() throws IllegalArgumentException {
     	if (!isOptionAsInt(code)) {
@@ -316,7 +316,7 @@ public class DHCPOption implements Serializable {
         	throw new IllegalStateException("value is null");
         }
         if (this.value.length != 4) {
-        	throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 4");
+        	throw new IllegalArgumentException("option " + this.code + " is wrong size:" + this.value.length + " should be 4");
         }
         return ((this.value[0] & 0xFF) << 24 |
                 (this.value[1] & 0xFF) << 16 |
@@ -370,7 +370,7 @@ public class DHCPOption implements Serializable {
      * 
      * @return the option value, <tt>null</tt> if option is not present.
      * @throws IllegalArgumentException the option code is not in the list above.
-     * @throws DHCPBadPacketException the option value in packet is of wrong size.
+     * @throws IllegalArgumentException the option value in packet is of wrong size.
      */
     public InetAddress getValueAsInetAddr() throws IllegalArgumentException {
     	if (!isOptionAsInetAddr(code)) {
@@ -380,7 +380,7 @@ public class DHCPOption implements Serializable {
             throw new IllegalStateException("value is null");
         }
         if (this.value.length != 4) {
-            throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 4");
+            throw new IllegalArgumentException("option " + this.code + " is wrong size:" + this.value.length + " should be 4");
         }
         try {
             return InetAddress.getByAddress(this.value);
@@ -425,7 +425,7 @@ public class DHCPOption implements Serializable {
         if (this.value == null) {
             throw new IllegalStateException("value is null");
         }
-        return DHCPPacket.bytesToString(this.value);
+        return bytesToString(this.value);
     }
 
     public static final boolean isOptionAsShorts(byte code) {
@@ -442,7 +442,7 @@ public class DHCPOption implements Serializable {
      * 
      * @return the option value array, <tt>null</tt> if option is not present.
      * @throws IllegalArgumentException the option code is not in the list above.
-     * @throws DHCPBadPacketException the option value in packet is of wrong size.
+     * @throws IllegalArgumentException the option value in packet is of wrong size.
      */
     public short[] getValueAsShorts() throws IllegalArgumentException {
     	if (!isOptionAsShorts(code)) {
@@ -453,7 +453,7 @@ public class DHCPOption implements Serializable {
         }
         if ((this.value.length % 2) != 0)		// multiple of 2
         {
-            throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 2*X");
+            throw new IllegalArgumentException("option " + this.code + " is wrong size:" + this.value.length + " should be 2*X");
         }
         
         short[] shorts = new short[this.value.length / 2];
@@ -502,7 +502,7 @@ public class DHCPOption implements Serializable {
      * 
      * @return the option value array, <tt>null</tt> if option is not present.
      * @throws IllegalArgumentException the option code is not in the list above.
-     * @throws DHCPBadPacketException the option value in packet is of wrong size.
+     * @throws IllegalArgumentException the option value in packet is of wrong size.
      */
     public InetAddress[] getValueAsInetAddrs() throws IllegalArgumentException {
     	if (!isOptionAsInetAddrs(code)) {
@@ -513,7 +513,7 @@ public class DHCPOption implements Serializable {
         }
         if ((this.value.length % 4) != 0)		// multiple of 4
         {
-            throw new DHCPBadPacketException("option " + this.code + " is wrong size:" + this.value.length + " should be 4*X");
+            throw new IllegalArgumentException("option " + this.code + " is wrong size:" + this.value.length + " should be 4*X");
         }
         try {
             byte[] addr = new byte[4];
@@ -765,29 +765,9 @@ public class DHCPOption implements Serializable {
     	if (!isOptionAsString(code)) {
             throw new IllegalArgumentException("DHCP option type ("+code+") is not string");
         }
-    	return new DHCPOption(code, DHCPPacket.stringToBytes(val));
+    	return new DHCPOption(code, stringToBytes(val));
     }
 
-	/**
-	 * Get the option value based on the context, i.e. the client's request.
-	 * 
-	 * <p>This should be the only method used with this class to get relevant values.
-	 * 
-	 * @param request the client's DHCP requets
-	 * @return the value of the specific option in the client request
-	 * @throws NullPointerException if <tt>request</tt> is <tt>null</tt>.
-	 */
-	public DHCPOption applyOption(DHCPPacket request) {
-		if (request == null) {
-			throw new NullPointerException("request is null");
-		}
-		if (this.mirror) {
-			DHCPOption res = request.getOption(this.getCode());
-			return (res != null ? res : this);	// return res or this
-		} else {
-			return this;
-		}
-	}
 	
     /**
      * Appends to this string builder a detailed string representation of the DHCP datagram.
@@ -829,11 +809,11 @@ public class DHCPOption implements Serializable {
         	try {	// catch malformed values
         		switch (_DHO_FORMATS.get(this.code)) {
                     case INET:
-                        DHCPPacket.appendHostAddress(buffer, this.getValueAsInetAddr());
+                        appendHostAddress(buffer, this.getValueAsInetAddr());
                         break;
                     case INETS:
                         for (InetAddress addr : this.getValueAsInetAddrs()) {
-                            DHCPPacket.appendHostAddress(buffer, addr);
+                            appendHostAddress(buffer, addr);
                             buffer.append(' ');
                         }
                         break;
@@ -867,18 +847,18 @@ public class DHCPOption implements Serializable {
                         break;
         		default:
         			buffer.append("0x");
-                    DHCPPacket.appendHex(buffer, this.value);
+                    appendHex(buffer, this.value);
             		break;
         		}
         	} catch (IllegalArgumentException e) {
         		// fallback to bytes
                 buffer.append("0x");
-                DHCPPacket.appendHex(buffer, this.value);
+                appendHex(buffer, this.value);
         	}
         } else {
         	// unformatted raw output
         	buffer.append("0x");
-            DHCPPacket.appendHex(buffer, this.value);
+            appendHex(buffer, this.value);
         }
     }
 
@@ -970,7 +950,7 @@ public class DHCPOption implements Serializable {
             if (size > instock) {
                 size = instock;
             }
-            list.add(DHCPPacket.bytesToString(buf, i, size));
+            list.add(bytesToString(buf, i, size));
             i += size;
         }
         return list;
@@ -1014,7 +994,7 @@ public class DHCPOption implements Serializable {
 
         try {
             for (String s : list) {
-                byte[] bytes = DHCPPacket.stringToBytes(s);
+                byte[] bytes = stringToBytes(s);
                 int    size  = bytes.length;
 
                 if (size > 255) { size = 255; }
@@ -1070,7 +1050,7 @@ public class DHCPOption implements Serializable {
         DataOutputStream out = new DataOutputStream(buf);
         try {
         	for (Entry<Byte, String> entry : map.entrySet()) {
-	            byte[] bufTemp = DHCPPacket.stringToBytes(entry.getValue());
+	            byte[] bufTemp = stringToBytes(entry.getValue());
 	            int size = bufTemp.length;
 	            assert (size >= 0);
 	            if (size > 255) {
@@ -1114,7 +1094,7 @@ public class DHCPOption implements Serializable {
             if (size > instock) {
                 size = instock;
             }
-            map.put(key, DHCPPacket.bytesToString(buf, i, size));
+            map.put(key, bytesToString(buf, i, size));
             i += size;
         }
         return map;
@@ -1384,59 +1364,112 @@ public class DHCPOption implements Serializable {
         }
     }
 
-    // ========================================================================
-    // main: print DHCP options for Javadoc
-    public static void main(String[] args) {
-        String all     = "";
-        String inet1   = "";
-        String inets   = "";
-        String int1    = "";
-        String short1  = "";
-        String shorts  = "";
-        String byte1   = "";
-        String bytes   = "";
-        String string1 = "";
+    private static byte[] stringToBytes(String str) {
+        if (str == null) { return null; }
 
-        for (Byte codeByte : _DHO_NAMES.keySet()) {
-            byte code = codeByte.byteValue();
-            String s = "";
-            if (code != DHO_PAD && code != DHO_END) {
-                s = " * " + _DHO_NAMES.get(codeByte) + '(' + (code & 0xFF) + ")\n";
-            }
-            
-            all += s;
-            if (_DHO_FORMATS.containsKey(codeByte)) {
-	            switch (_DHO_FORMATS.get(codeByte)) {
-	            	case INET:   inet1   += s; break;
-	            	case INETS:  inets   += s; break;
-	            	case INT:    int1    += s; break;
-	            	case SHORT:  short1  += s; break;
-	            	case SHORTS: shorts  += s; break;
-	            	case BYTE:   byte1   += s; break;
-	            	case BYTES:  bytes   += s; break;
-	            	case STRING: string1 += s; break;
-	            	default:
-	            }
+        char[] chars = str.toCharArray();
+        int    len   = chars.length;
+        byte[] buf   = new byte[len];
+
+        for (int i = 0; i < len; i++) {
+            buf[i] = (byte) chars[i];
+        }
+        return buf;
+    }
+    
+    private static String bytesToString(byte[] buf) {
+        if (buf == null) { return ""; }
+        return bytesToString(buf, 0, buf.length);
+    }
+    
+    private static String bytesToString(byte[] buf, int src, int len) {
+        if (buf == null) { return ""; }
+        if (src < 0) {
+            len += src;    // reduce length
+            src = 0;
+        }
+        if (len <= 0) { return ""; }
+        if (src >= buf.length) { return ""; }
+        if (src + len > buf.length) { len = buf.length - src; }
+        // string should be null terminated or whole buffer
+        // first find the real lentgh
+        for (int i=src; i<src+len; i++) {
+            if (buf[i] == 0) {
+                len = i - src;
+                break;
             }
         }
 
-        System.out.println("---All codes---");
-        System.out.println(all);
-        System.out.println("---INET---");
-        System.out.println(inet1);
-        System.out.println("---INETS---");
-        System.out.println(inets);
-        System.out.println("---INT---");
-        System.out.println(int1);
-        System.out.println("---SHORT---");
-        System.out.println(short1);
-        System.out.println("---SHORTS---");
-        System.out.println(shorts);
-        System.out.println("---BYTE---");
-        System.out.println(byte1);
-        System.out.println("---BYTES---");
-        System.out.println(bytes);
-        System.out.println("---STRING---");
-        System.out.println(string1);
+        char[] chars = new char[len];
+
+        for (int i = src; i < src + len; i++) {
+            chars[i - src] = (char) buf[i];
+        }
+        return new String(chars);
     }
+    
+    /**
+     * Even faster version than {@link #getHostAddress} when the address is not
+     * the only piece of information put in the string.
+     *
+     * @param sbuf the string builder
+     * @param addr the Internet address
+     */
+    private static void appendHostAddress(StringBuilder sbuf, InetAddress addr) {
+        if (addr == null) {
+            throw new IllegalArgumentException("addr must not be null");
+        }
+        if (!(addr instanceof Inet4Address)) {
+            throw new IllegalArgumentException("addr must be an instance of Inet4Address");
+        }
+
+        byte[] src = addr.getAddress();
+
+        sbuf.append(src[0] & 0xFF)
+            .append('.')
+            .append(src[1] & 0xFF)
+            .append('.')
+            .append(src[2] & 0xFF)
+            .append('.')
+            .append(src[3] & 0xFF);
+    }
+    
+    /**
+     * Converts byte to hex string (2 chars) (uppercase)
+     */
+    private static final char[] hex = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
+    private static void appendHex(StringBuilder sbuf, byte b) {
+        int i = (b & 0xFF);
+        sbuf.append(hex[(i & 0xF0) >> 4])
+            .append(hex[i & 0x0F]);
+    }
+
+    /**
+     * Converts a byte[] to a sequence of hex chars (uppercase), limited to <tt>len</tt> bytes
+     * and appends them to a string buffer
+     */
+    private static void appendHex(StringBuilder sbuf, final byte[] buf, int src, int len) {
+        if (buf == null) { return; }
+        if (src < 0) {
+            len += src;    // reduce length
+            src = 0;
+        }
+        if (len <= 0 || src >= buf.length) { return; }
+        if (src + len > buf.length) { len = buf.length - src; }
+
+        for (int i = src; i < src + len; i++) {
+            appendHex(sbuf, buf[i]);
+        }
+    }
+
+    /**
+     * Convert plain byte[] to hex string (uppercase)
+     */
+    private static void appendHex(StringBuilder sbuf, final byte[] buf) {
+        appendHex(sbuf, buf, 0, buf.length);
+    }
+
+    
+
 }

@@ -72,5 +72,5 @@
 	<import resource="classpath:/resource/spring-cache.xml" />
 	<import resource="classpath:/resource/spring-dao.xml" />
 	<import resource="classpath:/resource/spring-service.xml" />
-	
+	<import resource="classpath:/resource/spring-pxe.xml" />
 </beans>
