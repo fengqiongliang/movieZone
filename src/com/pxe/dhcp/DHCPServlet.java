@@ -32,6 +32,13 @@ public class DHCPServlet {
     	byte[] nameServer     = gateway;
     	String fileName          = allocatedIP.getFileName();
     	
+    	//用于gpxe启动
+    	String gpxeFileName   = "http://"+request.getSocket().getLocalAddress().getHostAddress()+":8080/gpxe.do"; //默认的gpxe 启动文件
+    	DHCPOption userClass = request.getOptions().get(DHCPConstants.DHO_USER_CLASS);
+    	if(userClass != null && "gPXE".equals(userClass.getValueAsString())){
+    		fileName = gpxeFileName;
+    	}
+    	
     	//如果有yiaddr 地址则单播回去，否则广播回去
     	InetAddress broadIp    = InetAddress.getByName("255.255.255.255");
     	InetAddress unkownIp  = InetAddress.getByName("0.0.0.0");
@@ -102,6 +109,13 @@ public class DHCPServlet {
     	byte[] nextServer       = request.getSocket().getLocalAddress().getAddress();
     	byte[] nameServer     = gateway;
     	String fileName          = allocatedIP.getFileName();
+    	
+    	//用于gpxe启动
+    	String gpxeFileName   = "http://"+request.getSocket().getLocalAddress().getHostAddress()+":8080/gpxe.do"; //默认的gpxe 启动文件
+    	DHCPOption userClass = request.getOptions().get(DHCPConstants.DHO_USER_CLASS);
+    	if(userClass != null && "gPXE".equals(userClass.getValueAsString())){
+    		fileName = gpxeFileName;
+    	}
     	
     	//如果有yiaddr 地址则单播回去，否则广播回去
     	InetAddress broadIp    = InetAddress.getByName("255.255.255.255");

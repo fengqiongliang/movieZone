@@ -140,7 +140,6 @@ public class TFTPServer {
 		while(true){
 			try {
 				TFTPPacket p = servletQueue.take();
-				if(p==null)continue;
 				logger.debug("Servlet Thread["+Thread.currentThread().getId()+"] call servlet");
 				TFTPPacket response = null;
 				if(p instanceof TFTPRead) response = this.servlet.doTFTPRead((TFTPRead)p);

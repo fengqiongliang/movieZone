@@ -413,6 +413,7 @@ public class DHCPOption implements Serializable {
 	 * DHO_BOOTFILE(67)
 	 * DHO_NDS_TREE_NAME(86)
 	 * DHO_USER_AUTHENTICATION_PROTOCOL(98)
+	 * DHO_USER_CLASS(77)
      * </pre>
      * 
      * @return the option value, <tt>null</tt> if option is not present.
@@ -1349,7 +1350,7 @@ public class DHCPOption implements Serializable {
             DHO_NAME_SERVICE_SEARCH,			OptionFormat.SHORTS,
             DHO_SUBNET_SELECTION,				OptionFormat.INET,
             DHO_DOMAIN_SEARCH,					OptionFormat.STRING,
-            
+            DHO_USER_CLASS,					OptionFormat.STRING,
     };    
     static final Map<Byte, OptionFormat> _DHO_FORMATS = new LinkedHashMap<Byte, OptionFormat>();
 
