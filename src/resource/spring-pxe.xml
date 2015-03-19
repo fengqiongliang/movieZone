@@ -17,18 +17,22 @@
 						http://www.springframework.org/schema/aop
 						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 	
-	
+	<!-- dhcp -->
 	<bean id="dhcpServlet" class="com.pxe.dhcp.DHCPServlet" />
 	<bean id="assignStrategy" class="com.pxe.dhcp.AssignStrategy">
 		<property name="pxeService" ref="pxeService" />
 	</bean>
-	
-	
 	<bean id="dhcpServer" class="com.pxe.dhcp.DHCPServer">
 		<constructor-arg index="0" ref="dhcpServlet" />
 		<constructor-arg index="1" ref="assignStrategy" />
 	</bean>
-	
+
+	<!-- tftp -->
+	<bean id="tftpServlet" class="com.pxe.tftp.TFTPServlet" />
+	<bean id="tftpServer" class="com.pxe.tftp.TFTPServer">
+		<constructor-arg index="0" ref="tftpServlet" />
+	</bean>
+	 	
 	
 	
 </beans>

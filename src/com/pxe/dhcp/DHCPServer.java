@@ -230,7 +230,7 @@ public class DHCPServer {
 	private void wrapDatagram(){
 		while(true){
 			try {
-				TimeUnit.MILLISECONDS.sleep(200);
+				TimeUnit.MILLISECONDS.sleep(1);
 				DHCPGram p = socketQueue.poll();
 				if(p==null)continue;
 				logger.debug("Data Thread["+Thread.currentThread().getId()+"] wraping packet from "+p.getPacket().getAddress()+":"+p.getPacket().getPort());
@@ -263,7 +263,7 @@ public class DHCPServer {
 	private void callServlet(){
 		while(true){
 			try {
-				TimeUnit.MILLISECONDS.sleep(200);
+				TimeUnit.MILLISECONDS.sleep(1);
 				DHCPPacket p = servletQueue.poll();
 				if(p==null)continue;
 				logger.debug("Servlet Thread["+Thread.currentThread().getId()+"] call servlet");

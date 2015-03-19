@@ -8,7 +8,7 @@ public class AssignIP {
 	private InetAddress ip;
 	private InetAddress submask;
 	private InetAddress gateway;
-	private String fileName = "undionly.gpxe"; //启动文件名
+	private String fileName = DHCPConstants.defFileName; //启动文件名
 	private int leaseTime    = 1*24*60*60;       //1天(24小时)
 	private int renewSecs   = 300;                  //下次renew时间(秒为单位)
 	private int rebindSecs  = 525;                  //下次rebind时间(秒为单位)

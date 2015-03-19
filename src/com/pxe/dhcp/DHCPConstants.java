@@ -18,6 +18,7 @@
  */
 package com.pxe.dhcp;
 
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
@@ -164,6 +165,8 @@ public final class DHCPConstants {
     public static final InetAddress INADDR_ANY = getInaddrAny();
     /** Broadcast Address */
     public static final InetAddress INADDR_BROADCAST = getInaddrBroadcast();
+    
+    public static final String defFileName="mygpxe-undionly.kpxe";
 
     private static final InetAddress getInaddrAny() {
     	try {
