@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,8 +36,8 @@ class DaemonFactory implements ThreadFactory{
 }
 public class TFTPServer {
 	private static final Logger logger = LoggerFactory.getLogger(TFTPServer.class);
-	private ConcurrentLinkedQueue<DatagramPacket> socketQueue     = new ConcurrentLinkedQueue<DatagramPacket>();
-	private ConcurrentLinkedQueue<TFTPPacket> servletQueue  = new ConcurrentLinkedQueue<TFTPPacket>();
+	private LinkedBlockingQueue<DatagramPacket> socketQueue     = new LinkedBlockingQueue<DatagramPacket>();
+	private LinkedBlockingQueue<TFTPPacket> servletQueue  = new LinkedBlockingQueue<TFTPPacket>();
 	private final int dataThreads    = 3;
 	private final int servletThreads = 5;
 	private ThreadFactory daemonFactory = new DaemonFactory();
@@ -123,9 +124,7 @@ public class TFTPServer {
 	private void wrapDatagram(){
 		while(true){
 			try {
-				TimeUnit.MILLISECONDS.sleep(1);
-				DatagramPacket p = socketQueue.poll();
-				if(p==null)continue;
+				DatagramPacket p = socketQueue.take();
 				logger.debug("Data Thread["+Thread.currentThread().getId()+"] wraping packet from "+p.getAddress()+":"+p.getPort());
 				TFTPPacket packet = TFTPPacket.fromDatagram(p);
 				if(packet!=null && !servletQueue.contains(packet))servletQueue.add(packet);
@@ -140,8 +139,7 @@ public class TFTPServer {
 	private void callServlet(){
 		while(true){
 			try {
-				TimeUnit.MILLISECONDS.sleep(1);
-				TFTPPacket p = servletQueue.poll();
+				TFTPPacket p = servletQueue.take();
 				if(p==null)continue;
 				logger.debug("Servlet Thread["+Thread.currentThread().getId()+"] call servlet");
 				TFTPPacket response = null;

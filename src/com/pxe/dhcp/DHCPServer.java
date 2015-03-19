@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -62,8 +63,8 @@ class ObjectHold{
 
 public class DHCPServer {
 	private static final Logger logger = LoggerFactory.getLogger(DHCPServer.class);
-	private ConcurrentLinkedQueue<DHCPGram> socketQueue     = new ConcurrentLinkedQueue<DHCPGram>();
-	private ConcurrentLinkedQueue<DHCPPacket> servletQueue  = new ConcurrentLinkedQueue<DHCPPacket>();
+	private LinkedBlockingQueue<DHCPGram> socketQueue     = new LinkedBlockingQueue<DHCPGram>();
+	private LinkedBlockingQueue<DHCPPacket> servletQueue  = new LinkedBlockingQueue<DHCPPacket>();
 	private final int dataThreads    = 3;
 	private final int servletThreads = 5;
 	private ThreadFactory daemonFactory = new DaemonFactory();
@@ -230,9 +231,7 @@ public class DHCPServer {
 	private void wrapDatagram(){
 		while(true){
 			try {
-				TimeUnit.MILLISECONDS.sleep(1);
-				DHCPGram p = socketQueue.poll();
-				if(p==null)continue;
+				DHCPGram p = socketQueue.take();
 				logger.debug("Data Thread["+Thread.currentThread().getId()+"] wraping packet from "+p.getPacket().getAddress()+":"+p.getPacket().getPort());
 				DHCPPacket packet = wrap(p);
 				if(packet!=null && !servletQueue.contains(packet))servletQueue.add(packet);
@@ -263,9 +262,7 @@ public class DHCPServer {
 	private void callServlet(){
 		while(true){
 			try {
-				TimeUnit.MILLISECONDS.sleep(1);
-				DHCPPacket p = servletQueue.poll();
-				if(p==null)continue;
+				DHCPPacket p = servletQueue.take();
 				logger.debug("Servlet Thread["+Thread.currentThread().getId()+"] call servlet");
 				DHCPPacket response = null;
 				switch(p.getMessageType()){
