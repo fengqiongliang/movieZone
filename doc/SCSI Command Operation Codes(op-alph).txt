@@ -1,0 +1,263 @@
+File: OP-ALPH.TXT
+
+SCSI Operation Codes
+Alphabetic Sorted Listing
+as of  1/03/15
+
+    D - Direct Access Device (SBC-4)                   device column key
+    .Z - Host Managed Zoned Block Device (ZBC)        -------------------
+    . T - Sequential Access Device (SSC-5)            M = Mandatory
+    .  P - Processor Device (SPC-2)                   O = Optional
+    .  .R - C/DVD Device (MMC-6)                      V = Vendor specific
+    .  . O - Optical Memory Device (SBC)              Z = Obsolete
+    .  .  M - Media Changer Device (SMC-3)
+    .  .  .A - Storage Array Device (SCC-2)
+    .  .  . E - Enclosure Services Device (SES-3)
+    .  .  .  B - Simplified Direct-Access Device (RBC)
+    .  .  .  .K - Optical Card Reader/Writer Device (OCRW)
+    .  .  .  . V - Automation/Drive Interface Device (ADC-4)
+    .  .  .  .  F - Object-Based Storage Device (OSD-2)
+OP  DZTPROMAEBKVF  Description
+--  -------------  ----------------------------------------------------
+
+82    O            ALLOW OVERWRITE
+85  OO       O     ATA PASS-THROUGH(16)
+86  Z ZZ ZZZZZZZ   ACCESS CONTROL IN
+87  Z ZZ ZZZZZZZ   ACCESS CONTROL OUT
+A1  OO       O     ATA PASS-THROUGH(12)
+
+
+A1      O          BLANK
+
+
+18  Z ZZZO    Z    COPY
+39  Z ZZZO    Z    COMPARE
+3A  Z ZZZO    Z    COPY AND VERIFY
+40  Z ZZZOZ        CHANGE DEFINITION
+5B      O          CLOSE TRACK/SESSION
+89  O              COMPARE AND WRITE
+
+
+19  V MVV          ERASE(6)
+2C  V   OO         ERASE(10)
+93    M            ERASE(16)
+A6        O        EXCHANGE MEDIUM
+AC       O         ERASE(12)
+
+
+04  MO  OO         FORMAT UNIT
+04    O            FORMAT MEDIUM
+04                 FORMAT
+
+
+08                 GET MESSAGE(6)
+25                 GET WINDOW
+28                 GET MESSAGE(10)
+34                 GET DATA BUFFER STATUS
+46      M          GET CONFIGURATION
+4A      M          GET EVENT STATUS NOTIFICATION
+A8                 GET MESSAGE(12)
+AC      O          GET PERFORMANCE
+
+
+07        O        INITIALIZE ELEMENT STATUS
+12  MMMMMMMMMMMMM  INQUIRY
+37        O        INITIALIZE ELEMENT STATUS WITH RANGE
+
+
+1B    O        M   LOAD UNLOAD
+2B    M            LOCATE(10)
+36  Z    O    O    LOCK UNLOCK CACHE(10)
+4C  OOOO OOOO OOO  LOG SELECT
+4D  OMOO OOOO OMO  LOG SENSE
+92  Z    O         LOCK UNLOCK CACHE(16)
+92    M            LOCATE(16)
+A6      O          LOAD/UNLOAD C/DVD
+
+
+15  O M  OOOO OO   MODE SELECT(6)
+1A  O M  OOOO OO   MODE SENSE(6)
+38       O    O    MEDIUM SCAN
+55  OMO MOOOOMOMO  MODE SELECT(10)
+5A  OMO MOOOOMOMO  MODE SENSE(10)
+A3  OMO  OOMOOOM   MAINTENANCE IN
+A4  OOO  OOOOOOO   MAINTENANCE OUT
+A5    Z  OM        MOVE MEDIUM
+A7  Z Z  O         MOVE MEDIUM ATTACHED
+BD      O          MECHANISM STATUS
+
+
+1B        O        OPEN/CLOSE IMPORT/EXPORT ELEMENT
+31                 OBJECT POSITION
+8B  O              ORWRITE
+
+
+0A                 PRINT
+1E  O O OOO   O O  PREVENT ALLOW MEDIUM REMOVAL
+2B        O        POSITION TO ELEMENT
+34  O    O    O    PRE-FETCH(10)
+45      O          PLAY AUDIO(10)
+47      O          PLAY AUDIO MSF
+4B      O          PAUSE/RESUME
+5E  OOMO OOOO   M  PERSISTENT RESERVE IN
+5F  OOMO OOOO   M  PERSISTENT RESERVE OUT
+90  O    O   O     PRE-FETCH(16)
+A5      O          PLAY AUDIO(12)
+
+
+01    M            REWIND
+01  Z   ZZZ        REZERO UNIT
+03  MMMMMMMMMOMMM  REQUEST SENSE
+05  V MVV V        READ BLOCK LIMITS
+07  O V  OV        REASSIGN BLOCKS
+08  Z M  OV        READ(6)
+08     O           RECEIVE
+0F  V OVV V        READ REVERSE(6)
+14  V OVV          RECOVER BUFFERED DATA
+16  Z ZZ OOOZ O    RESERVE(6)
+16        Z        RESERVE ELEMENT(6)
+17  Z ZZ OOOZ O    RELEASE(6)
+17        Z        RELEASE ELEMENT(6)
+1C  O OO OOOM OOO  RECEIVE DIAGNOSTIC RESULTS
+23      O          READ FORMAT CAPACITIES
+25  M    M   M     READ CAPACITY(10)
+25      O          READ CAPACITY
+25            M    READ CARD CAPACITY
+28  M   OM   MM    READ(10)
+29  V   VO         READ GENERATION
+2D       O         READ UPDATED BLOCK
+34    M            READ POSITION
+37  O    O         READ DEFECT DATA(10)
+3C  OOOOOOOOO OOO  READ BUFFER(10)
+3E  O    O         READ LONG(10)
+42      O          READ SUB-CHANNEL
+43      O          READ TOC/PMA/ATIP
+44    M        M   REPORT DENSITY SUPPORT
+44                 READ HEADER
+51      O          READ DISC INFORMATION
+52      O          READ TRACK INFORMATION
+53      O          RESERVE TRACK
+56  Z ZZ OOOZ      RESERVE(10)
+56        Z        RESERVE ELEMENT(10)
+57  Z ZZ OOOZ      RELEASE(10)
+57        Z        RELEASE ELEMENT(10)
+58      O          REPAIR TRACK
+5C      O          READ BUFFER CAPACITY
+81  Z              REBUILD(16)
+81    O            READ REVERSE(16)
+82  Z              REGENERATE(16)
+88  MMO  O   O     READ(16)
+8C  O O  OO  O M   READ ATTRIBUTE
+9B  OOO   OOO  O   READ BUFFER(10)
+A0  MMMO OMMM OMO  REPORT LUNS
+A4      O          REPORT KEY
+A8  O   OO         READ(12)
+AD      O          READ DVD STRUCTURE
+B4  Z Z ZO         READ ELEMENT STATUS ATTACHED
+B5        O        REQUEST VOLUME ELEMENT ADDRESS
+B7  OO   O         READ DEFECT DATA(12)
+B8    Z ZOM        READ ELEMENT STATUS
+B9      O          READ CD MSF
+BA  O    OOMO      REDUNDANCY GROUP (IN)
+BB  O    OOOO      REDUNDANCY GROUP (OUT)
+BE      O          READ CD
+
+
+0A     M           SEND(6)
+0A                 SEND MESSAGE(6)
+0B  Z   OZV        SEEK(6)
+0B    O            SET CAPACITY
+0B                 SLEW AND PRINT
+10                 SYNCHRONIZE BUFFER
+11  V MVV          SPACE(6)
+1B  OM  OO O MO O  START STOP UNIT
+1B                 SCAN
+1B                 STOP PRINT
+1D  MOMM MMOM MMM  SEND DIAGNOSTIC
+24  V   V          SET WINDOW
+2A                 SEND(10)
+2A                 SEND MESSAGE(10)
+2B  Z   OO    O    SEEK(10)
+30  Z   ZZ         SEARCH DATA HIGH(10)
+31  Z   ZZ         SEARCH DATA EQUAL(10)
+32  Z   ZZ         SEARCH DATA LOW(10)
+33  Z   ZO         SET LIMITS(10)
+35  O   OO   MO    SYNCHRONIZE CACHE(10)
+48  OO       O     SANITIZE
+4E      O          STOP PLAY/SCAN
+54      O          SEND OPC INFORMATION
+5D      O          SEND CUE SHEET
+91  OM   O   O     SYNCHRONIZE CACHE(16)
+91    O            SPACE(16)
+9D                 SERVICE ACTION BIDIRECTIONAL
+9E  OM             SERVICE ACTION IN(16)
+9F             M   SERVICE ACTION OUT(16)
+A2  OOO O      O   SECURITY PROTOCOL IN
+A3      O          SEND KEY
+A7      O          SET READ AHEAD
+A9             O   SERVICE ACTION OUT(12)
+AA                 SEND MESSAGE(12)
+AB      O      O   SERVICE ACTION IN(12)
+B0      ZZ         SEARCH DATA HIGH(12)
+B1      ZZ         SEARCH DATA EQUAL(12)
+B2      ZZ         SEARCH DATA LOW(12)
+B3  Z   ZO         SET LIMITS(12)
+B5  OOO O      O   SECURITY PROTOCOL OUT
+B6        O        SEND VOLUME TAG
+B6      O          SET STREAMING
+BA      O          SCAN
+BB      O          SET CD SPEED
+BC  O    OOMO      SPARE (IN)
+BD  O    OOOO      SPARE (OUT)
+BF      O          SEND DVD STRUCTURE
+
+
+00  MMMMMMMMMMMMM  TEST UNIT READY
+83  O OO O    OO   Third-party Copy OUT
+84  O OO O    OO   Third-party Copy IN
+
+
+3D       O         UPDATE BLOCK
+42  O              UNMAP
+
+
+13    O            VERIFY(6)
+2F  O   OO         VERIFY(10)
+8F  OOO  O   O     VERIFY(16)
+AF  O    O         VERIFY(12)
+BE  O    OOMO      VOLUME SET (IN)
+BF  O    OOOO      VOLUME SET (OUT)
+
+
+0A  Z O  OV        WRITE(6)
+10  V MVV          WRITE FILEMARKS(6)
+2A  O   OM   MO    WRITE(10)
+2E  O   OO   MO    WRITE AND VERIFY(10)
+3B  OOOOOOOOOMOOO  WRITE BUFFER
+3F  O    O         WRITE LONG(10)
+41  O              WRITE SAME(10)
+80    M            WRITE FILEMARKS(16)
+8A  OMO  O   O     WRITE(16)
+8D  O O  OO  O O   WRITE ATTRIBUTE
+8E  O    O   O     WRITE AND VERIFY(16)
+93  OM             WRITE SAME(16)
+9C  O              WRITE ATOMIC(16)
+AA  O   OO         WRITE(12)
+AE  O    O         WRITE AND VERIFY(12)
+
+
+50  Z              XDWRITE(10)
+51  O              XPWRITE(10)
+52  Z              XDREAD(10)
+53  O              XDWRITEREAD(10)
+80  Z              XDWRITE EXTENDED(16)
+
+
+94  OM             ZBC OUT
+95  OM             ZBC IN
+
+
+7E  O O O OOOO O   extended CDB
+
+
+7F  O           M  variable length CDB (more than 16 bytes)
