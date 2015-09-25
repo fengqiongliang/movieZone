@@ -13,14 +13,14 @@ public class ByteUtil {
 	private static final Logger logger = LoggerFactory.getLogger(ByteUtil.class);
 	
 	public static int getBit(byte b,int index) throws Exception{
-		if(index==0)return b & 0x80;
-		if(index==1)return b & 0x40;
-		if(index==2)return b & 0x20;
-		if(index==3)return b & 0x10;
-		if(index==4)return b & 0x8;
-		if(index==5)return b & 0x4;
-		if(index==6)return b & 0x2;
-		if(index==7)return b & 0x1;
+		if(index==0)return (b & 0x80) > 0 ? 1:0;
+		if(index==1)return (b & 0x40) > 0 ? 1:0;
+		if(index==2)return (b & 0x20) > 0 ? 1:0;
+		if(index==3)return (b & 0x10) > 0 ? 1:0;
+		if(index==4)return (b & 0x8) > 0 ? 1:0;
+		if(index==5)return (b & 0x4) > 0 ? 1:0;
+		if(index==6)return (b & 0x2) > 0 ? 1:0;
+		if(index==7)return (b & 0x1) > 0 ? 1:0;
 		throw new Exception("out of index : "+index);
 	}
 	
