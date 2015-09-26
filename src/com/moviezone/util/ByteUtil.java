@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class ByteUtil {
 	private static final Logger logger = LoggerFactory.getLogger(ByteUtil.class);
+	public static String nullStr = String.valueOf((char)0); 
 	
 	public static int getBit(byte b,int index) throws Exception{
 		if(index==0)return (b & 0x80) > 0 ? 1:0;
@@ -65,8 +66,8 @@ public class ByteUtil {
     }
 	public static int byteArrayToInt(byte[] b){
 		int i = 0;
-		for(int t=0;t<b.length;t++){
-			int offset = 24-t*8;
+		for(int t=b.length-1;t>-1;t--){
+			int offset = (b.length-t-1)*8;
 			i += (int)((b[t] & 0xff) << offset);
 		}
 		return i;
