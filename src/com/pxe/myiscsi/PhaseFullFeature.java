@@ -4,6 +4,12 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map.Entry;
 
+import com.pxe.myiscsi.pdu.LogoutRequest;
+import com.pxe.myiscsi.pdu.LogoutResponse;
+import com.pxe.myiscsi.pdu.SCSICommand;
+import com.pxe.myiscsi.pdu.TextRequest;
+import com.pxe.myiscsi.pdu.TextResponse;
+
 /**
  <pre>
 
@@ -225,10 +231,10 @@ public class PhaseFullFeature {
 
 	 </pre> 
 	 */
-	public void discovery(Socket socket,PDUTextRequest request) throws Exception{
+	public void discovery(Socket socket,TextRequest request) throws Exception{
 		if(!"All".equalsIgnoreCase(request.getParameter("SendTargets")))return;
 		System.out.println(socket.getRemoteSocketAddress()+" --> discovery[SendTargets=All]");
-		PDUTextResponse response = new PDUTextResponse();
+		TextResponse response = new TextResponse();
 		OutputStream os = socket.getOutputStream();
 		response.setFinal(true);
 		response.setContinue(false);
@@ -267,12 +273,12 @@ public class PhaseFullFeature {
 
 	 </pre> 
 	 */
-	public void logout(Socket socket,PDULogoutRequest request) throws Exception{
+	public void logout(Socket socket,LogoutRequest request) throws Exception{
 		System.out.println(socket.getRemoteSocketAddress()+" --> logout");
-		PDULogoutResponse response = new PDULogoutResponse();
+		LogoutResponse response = new LogoutResponse();
 		OutputStream os = socket.getOutputStream();
 		response.setInitiatorTaskTag(request.getInitiatorTaskTag());
-		response.setResponse(PDUResponseEnum.closeSuccess);
+		response.setResponse(LogoutResponse.Response.SUCCESS);
 		response.setStatSN(request.getExpStatSN());
 		response.setExpCmdSN(request.getCmdSN());
 		response.setMaxCmdSN(response.getExpCmdSN());
@@ -281,6 +287,25 @@ public class PhaseFullFeature {
 		os.write(response.toByte());
 		os.close();
 		socket.close();
+	}
+
+
+	public void scsiCommand(Socket socket, SCSICommand scsiCommand) {
+		System.out.println(socket.getRemoteSocketAddress()+" --> scsi command");
+		/*
+		LogoutResponse response = new LogoutResponse();
+		OutputStream os = socket.getOutputStream();
+		response.setInitiatorTaskTag(request.getInitiatorTaskTag());
+		response.setResponse(LogoutResponse.Response.SUCCESS);
+		response.setStatSN(request.getExpStatSN());
+		response.setExpCmdSN(request.getCmdSN());
+		response.setMaxCmdSN(response.getExpCmdSN());
+		response.setTime2Retain((short)2);
+		System.out.println(response);
+		os.write(response.toByte());
+		os.close();
+		socket.close();
+		*/
 	}
 	
 	

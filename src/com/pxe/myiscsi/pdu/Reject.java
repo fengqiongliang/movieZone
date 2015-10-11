@@ -1,10 +1,13 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.moviezone.util.ByteUtil;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -143,60 +146,145 @@ import com.moviezone.util.ByteUtil;
  * 
  *
  */
-public class PDUReject {
+public class Reject {
+	public enum Reason {
+
+ /**
+<pre>
+0x02 - Data (payload) Digest Error 
+</pre>
+ */
+		DataDigestError((byte) 0x02),
+
+ /**
+<pre>
+0x03 - SNACK Reject
+</pre>
+ */
+		SNACKReject((byte) 0x03),
 	
-	private byte Opcode = 0x3f;
+/**
+<pre>
+0x04 - Protocol Error 
+    (e.g., SNACK request for a status that was already acknowledged)
+</pre>
+ */
+		ProtocolError((byte) 0x04),
+
+/**
+<pre>
+0x05 - Command not supported 
+</pre>
+ */
+		CommandNotSupported((byte) 0x05),
+
+/**
+<pre>
+0x06 - Immediate Command Reject - too many immediate commands   
+</pre>
+ */
+		ImmediateCommandReject((byte) 0x06),
+
+/**
+<pre>
+0x07 - Task in progress
+</pre>
+ */
+		TaskInProgress((byte) 0x07),
+
+/**
+<pre>
+0x08 - Invalid Data ACK
+</pre>
+ */
+		InvalidDataACK((byte) 0x08),
+		
+/**
+<pre>
+0x09 - Invalid PDU field
+</pre>
+ */
+		InvalidPDUField((byte) 0x09),
+
+/**
+<pre>
+0x0a - Long Operation Reject  
+    Can't generate Target Transfer Tag - out of resources 
+</pre>
+ */
+		LongOperationReject((byte) 0x0a),
+
+/**
+<pre>
+0x0b - Negotiation Reset 
+</pre>
+ */
+		NegotiationReset((byte) 0x0b),
+
+/**
+<pre>
+0x0c - Waiting for Logout 
+</pre>
+ */
+		WaitingLogout((byte) 0x0c);
+		
+	    private final byte value;
+	    private static Map<Byte , Reason> mapping;
+	    static {
+	    	Reason.mapping = new HashMap<Byte , Reason>();
+	        for (Reason s : values()) {
+	        	Reason.mapping.put(s.value, s);
+	        }
+	    }
+	    private Reason (final byte newValue) {
+	        value = newValue;
+	    }
+	    public final byte value () {
+	        return value;
+	    }
+	    public static final Reason valueOf (final byte value) {
+	        return Reason.mapping.get(value);
+	    }
+	}
+	
+	private byte opcode = 0x3f;
 	private boolean isFinal = true;
-	private byte Reason;
+	private byte reason;
 	private byte TotalAHSLength = 0;
 	private byte[] DataSegmentLength = new byte[3];
 	private byte[] StatSN = new byte[4];
 	private byte[] ExpCmdSN = new byte[4];
 	private byte[] MaxCmdSN = new byte[4];
 	private byte[] DataSN = new byte[4]; //DataSN/R2TSN or Reserved 
-	public PDUReject(){}
-	public PDUReject(byte[] BHS) throws Exception{
+	public Reject(){}
+	public Reject(byte[] BHS) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
-		System.arraycopy(BHS, 8, LUN, 0, LUN.length); 
-		System.arraycopy(BHS, 16, InitiatorTaskTag, 0, InitiatorTaskTag.length);
-		System.arraycopy(BHS, 20, TargetTransferTag, 0, TargetTransferTag.length);
+		reason = BHS[2];
+		TotalAHSLength = BHS[4];
+		System.arraycopy(BHS, 5, DataSegmentLength, 0, DataSegmentLength.length); 
 		System.arraycopy(BHS, 24, StatSN, 0, StatSN.length);
 		System.arraycopy(BHS, 28, ExpCmdSN, 0, ExpCmdSN.length);
 		System.arraycopy(BHS, 32, MaxCmdSN, 0, MaxCmdSN.length);
 		System.arraycopy(BHS, 36, DataSN, 0, DataSN.length);
-		System.arraycopy(BHS, 40, BufferOffset, 0, BufferOffset.length);
-		System.arraycopy(BHS, 44, DesiredDataLength, 0, DesiredDataLength.length);
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.R2T;
+	public Opcode getOpcode() {
+		return Opcode.REJECT;
 	}
 	public boolean getFinal(){
 		return isFinal;
+	}
+	public Reason getReason() {
+		return Reason.valueOf(this.reason);
+	}
+	public void setReason(Reason reason) {
+		this.reason = reason.value;
 	}
 	public int getTotalAHSLength() {
 		return TotalAHSLength;
 	}
 	public int getDataSegmentLength() { 
 		return ByteUtil.byteArrayToInt(DataSegmentLength);
-	}
-	public byte[] getLUN() {
-		return LUN;
-	}
-	public void setLUN(byte[] LUN) {
-		System.arraycopy(LUN, 0, this.LUN, 0, Math.min(LUN.length, this.LUN.length));
-	}
-	public int getInitiatorTaskTag() {
-		return ByteUtil.byteArrayToInt(InitiatorTaskTag);
-	}
-	public void setInitiatorTaskTag(int initiatorTaskTag) {
-		InitiatorTaskTag = ByteUtil.intToByteArray(initiatorTaskTag);
-	}
-	public int getTargetTransferTag() {
-		return ByteUtil.byteArrayToInt(TargetTransferTag);
-	}
-	public void setTargetTransferTag(int targetTransferTag) {
-		TargetTransferTag = ByteUtil.intToByteArray(targetTransferTag);
 	}
 	public int getStatSN() {
 		return ByteUtil.byteArrayToInt(StatSN);
@@ -216,40 +304,24 @@ public class PDUReject {
 	public void setMaxCmdSN(int MaxCmdSN) {
 		this.MaxCmdSN = ByteUtil.intToByteArray(MaxCmdSN);
 	}
-	public int getR2TSN() {
+	public int getDataSN() {
 		return ByteUtil.byteArrayToInt(DataSN);
 	}
-	public void setR2TSN(int R2TSN) {
-		this.DataSN = ByteUtil.intToByteArray(R2TSN);
-	}
-	public int getBufferOffset() {
-		return ByteUtil.byteArrayToInt(BufferOffset);
-	}
-	public void setBufferOffset(int BufferOffset) {
-		this.BufferOffset = ByteUtil.intToByteArray(BufferOffset);
-	}
-	public int getDesiredDataLength() {
-		return ByteUtil.byteArrayToInt(DesiredDataLength);
-	}
-	public void setDesiredDataLength(int DesiredDataLength) {
-		this.DesiredDataLength = ByteUtil.intToByteArray(DesiredDataLength);
+	public void setDataSN(int DataSN) {
+		this.DataSN = ByteUtil.intToByteArray(DataSN);
 	}
 
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
+		build.append(System.getProperty("line.separator")+" Reason : "+Reason.valueOf(this.reason));
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
 		build.append(System.getProperty("line.separator")+" DataSegmentLength : "+ByteUtil.byteArrayToInt(DataSegmentLength));
-		build.append(System.getProperty("line.separator")+" LUN : 0x"+ByteUtil.toHex(LUN));
-		build.append(System.getProperty("line.separator")+" InitiatorTaskTag : "+ByteUtil.byteArrayToInt(InitiatorTaskTag));
-		build.append(System.getProperty("line.separator")+" TargetTransferTag : "+ByteUtil.byteArrayToInt(this.TargetTransferTag));
 		build.append(System.getProperty("line.separator")+" StatSN : "+ByteUtil.byteArrayToInt(this.StatSN));
 		build.append(System.getProperty("line.separator")+" ExpCmdSN : "+ByteUtil.byteArrayToInt(this.ExpCmdSN));
 		build.append(System.getProperty("line.separator")+" MaxCmdSN : "+ByteUtil.byteArrayToInt(this.MaxCmdSN));
-		build.append(System.getProperty("line.separator")+" R2TSN : "+ByteUtil.byteArrayToInt(this.DataSN));
-		build.append(System.getProperty("line.separator")+" BufferOffset : "+ByteUtil.byteArrayToInt(this.BufferOffset));
-		build.append(System.getProperty("line.separator")+" DesiredDataLength : "+ByteUtil.byteArrayToInt(this.DesiredDataLength));
+		build.append(System.getProperty("line.separator")+" DataSN/R2TSN : "+ByteUtil.byteArrayToInt(this.DataSN));
 		return build.toString();
 	}
 	
@@ -257,20 +329,22 @@ public class PDUReject {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
-			dos.writeByte(0x31); //Opcode
+			dos.writeByte(0x3f); //Opcode
 			dos.writeByte(0x80);
-			dos.write(new byte[]{0,0}); //Reserved
+			dos.writeByte(this.reason);
+			dos.write(new byte[]{0}); //Reserved
 			dos.writeByte(this.TotalAHSLength);
 			dos.write(this.DataSegmentLength); //This is the data segment payload length in bytes (excluding padding).
-			dos.write(this.LUN);
-			dos.write(this.InitiatorTaskTag);
-			dos.write(this.TargetTransferTag);
+			dos.write(new byte[]{0,0,0,0}); //Reserved
+			dos.write(new byte[]{0,0,0,0}); //Reserved
+			dos.writeInt(-1);
+			dos.write(new byte[]{0,0,0,0}); //Reserved
 			dos.write(this.StatSN);
 			dos.write(this.ExpCmdSN);
 			dos.write(this.MaxCmdSN);
 			dos.write(this.DataSN);
-			dos.write(this.BufferOffset);
-			dos.write(this.DesiredDataLength);
+			dos.write(new byte[]{0,0,0,0}); //Reserved
+			dos.write(new byte[]{0,0,0,0}); //Reserved
 			byte[] result = bos.toByteArray();
 			dos.close();
 			bos.close();
@@ -282,21 +356,17 @@ public class PDUReject {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		PDUReject original = new PDUReject();
-		original.setLUN(new byte[]{1});
-		original.setInitiatorTaskTag(1);
-		original.setTargetTransferTag(2);
-		original.setStatSN(3);
-		original.setExpCmdSN(4);
-		original.setMaxCmdSN(5);
-		original.setR2TSN(6);
-		original.setBufferOffset(7);
-		original.setDesiredDataLength(8);
+		Reject original = new Reject();
+		original.setReason(Reason.DataDigestError);
+		original.setStatSN(2);
+		original.setExpCmdSN(3);
+		original.setMaxCmdSN(4);
+		original.setDataSN(5);
 		System.out.println(original);
 		byte[] data = original.toByte();
 		byte[] BHS   = new byte[48];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
-		PDUReject after = new PDUReject(BHS);
+		Reject after = new Reject(BHS);
 		System.out.println(after);
 		System.out.println(data.length);
 		

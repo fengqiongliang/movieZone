@@ -16,7 +16,7 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.ENUM;
 
 
 import java.util.HashMap;
@@ -26,61 +26,59 @@ import java.util.Map;
 /**
 <pre>
 
-Task Attributes (ATTR) have one of the following integer values 
-(see [SAM2] for details):
+10.12.3.  CSG and NSG
 
-    0 - Untagged
-    1 - Simple
-    2 - Ordered
-    3 - Head of Queue
-    4 - ACA
-    5-7 - Reserved
+   Through these fields, Current Stage (CSG) and Next Stage (NSG), the
+   Login negotiation requests and responses are associated with a
+   specific stage in the session (SecurityNegotiation,
+   LoginOperationalNegotiation, FullFeaturePhase) and may indicate the
+   next stage to which they want to move (see Chapter 5).  The next
+   stage value is only valid  when the T bit is 1; otherwise, it is
+   reserved.
+
+   The stage codes are:
+
+      - 0 - SecurityNegotiation
+      - 1 - LoginOperationalNegotiation
+      - 3 - FullFeaturePhase
+
+   All other codes are reserved.
 
 
    
 </pre>
  * 
  */
-public enum PDUAttrEnum {
+public enum Stage {
 
 
     /**
-     * 0 - Untagged
+     * 0 - SecurityNegotiation
      */
-	Untagged((byte) 0x00),
+	SecurityNegotiation((byte) 0x00),
 
 	 /**
-     * 1 - Simple
+     * 1 - LoginOperationalNegotiation
      */
-	Simple((byte) 0x01),
+	LoginOperationalNegotiation((byte) 0x01),
 	
 	 /**
-     * 2 - Ordered
+     * 3 - FullFeaturePhase
      */
-	Ordered((byte) 0x02),
-	
-	/**
-     * 3 - Head of Queue
-     */
-	HeadOfQueue((byte) 0x03),
-	
-	/**
-     * 4 - ACA
-     */
-	ACA((byte) 0x04);
+	FullFeaturePhase((byte) 0x03);
 	
     private final byte value;
 
-    private static Map<Byte , PDUAttrEnum> mapping;
+    private static Map<Byte , Stage> mapping;
 
     static {
-        PDUAttrEnum.mapping = new HashMap<Byte , PDUAttrEnum>();
-        for (PDUAttrEnum s : values()) {
-            PDUAttrEnum.mapping.put(s.value, s);
+        Stage.mapping = new HashMap<Byte , Stage>();
+        for (Stage s : values()) {
+            Stage.mapping.put(s.value, s);
         }
     }
 
-    private PDUAttrEnum (final byte newValue) {
+    private Stage (final byte newValue) {
 
         value = newValue;
     }
@@ -102,9 +100,9 @@ public enum PDUAttrEnum {
      * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not defined
      *         by this enumeration.
      */
-    public static final PDUAttrEnum valueOf (final byte value) {
+    public static final Stage valueOf (final byte value) {
 
-        return PDUAttrEnum.mapping.get(value);
+        return Stage.mapping.get(value);
     }
 
     // --------------------------------------------------------------------------

@@ -1,10 +1,11 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 import com.moviezone.util.ByteUtil;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -140,9 +141,9 @@ import com.moviezone.util.ByteUtil;
  * 
  *
  */
-public class PDUR2T {
+public class R2T {
 	
-	private byte Opcode = 0x31;
+	private byte opcode = 0x31;
 	private boolean isFinal = true;
 	private byte TotalAHSLength = 0;
 	private byte[] DataSegmentLength = new byte[]{0,0,0};
@@ -155,8 +156,8 @@ public class PDUR2T {
 	private byte[] R2TSN = new byte[4];
 	private byte[] BufferOffset = new byte[4];
 	private byte[] DesiredDataLength = new byte[4];
-	public PDUR2T(){}
-	public PDUR2T(byte[] BHS) throws Exception{
+	public R2T(){}
+	public R2T(byte[] BHS) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
 		System.arraycopy(BHS, 8, LUN, 0, LUN.length); 
 		System.arraycopy(BHS, 16, InitiatorTaskTag, 0, InitiatorTaskTag.length);
@@ -169,8 +170,8 @@ public class PDUR2T {
 		System.arraycopy(BHS, 44, DesiredDataLength, 0, DesiredDataLength.length);
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.R2T;
+	public Opcode getOpcode() {
+		return Opcode.R2T;
 	}
 	public boolean getFinal(){
 		return isFinal;
@@ -238,7 +239,7 @@ public class PDUR2T {
 
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
 		build.append(System.getProperty("line.separator")+" DataSegmentLength : "+ByteUtil.byteArrayToInt(DataSegmentLength));
@@ -283,7 +284,7 @@ public class PDUR2T {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		PDUR2T original = new PDUR2T();
+		R2T original = new R2T();
 		original.setLUN(new byte[]{1});
 		original.setInitiatorTaskTag(1);
 		original.setTargetTransferTag(2);
@@ -297,7 +298,7 @@ public class PDUR2T {
 		byte[] data = original.toByte();
 		byte[] BHS   = new byte[48];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
-		PDUR2T after = new PDUR2T(BHS);
+		R2T after = new R2T(BHS);
 		System.out.println(after);
 		System.out.println(data.length);
 		

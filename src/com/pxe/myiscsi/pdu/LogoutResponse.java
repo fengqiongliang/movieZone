@@ -1,19 +1,14 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
 
 import com.moviezone.util.ByteUtil;
-import com.pxe.iscsi.target.connection.SessionType;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -124,11 +119,61 @@ import com.pxe.iscsi.target.connection.SessionType;
  * 
  *
  */
-public class PDULogoutResponse {
+public class LogoutResponse {
+	public enum Response {
+
+ /**
+<pre>
+0 - connection or session closed successfully.
+</pre>
+ */
+		SUCCESS((byte) 0x00),
+
+ /**
+<pre>
+1 - CID not found.
+</pre>
+ */
+	CIDNotFound((byte) 0x01),
 	
-	private byte Opcode = 0x26;
+/**
+<pre>
+2 - connection recovery is not supported.  If Logout reason code
+    was recovery and target does not support it as indicated by the
+    ErrorRecoveryLevel.
+</pre>
+ */
+	ConnRecoveryNotSupport((byte) 0x02),
+
+/**
+<pre>
+3 - cleanup failed for various reasons.
+</pre>
+ */
+		CleanupFailed((byte) 0x03);
+		
+	    private final byte value;
+	    private static Map<Byte , Response> mapping;
+	    static {
+	    	Response.mapping = new HashMap<Byte , Response>();
+	        for (Response s : values()) {
+	        	Response.mapping.put(s.value, s);
+	        }
+	    }
+	    private Response (final byte newValue) {
+	        value = newValue;
+	    }
+	    public final byte value () {
+	        return value;
+	    }
+	    public static final Response valueOf (final byte value) {
+	        return Response.mapping.get(value);
+	    }
+	}
+		
+	private byte opcode = 0x26;
 	private boolean isFinal = true;
-	private byte Response; 
+	private byte response; 
 	private byte TotalAHSLength = 0;
 	private byte[] DataSegmentLength = new byte[3];
 	private byte[] InitiatorTaskTag = new byte[4];
@@ -137,10 +182,10 @@ public class PDULogoutResponse {
 	private byte[] MaxCmdSN = new byte[4];
 	private byte[] Time2Wait = new byte[2];
 	private byte[] Time2Retain = new byte[2];
-	public PDULogoutResponse(){}
-	public PDULogoutResponse(byte[] BHS,byte[] DataSegment) throws Exception{
+	public LogoutResponse(){}
+	public LogoutResponse(byte[] BHS,byte[] DataSegment) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
-		Response =BHS[2];
+		response =BHS[2];
 		TotalAHSLength = BHS[4];
 		System.arraycopy(BHS, 5, DataSegmentLength, 0, DataSegmentLength.length);
 		System.arraycopy(BHS, 16, InitiatorTaskTag, 0, InitiatorTaskTag.length);
@@ -151,17 +196,17 @@ public class PDULogoutResponse {
 		System.arraycopy(BHS, 42, Time2Retain, 0, Time2Retain.length);
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.LOGOUT_RESPONSE;
+	public Opcode getOpcode() {
+		return Opcode.LOGOUT_RESPONSE;
 	}
 	public boolean getFinal() {
 		return isFinal;
 	}
-	public PDUResponseEnum getResponse() {
-		return PDUResponseEnum.valueOf(Response);
+	public Response getResponse() {
+		return Response.valueOf(response);
 	}
-	public void setResponse(PDUResponseEnum response) {
-		Response = response.value();
+	public void setResponse(Response response) {
+		this.response = response.value();
 	}
 	public byte getTotalAHSLength() {
 		return TotalAHSLength;
@@ -208,9 +253,9 @@ public class PDULogoutResponse {
 	
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
-		build.append(System.getProperty("line.separator")+" Response : "+PDUResponseEnum.valueOf(Response));
+		build.append(System.getProperty("line.separator")+" Response : "+Response.valueOf(response));
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
 		build.append(System.getProperty("line.separator")+" DataSegmentLength : "+this.getDataSegmentLength());
 		build.append(System.getProperty("line.separator")+" InitiatorTaskTag : "+ByteUtil.byteArrayToInt(InitiatorTaskTag));
@@ -224,8 +269,8 @@ public class PDULogoutResponse {
 	}
  	
 	public static void main(String[] args) throws Exception{
-		PDULogoutResponse original = new PDULogoutResponse();
-		original.setResponse(PDUResponseEnum.connRecoveryNotSupport);
+		LogoutResponse original = new LogoutResponse();
+		original.setResponse(Response.CleanupFailed);
 		original.setInitiatorTaskTag(10);
 		original.setStatSN(1);
 		original.setExpCmdSN(2);
@@ -238,7 +283,7 @@ public class PDULogoutResponse {
 		byte[] dataS = new byte[data.length-BHS.length];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
 		System.arraycopy(data, 48, dataS, 0, dataS.length);
-		PDULogoutResponse after = new PDULogoutResponse(BHS,dataS);
+		LogoutResponse after = new LogoutResponse(BHS,dataS);
 		System.out.println(after);
 		System.out.println(data.length);
 		byte[] b = ByteUtil.intToByteArray(-1);
@@ -252,7 +297,7 @@ public class PDULogoutResponse {
 		try {
 			dos.writeByte(0x26); //Opcode
 			dos.writeByte(0x80);
-			dos.writeByte(Response);
+			dos.writeByte(this.response);
 			dos.write(new byte[]{0}); //Reserved
 			dos.writeByte(this.TotalAHSLength);
 			dos.write(this.DataSegmentLength); //This is the data segment payload length in bytes (excluding padding).

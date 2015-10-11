@@ -1,10 +1,11 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 import com.moviezone.util.ByteUtil;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -92,9 +93,9 @@ import com.moviezone.util.ByteUtil;
  * 
  *
  */
-public class PDUNopIn {
+public class NopIn {
 	
-	private byte Opcode = 0x20;
+	private byte opcode = 0x20;
 	private boolean isFinal = true;
 	private byte TotalAHSLength;
 	private byte[] DataSegmentLength = new byte[3];
@@ -105,8 +106,8 @@ public class PDUNopIn {
 	private byte[] ExpCmdSN = new byte[4];
 	private byte[] MaxCmdSN = new byte[4];
 	private byte[] PingData = new byte[0];
-	public PDUNopIn(){}
-	public PDUNopIn(byte[] BHS,byte[] DataSegment) throws Exception{
+	public NopIn(){}
+	public NopIn(byte[] BHS,byte[] DataSegment) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
 		TotalAHSLength = BHS[4];
 		System.arraycopy(BHS, 5, DataSegmentLength, 0, DataSegmentLength.length);
@@ -119,8 +120,8 @@ public class PDUNopIn {
 		PingData = DataSegment;
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.NOP_IN;
+	public Opcode getOpcode() {
+		return Opcode.NOP_IN;
 	}
 	public int getTotalAHSLength() {
 		return TotalAHSLength;
@@ -176,7 +177,7 @@ public class PDUNopIn {
 
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
 		build.append(System.getProperty("line.separator")+" DataSegmentLength : "+ByteUtil.byteArrayToInt(DataSegmentLength));
@@ -225,7 +226,7 @@ public class PDUNopIn {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		PDUNopIn original = new PDUNopIn();
+		NopIn original = new NopIn();
 		original.setLUN(new byte[]{1});
 		original.setInitiatorTaskTag(1);
 		original.setTargetTransferTag(2);
@@ -239,7 +240,7 @@ public class PDUNopIn {
 		byte[] dataS = new byte[data.length-BHS.length];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
 		System.arraycopy(data, 48, dataS, 0, dataS.length);
-		PDUNopIn after = new PDUNopIn(BHS,dataS);
+		NopIn after = new NopIn(BHS,dataS);
 		System.out.println(after);
 		System.out.println(data.length);
 		

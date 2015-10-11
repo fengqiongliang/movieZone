@@ -8,6 +8,13 @@ import java.net.Socket;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.pxe.myiscsi.ENUM.Opcode;
+import com.pxe.myiscsi.pdu.LoginRequest;
+import com.pxe.myiscsi.pdu.LogoutRequest;
+import com.pxe.myiscsi.pdu.BasicHeaderSegment;
+import com.pxe.myiscsi.pdu.SCSICommand;
+import com.pxe.myiscsi.pdu.TextRequest;
+
 public class ISCSIServer {
 
 	public static void main(String[] args) throws Exception {
@@ -35,8 +42,7 @@ public class ISCSIServer {
 				continue;
 			}
 			
-			PDUBasicHeaderSegment basicHead = new PDUBasicHeaderSegment(BHS);
-			System.out.println(basicHead);
+			BasicHeaderSegment basicHead = new BasicHeaderSegment(BHS);
 			byte[] AHS = new byte[basicHead.getTotalAHSLength()];
 			byte[] HeaderDigest = new byte[0];
 			byte[] DataSegment = new byte[basicHead.getDataSegmentLength()];
@@ -57,21 +63,26 @@ public class ISCSIServer {
 			is.read(DataDigest);
 			PhaseLogin loginPhase = new PhaseLogin();
 			PhaseFullFeature featurePhase = new PhaseFullFeature();
-			if(basicHead.getOpcode()==PDUOpcodeEnum.LOGIN_REQUEST){
-				PDULoginRequest loginRequest = new PDULoginRequest(BHS,DataSegment);
+			if(basicHead.getOpcode()==Opcode.LOGIN_REQUEST){
+				LoginRequest loginRequest = new LoginRequest(BHS,DataSegment);
 				System.out.println(loginRequest);
 				loginPhase.execute(socket, loginRequest);
-			}
-			if(basicHead.getOpcode()==PDUOpcodeEnum.TEXT_REQUEST){
-				PDUTextRequest textRequest = new PDUTextRequest(BHS,DataSegment);
+			}else if(basicHead.getOpcode()==Opcode.TEXT_REQUEST){
+				TextRequest textRequest = new TextRequest(BHS,DataSegment);
 				System.out.println(textRequest);
 				featurePhase.discovery(socket, textRequest);
-			}
-			if(basicHead.getOpcode()==PDUOpcodeEnum.LOGOUT_REQUEST){
-				PDULogoutRequest textRequest = new PDULogoutRequest(BHS,DataSegment);
+			}else if(basicHead.getOpcode()==Opcode.LOGOUT_REQUEST){
+				LogoutRequest textRequest = new LogoutRequest(BHS,DataSegment);
 				System.out.println(textRequest);
 				featurePhase.logout(socket, textRequest);
+			}else if(basicHead.getOpcode()==Opcode.SCSI_COMMAND){
+				SCSICommand scsiCommand = new SCSICommand(BHS,DataSegment);
+				System.out.println(scsiCommand);
+				featurePhase.scsiCommand(socket, scsiCommand);
+			}else{
+				System.out.println(basicHead);
 			}
+			
 			
 		}
 		

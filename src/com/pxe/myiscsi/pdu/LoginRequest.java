@@ -1,19 +1,20 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
+
+
 
 import com.moviezone.util.ByteUtil;
-import com.pxe.iscsi.target.connection.SessionType;
+import com.pxe.myiscsi.ENUM.Opcode;
+import com.pxe.myiscsi.ENUM.SessionType;
+import com.pxe.myiscsi.ENUM.Stage;
 
 /**
 <pre>
@@ -255,10 +256,10 @@ import com.pxe.iscsi.target.connection.SessionType;
  * 
  *
  */
-public class PDULoginRequest {
+public class LoginRequest {
 	
 	private boolean isImmediate = true;
-	private byte Opcode = 0x03;
+	private byte opcode = 0x03;
 	private boolean isTransit;
 	private boolean isContinue;
 	private byte CSG;
@@ -274,11 +275,11 @@ public class PDULoginRequest {
 	private byte[] CmdSN = new byte[4];
 	private byte[] ExpStatSN = new byte[4];
 	private Map<String,String> parameter = new LinkedHashMap<String,String>();
-	private SessionType sessionType = SessionType.NORMAL;
-	public PDULoginRequest(){
+	private SessionType sessionType = SessionType.Normal;
+	public LoginRequest(){
 		parameter.put("SessionType", sessionType.toString());
 	}
-	public PDULoginRequest(byte[] BHS,byte[] DataSegment) throws Exception{
+	public LoginRequest(byte[] BHS,byte[] DataSegment) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
 		isTransit = (ByteUtil.getBit(BHS[1], 0)==1);
 		isContinue = (ByteUtil.getBit(BHS[1], 1)==1);
@@ -302,8 +303,8 @@ public class PDULoginRequest {
 		}
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.LOGIN_REQUEST;
+	public Opcode getOpcode() {
+		return Opcode.LOGIN_REQUEST;
 	}
 	public boolean getTransit() {
 		return isTransit;
@@ -317,16 +318,16 @@ public class PDULoginRequest {
 	public void setContinue(boolean isContinue) {
 		this.isContinue = isContinue;
 	}
-	public PDUStageEnum getCSG() {
-		return PDUStageEnum.valueOf(CSG);
+	public Stage getCSG() {
+		return Stage.valueOf(CSG);
 	}
-	public void setCSG(PDUStageEnum cSG) {
+	public void setCSG(Stage cSG) {
 		CSG = cSG.value();
 	}
-	public PDUStageEnum getNSG() {
-		return PDUStageEnum.valueOf(NSG);
+	public Stage getNSG() {
+		return Stage.valueOf(NSG);
 	}
-	public void setNSG(PDUStageEnum nSG) {
+	public void setNSG(Stage nSG) {
 		NSG = nSG.value();
 	}
 	public int getVersionMax() {
@@ -415,11 +416,11 @@ public class PDULoginRequest {
 	public String toString(){
 		StringBuilder build = new StringBuilder();
 		build.append(System.getProperty("line.separator")+" isImmediate : "+isImmediate);
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isTransit : "+isTransit);
 		build.append(System.getProperty("line.separator")+" isContinue : "+isContinue);
-		build.append(System.getProperty("line.separator")+" CSG : "+PDUStageEnum.valueOf(CSG));
-		build.append(System.getProperty("line.separator")+" NSG : "+PDUStageEnum.valueOf(NSG));
+		build.append(System.getProperty("line.separator")+" CSG : "+Stage.valueOf(CSG));
+		build.append(System.getProperty("line.separator")+" NSG : "+Stage.valueOf(NSG));
 		build.append(System.getProperty("line.separator")+" Version-max : "+(short)VersionMax);
 		build.append(System.getProperty("line.separator")+" Version-min : "+(short)VersionMin);
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
@@ -439,7 +440,7 @@ public class PDULoginRequest {
 	}
  	
 	public static void main(String[] args) throws Exception{
-		PDULoginRequest original = new PDULoginRequest();
+		LoginRequest original = new LoginRequest();
 		original.setParameter("haha", "你好啊?你在干什么 韩非械");
 		System.out.println(original);
 		byte[] data = original.toByte();
@@ -447,7 +448,7 @@ public class PDULoginRequest {
 		byte[] dataS = new byte[data.length-BHS.length];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
 		System.arraycopy(data, 48, dataS, 0, dataS.length);
-		PDULoginRequest after = new PDULoginRequest(BHS,dataS);
+		LoginRequest after = new LoginRequest(BHS,dataS);
 		System.out.println(after);
 		System.out.println(data.length);
 		

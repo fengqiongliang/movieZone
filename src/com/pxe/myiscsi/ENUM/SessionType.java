@@ -16,7 +16,7 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.ENUM;
 
 
 import java.util.HashMap;
@@ -26,59 +26,56 @@ import java.util.Map;
 /**
 <pre>
 
-10.12.3.  CSG and NSG
+12.21.  SessionType
 
-   Through these fields, Current Stage (CSG) and Next Stage (NSG), the
-   Login negotiation requests and responses are associated with a
-   specific stage in the session (SecurityNegotiation,
-   LoginOperationalNegotiation, FullFeaturePhase) and may indicate the
-   next stage to which they want to move (see Chapter 5).  The next
-   stage value is only valid  when the T bit is 1; otherwise, it is
-   reserved.
+   Use: LO, Declarative, Any-Stage
+   Senders: Initiator
+   Scope: SW
 
-   The stage codes are:
+   SessionType= <Discovery|Normal>
 
-      - 0 - SecurityNegotiation
-      - 1 - LoginOperationalNegotiation
-      - 3 - FullFeaturePhase
+   Default is Normal.
 
-   All other codes are reserved.
+   The initiator indicates the type of session it wants to create.  The
+   target can either accept it or reject it.
 
+   A discovery session indicates to the Target that the only purpose of
+   this Session is discovery.  The only requests a target accepts in
+   this type of session are a text request with a SendTargets key and a
+   logout request with reason "close the session".
+
+   The discovery session implies MaxConnections = 1 and overrides both
+   the default and an explicit setting.
 
    
 </pre>
  * 
  */
-public enum PDUStageEnum {
+public enum SessionType {
 
 
     /**
-     * 0 - SecurityNegotiation
+     * 0 - Normal
      */
-	SecurityNegotiation((byte) 0x00),
+	Normal((byte) 0x00),
 
 	 /**
-     * 1 - LoginOperationalNegotiation
+     * 1 - Discovery
      */
-	LoginOperationalNegotiation((byte) 0x01),
-	
-	 /**
-     * 3 - FullFeaturePhase
-     */
-	FullFeaturePhase((byte) 0x03);
+	Discovery((byte) 0x01);
 	
     private final byte value;
 
-    private static Map<Byte , PDUStageEnum> mapping;
+    private static Map<Byte , SessionType> mapping;
 
     static {
-        PDUStageEnum.mapping = new HashMap<Byte , PDUStageEnum>();
-        for (PDUStageEnum s : values()) {
-            PDUStageEnum.mapping.put(s.value, s);
+        SessionType.mapping = new HashMap<Byte , SessionType>();
+        for (SessionType s : values()) {
+            SessionType.mapping.put(s.value, s);
         }
     }
 
-    private PDUStageEnum (final byte newValue) {
+    private SessionType (final byte newValue) {
 
         value = newValue;
     }
@@ -100,9 +97,9 @@ public enum PDUStageEnum {
      * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not defined
      *         by this enumeration.
      */
-    public static final PDUStageEnum valueOf (final byte value) {
+    public static final SessionType valueOf (final byte value) {
 
-        return PDUStageEnum.mapping.get(value);
+        return SessionType.mapping.get(value);
     }
 
     // --------------------------------------------------------------------------

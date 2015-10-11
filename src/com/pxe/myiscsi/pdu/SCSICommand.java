@@ -1,19 +1,15 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import com.moviezone.util.ByteUtil;
-import com.pxe.iscsi.target.connection.SessionType;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -155,14 +151,102 @@ import com.pxe.iscsi.target.connection.SessionType;
  * 
  *
  */
-public class PDUSCSICommand {
+public class SCSICommand {
+	/**
+	<pre>
+
+	Task Attributes (ATTR) have one of the following integer values 
+	(see [SAM2] for details):
+
+	    0 - Untagged
+	    1 - Simple
+	    2 - Ordered
+	    3 - Head of Queue
+	    4 - ACA
+	    5-7 - Reserved
+
+
+	   
+	</pre>
+	 * 
+	 */
+	public enum Attr {
+
+
+	    /**
+	     * 0 - Untagged
+	     */
+		Untagged((byte) 0x00),
+
+		 /**
+	     * 1 - Simple
+	     */
+		Simple((byte) 0x01),
+		
+		 /**
+	     * 2 - Ordered
+	     */
+		Ordered((byte) 0x02),
+		
+		/**
+	     * 3 - Head of Queue
+	     */
+		HeadOfQueue((byte) 0x03),
+		
+		/**
+	     * 4 - ACA
+	     */
+		ACA((byte) 0x04);
+		
+	    private final byte value;
+
+	    private static Map<Byte , Attr> mapping;
+
+	    static {
+	        Attr.mapping = new HashMap<Byte , Attr>();
+	        for (Attr s : values()) {
+	            Attr.mapping.put(s.value, s);
+	        }
+	    }
+
+	    private Attr (final byte newValue) {
+
+	        value = newValue;
+	    }
+
+	    /**
+	     * Returns the value of this enumeration.
+	     * 
+	     * @return The value of this enumeration.
+	     */
+	    public final byte value () {
+
+	        return value;
+	    }
+
+	    /**
+	     * Returns the constant defined for the given <code>value</code>.
+	     * 
+	     * @param value The value to search for.
+	     * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not defined
+	     *         by this enumeration.
+	     */
+	    public static final Attr valueOf (final byte value) {
+
+	        return Attr.mapping.get(value);
+	    }
+
+	    // --------------------------------------------------------------------------
+	    // --------------------------------------------------------------------------
+
+	}
 	
 	private boolean isImmediate = true;
-	private byte Opcode = 0x01;
+	private byte opcode = 0x01;
 	private boolean isFinal;
 	private boolean isRead;
 	private boolean isWrite;
-	private byte ATTR;
+	private byte attr;
 	private byte TotalAHSLength;
 	private byte[] DataSegmentLength = new byte[3];
 	private byte[] LUN  = new byte[8];
@@ -171,14 +255,14 @@ public class PDUSCSICommand {
 	private byte[] CmdSN = new byte[4];
 	private byte[] ExpStatSN = new byte[4];
 	private byte[] CDB = new byte[16];
-	public PDUSCSICommand(){}
-	public PDUSCSICommand(byte[] BHS,byte[] DataSegment) throws Exception{
+	public SCSICommand(){}
+	public SCSICommand(byte[] BHS,byte[] DataSegment) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
 		isImmediate = (ByteUtil.getBit(BHS[0], 1)==1);
 		isFinal = (ByteUtil.getBit(BHS[1], 0)==1);
 		isRead = (ByteUtil.getBit(BHS[1], 1)==1);
 		isWrite = (ByteUtil.getBit(BHS[1], 2)==1);
-		ATTR = (byte)(BHS[1] & 0x03);
+		attr = (byte)(BHS[1] & 0x03);
 		TotalAHSLength = BHS[4];
 		System.arraycopy(BHS, 5, DataSegmentLength, 0, DataSegmentLength.length);
 		System.arraycopy(BHS, 8, LUN, 0, LUN.length);
@@ -189,8 +273,8 @@ public class PDUSCSICommand {
 		System.arraycopy(BHS, 32, CDB, 0, CDB.length);
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.SCSI_COMMAND;
+	public Opcode getOpcode() {
+		return Opcode.SCSI_COMMAND;
 	}
 	public boolean getImmediate() {
 		return isImmediate;
@@ -216,11 +300,11 @@ public class PDUSCSICommand {
 	public void setWrite(boolean isWrite) {
 		this.isWrite = isWrite;
 	}
-	public PDUAttrEnum getATTR() {
-		return PDUAttrEnum.valueOf(ATTR);
+	public Attr getATTR() {
+		return Attr.valueOf(attr);
 	}
-	public void setATTR(PDUAttrEnum attr) {
-		this.ATTR = attr.value();
+	public void setATTR(Attr attr) {
+		this.attr = attr.value();
 	}
 	public byte getTotalAHSLength() {
 		return TotalAHSLength;
@@ -267,12 +351,12 @@ public class PDUSCSICommand {
 	
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isImmediate : "+isImmediate);
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
 		build.append(System.getProperty("line.separator")+" isRead : "+isRead);
 		build.append(System.getProperty("line.separator")+" isWrite : "+isWrite);
-		build.append(System.getProperty("line.separator")+" ATTR : "+PDUAttrEnum.valueOf(ATTR));
+		build.append(System.getProperty("line.separator")+" ATTR : "+Attr.valueOf(attr));
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
 		build.append(System.getProperty("line.separator")+" DataSegmentLength : "+this.getDataSegmentLength());
 		build.append(System.getProperty("line.separator")+" LUN : 0x"+ByteUtil.toHex(LUN));
@@ -286,7 +370,7 @@ public class PDUSCSICommand {
 	}
  	
 	public static void main(String[] args) throws Exception{
-		PDUSCSICommand original = new PDUSCSICommand();
+		SCSICommand original = new SCSICommand();
 		original.setImmediate(true);
 		original.setFinal(false);
 		original.setRead(true);
@@ -298,7 +382,7 @@ public class PDUSCSICommand {
 		}
 		original.setLUN(lun);
 		original.setCDB(new byte[]{1});
-		original.setATTR(PDUAttrEnum.HeadOfQueue);
+		original.setATTR(Attr.HeadOfQueue);
 		original.setInitiatorTaskTag(1);
 		original.setExpDataTransferLen(2);
 		original.setCmdSN(3);
@@ -309,7 +393,7 @@ public class PDUSCSICommand {
 		byte[] dataS = new byte[data.length-BHS.length];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
 		System.arraycopy(data, 48, dataS, 0, dataS.length);
-		PDUSCSICommand after = new PDUSCSICommand(BHS,dataS);
+		SCSICommand after = new SCSICommand(BHS,dataS);
 		System.out.println(after);
 		System.out.println(data.length);
 		
@@ -324,7 +408,7 @@ public class PDUSCSICommand {
 			b = (byte)(this.isFinal?(b|0x80):b);
 			b = (byte)(this.isRead?(b|0x40):b);
 			b = (byte)(this.isWrite?(b|0x20):b);
-			b = (byte)(b|this.ATTR);
+			b = (byte)(b|this.attr);
 			dos.writeByte(b); //T|C|.|.|CSG|NSG
 			dos.write(new byte[]{0,0}); //Reserved
 			dos.writeByte(this.TotalAHSLength);

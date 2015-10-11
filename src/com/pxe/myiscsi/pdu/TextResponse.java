@@ -1,34 +1,33 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
+
 
 import com.moviezone.util.ByteUtil;
-import com.pxe.iscsi.target.connection.SessionType;
+import com.pxe.myiscsi.ENUM.Opcode;
+import com.pxe.myiscsi.ENUM.SessionType;
 
 /**
 <pre>
 
-10.10.  Text Request
+10.11.  Text Response
 
-   The Text Request is provided to allow for the exchange of information
-   and for future extensions.  It permits the initiator to inform a
-   target of its capabilities or to request some special operations.
+   The Text Response PDU contains the target's responses to the
+   initiator's Text request.  The format of the Text field matches that
+   of the Text request.
 
    Byte/     0       |       1       |       2       |       3       |
       /              |               |               |               |
      |0 1 2 3 4 5 6 7|0 1 2 3 4 5 6 7|0 1 2 3 4 5 6 7|0 1 2 3 4 5 6 7|
      +---------------+---------------+---------------+---------------+
-    0|.|I| 0x04      |F|C| Reserved                                  |
+    0|.|.| 0x24      |F|C| Reserved                                  |
      +---------------+---------------+---------------+---------------+
     4|TotalAHSLength | DataSegmentLength                             |
      +---------------+---------------+---------------+---------------+
@@ -40,11 +39,13 @@ import com.pxe.iscsi.target.connection.SessionType;
      +---------------+---------------+---------------+---------------+
    20| Target Transfer Tag or 0xffffffff                             |
      +---------------+---------------+---------------+---------------+
-   24| CmdSN                                                         |
+   24| StatSN                                                        |
      +---------------+---------------+---------------+---------------+
-   28| ExpStatSN                                                     |
+   28| ExpCmdSN                                                      |
      +---------------+---------------+---------------+---------------+
-   32/ Reserved                                                      /
+   32| MaxCmdSN                                                      |
+     +---------------+---------------+---------------+---------------+
+   36/ Reserved                                                      /
     +/                                                               /
      +---------------+---------------+---------------+---------------+
    48| Header-Digest (Optional)                                      |
@@ -55,103 +56,86 @@ import com.pxe.iscsi.target.connection.SessionType;
      | Data-Digest (Optional)                                        |
      +---------------+---------------+---------------+---------------+
 
-   An initiator MUST have at most one outstanding Text Request on a
-   connection at any given time.
+10.11.1.  F (Final) Bit
 
-   On a connection failure, an initiator must either explicitly abort
-   any active allegiant text negotiation task or must cause such a task
-   to be implicitly terminated by the target.
+   When set to 1, in response to a Text Request with the Final bit set
+   to 1, the F bit indicates that the target has finished the whole
+   operation.  Otherwise, if set to 0 in response to a Text Request with
+   the Final Bit set to 1, it indicates that the target has more work to
+   do (invites a follow-on text request).  A Text Response with the F
+   bit set to 1 in response to a Text Request with the F bit set to 0 is
+   a protocol error.
 
-10.10.1.  F (Final) Bit
+   A Text Response with the F bit set to 1 MUST NOT contain key=value
+   pairs that may require additional answers from the initiator.
 
-   When set to 1,  indicates that this is the last or only text request
-   in a sequence of Text Requests; otherwise, it indicates that more
-   Text Requests will follow.
+   A Text Response with the F bit set to 1 MUST have a Target Transfer
+   Tag field set to the reserved value of 0xffffffff.
 
-10.10.2.  C (Continue) Bit
+   A Text Response with the F bit set to 0 MUST have a Target Transfer
+   Tag field set to a value other than the reserved 0xffffffff.
+
+10.11.2.  C (Continue) Bit
 
    When set to 1, indicates that the text (set of key=value pairs) in
-   this Text Request is not complete (it will be continued on subsequent
-   Text Requests); otherwise, it indicates that this Text Request ends a
-   set of key=value pairs.  A Text Request with the C bit set to 1 MUST
-   have the F bit set to 0.
+   this Text Response is not complete (it will be continued on
+   subsequent Text Responses); otherwise, it indicates that this Text
+   Response ends a set of key=value pairs.  A Text Response with the C
+   bit set to 1 MUST have the F bit set to 0.
 
-10.10.3.  Initiator Task Tag
+10.11.3.  Initiator Task Tag
 
-   The initiator assigned identifier for this Text Request.  If the
-   command is sent as part of a sequence of text requests and responses,
-   the Initiator Task Tag MUST be the same for all the requests within
-   the sequence (similar to linked SCSI commands).  The I bit for all
-   requests in a sequence also MUST be the same.
+   The Initiator Task Tag matches the tag used in the initial Text
+   Request.
 
-10.10.4.  Target Transfer Tag
+10.11.4.  Target Transfer Tag
 
-   When the Target Transfer Tag is set to the reserved value 0xffffffff,
-   it tells the target that this is a new request and the target resets
-   any internal state associated with the Initiator Task Tag (resets the
-   current negotiation state).
+   When a target has more work to do (e.g., cannot transfer all the
+   remaining text data in a single Text Response or has to continue the
+   negotiation) and has enough resources to proceed, it MUST set the
+   Target Transfer Tag to a value other than the reserved value of
+   0xffffffff.  Otherwise, the Target Transfer Tag MUST be set to
+   0xffffffff.
 
-   The target sets the Target Transfer Tag in a text response to a value
-   other than the reserved value 0xffffffff whenever it indicates that
-   it has more data to send or more operations to perform that are
-   associated with the specified Initiator Task Tag.  It MUST do so
-   whenever it sets the F bit to 0 in the response.  By copying the
-   Target Transfer Tag from the response to the next Text Request, the
-   initiator tells the target to continue the operation for the specific
-   Initiator Task Tag.  The initiator MUST ignore the Target Transfer
-   Tag in the Text Response when the F bit is set to 1.
+   When the Target Transfer Tag is not 0xffffffff, the LUN field may be
+   significant.
 
-   This mechanism allows the initiator and target to transfer a large
-   amount of textual data over a sequence of text-command/text-response
-   exchanges, or to perform extended negotiation sequences.
+   The initiator MUST copy the Target Transfer Tag and LUN in its next
+   request to indicate that it wants the rest of the data.
 
-   If the Target Transfer Tag is not 0xffffffff, the LUN field MUST be
-   sent by the target in the Text Response.
+   When the target receives a Text Request with the Target Transfer Tag
+   set to the reserved value of 0xffffffff, it resets its internal
+   information (resets state) associated with the given Initiator Task
+   Tag (restarts the negotiation).
 
-   A target MAY reset its internal negotiation state if an exchange is
-   stalled by the initiator for a long time or if it is running out of
-   resources.
+   When a target cannot finish the operation in a single Text Response,
+   and does not have enough resources to continue, it rejects the Text
+   Request with the appropriate Reject code.
 
-   Long text responses are handled as in the following example:
+   A target may reset its internal state associated with an Initiator
+   Task Tag (the current negotiation state), state expressed through the
+   Target Transfer Tag if the initiator fails to continue the exchange
+   for some time.  The target may reject subsequent Text Requests with
+   the Target Transfer Tag set to the "stale" value.
 
-     I->T Text SendTargets=All (F=1,TTT=0xffffffff)
-     T->I Text <part 1> (F=0,TTT=0x12345678)
-     I->T Text <empty> (F=1, TTT=0x12345678)
-     T->I Text <part 2> (F=0, TTT=0x12345678)
-     I->T Text <empty> (F=1, TTT=0x12345678)
-     ...
-     T->I Text <part n> (F=1, TTT=0xffffffff)
+10.11.5.  StatSN
 
-10.10.5.  Text
+   The target StatSN variable is advanced by each Text Response sent.
 
-   The data lengths of a text request MUST NOT exceed the iSCSI target
-   MaxRecvDataSegmentLength (a per connection and per direction
-   negotiated parameter).  The text format is specified in Section 5.2
-   Text Mode Negotiation.
+10.11.6.  Text Response Data
 
-   Chapter 11 and Chapter 12 list some basic Text key=value pairs, some
-   of which can be used in Login Request/Response and some in Text
-   Request/Response.
+   The data lengths of a text response MUST NOT exceed the iSCSI
+   initiator MaxRecvDataSegmentLength (a per connection and per
+   direction negotiated parameter).
 
-   A key=value pair can span Text request or response boundaries.  A
-   key=value pair can start in one PDU and continue on the next.  In
-   other words the end of a PDU does not necessarily signal the end of a
-   key=value pair.
+   The text in the Text Response Data is governed by the same rules as
+   the text in the Text Request Data (see Section 10.10.5 Text).
 
-   The target responds by sending its response back to the initiator.
-   The response text format is similar to the request text format.  The
-   text response MAY refer to key=value pairs presented in an earlier
-   text request and the text in the request may refer to earlier
-   responses.
+   Although the initiator is the requesting party and controls the
+   request-response initiation and termination, the target can offer
+   key=value pairs of its own as part of a sequence and not only in
+   response to the initiator.
 
-   Chapter 5 details the rules for the Text Requests and Responses.
-
-   Text operations are usually meant for parameter setting/
-   negotiations, but can also be used to perform some long lasting
-   operations.
-
-   Text operations that take a long time should be placed in their own
-   Text request.
 
 
 
@@ -161,10 +145,9 @@ import com.pxe.iscsi.target.connection.SessionType;
  * 
  *
  */
-public class PDUTextRequest {
+public class TextResponse {
 	
-	private boolean isImmediate;
-	private byte Opcode = 0x04;
+	private byte opcode = 0x24;
 	private boolean isFinal;
 	private boolean isContinue;
 	private byte TotalAHSLength = 0;
@@ -172,16 +155,16 @@ public class PDUTextRequest {
 	private byte[] LUN  = new byte[8];
 	private byte[] InitiatorTaskTag = new byte[4];
 	private byte[] TargetTransferTag = new byte[4];
-	private byte[] CmdSN = new byte[4];
-	private byte[] ExpStatSN = new byte[4];
+	private byte[] StatSN = new byte[4];
+	private byte[] ExpCmdSN = new byte[4];
+	private byte[] MaxCmdSN = new byte[4];
 	private Map<String,String> parameter = new LinkedHashMap<String,String>();
-	private SessionType sessionType = SessionType.NORMAL;
-	public PDUTextRequest(){
+	private SessionType sessionType = SessionType.Normal;
+	public TextResponse(){
 		//parameter.put("SessionType", sessionType.toString());
 	}
-	public PDUTextRequest(byte[] BHS,byte[] DataSegment) throws Exception{
+	public TextResponse(byte[] BHS,byte[] DataSegment) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
-		isImmediate = (ByteUtil.getBit(BHS[0], 1)==1);
 		isFinal = (ByteUtil.getBit(BHS[1], 0)==1);
 		isContinue = (ByteUtil.getBit(BHS[1], 1)==1);
 		TotalAHSLength = BHS[4];
@@ -189,8 +172,9 @@ public class PDUTextRequest {
 		System.arraycopy(BHS, 8, LUN, 0, LUN.length);
 		System.arraycopy(BHS, 16, InitiatorTaskTag, 0, InitiatorTaskTag.length);
 		System.arraycopy(BHS, 20, TargetTransferTag, 0, TargetTransferTag.length);
-		System.arraycopy(BHS, 24, CmdSN, 0, CmdSN.length);
-		System.arraycopy(BHS, 28, ExpStatSN, 0, ExpStatSN.length);
+		System.arraycopy(BHS, 24, StatSN, 0, StatSN.length);
+		System.arraycopy(BHS, 28, ExpCmdSN, 0, ExpCmdSN.length);
+		System.arraycopy(BHS, 32, MaxCmdSN, 0, MaxCmdSN.length);
 		if(DataSegment.length>0){
 			String param = new String(DataSegment,"UTF-8");
 			for(String item:param.split(ByteUtil.nullStr)){
@@ -200,14 +184,8 @@ public class PDUTextRequest {
 		}
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.TEXT_REQUEST;
-	}
-	public boolean getImmediate() {
-		return isImmediate;
-	}
-	public void setImmediate(boolean isImmediate) {
-		this.isImmediate = isImmediate;
+	public Opcode getOpcode() {
+		return Opcode.TEXT_RESPONSE;
 	}
 	public boolean getFinal() {
 		return isFinal;
@@ -242,17 +220,23 @@ public class PDUTextRequest {
 	public void setTargetTransferTag(int targetTransferTag) {
 		TargetTransferTag = ByteUtil.intToByteArray(targetTransferTag);
 	}
-	public int getCmdSN() {
-		return ByteUtil.byteArrayToInt(CmdSN);
+	public int getStatSN() {
+		return  ByteUtil.byteArrayToInt(StatSN);
 	}
-	public void setCmdSN(int cmdSN) {
-		CmdSN = ByteUtil.intToByteArray(cmdSN);
+	public void setStatSN(int statSN) {
+		StatSN = ByteUtil.intToByteArray(statSN);
 	}
-	public int getExpStatSN() {
-		return ByteUtil.byteArrayToInt(ExpStatSN);
+	public int getExpCmdSN() {
+		return ByteUtil.byteArrayToInt(ExpCmdSN);
 	}
-	public void setExpStatSN(int expStatSN) {
-		ExpStatSN = ByteUtil.intToByteArray(expStatSN);
+	public void setExpCmdSN(int expCmdSN) {
+		ExpCmdSN = ByteUtil.intToByteArray(expCmdSN);
+	}
+	public int getMaxCmdSN() {
+		return ByteUtil.byteArrayToInt(MaxCmdSN);
+	}
+	public void setMaxCmdSN(int maxCmdSN) {
+		MaxCmdSN = ByteUtil.intToByteArray(maxCmdSN);
 	}
 	public Map<String,String> getParameter(){
 		return parameter;
@@ -285,8 +269,7 @@ public class PDUTextRequest {
 	
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" isImmediate : "+isImmediate);
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
 		build.append(System.getProperty("line.separator")+" isContinue : "+isContinue);
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
@@ -294,8 +277,9 @@ public class PDUTextRequest {
 		build.append(System.getProperty("line.separator")+" LUN  : 0x"+ByteUtil.toHex(LUN));
 		build.append(System.getProperty("line.separator")+" InitiatorTaskTag : "+ByteUtil.byteArrayToInt(InitiatorTaskTag));
 		build.append(System.getProperty("line.separator")+" TargetTransferTag : "+ByteUtil.byteArrayToInt(TargetTransferTag));
-		build.append(System.getProperty("line.separator")+" CmdSN : 0x"+ByteUtil.toHex(CmdSN));
-		build.append(System.getProperty("line.separator")+" ExpStatSN : 0x"+ByteUtil.toHex(ExpStatSN));
+		build.append(System.getProperty("line.separator")+" StatSN : 0x"+ByteUtil.toHex(StatSN));
+		build.append(System.getProperty("line.separator")+" ExpCmdSN : 0x"+ByteUtil.toHex(ExpCmdSN));
+		build.append(System.getProperty("line.separator")+" MaxCmdSN : 0x"+ByteUtil.toHex(MaxCmdSN));
 		build.append(System.getProperty("line.separator")+" Text Parameters : ");
 		for(Entry<String,String> entry:parameter.entrySet()){
 			build.append(System.getProperty("line.separator")+"          "+entry.getKey()+"="+entry.getValue());
@@ -305,13 +289,14 @@ public class PDUTextRequest {
 	}
  	
 	public static void main(String[] args) throws Exception{
-		PDUTextRequest original = new PDUTextRequest();
-		original.setFinal(false);
-		original.setContinue(true);
+		TextResponse original = new TextResponse();
+		original.setFinal(true);
+		original.setContinue(false);
 		original.setInitiatorTaskTag(10);
 		original.setTargetTransferTag(11);
-		original.setCmdSN(1);
-		original.setExpStatSN(2);
+		original.setStatSN(1);
+		original.setExpCmdSN(2);
+		original.setMaxCmdSN(3);
 		original.setParameter("haha", "你好啊?你在干什么 韩非械");
 		System.out.println(original);
 		byte[] data = original.toByte();
@@ -319,11 +304,9 @@ public class PDUTextRequest {
 		byte[] dataS = new byte[data.length-BHS.length];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
 		System.arraycopy(data, 48, dataS, 0, dataS.length);
-		PDUTextRequest after = new PDUTextRequest(BHS,dataS);
+		TextResponse after = new TextResponse(BHS,dataS);
 		System.out.println(after);
 		System.out.println(data.length);
-		byte[] b = ByteUtil.intToByteArray(-1);
-		System.out.println(ByteUtil.toHex(b));
 		
 	}
 	
@@ -331,7 +314,7 @@ public class PDUTextRequest {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
-			dos.writeByte(this.isImmediate?0x44:0x04); //Opcode
+			dos.writeByte(0x24); //Opcode
 			byte b = 0;
 			b = (byte)(this.isFinal?(b|0x80):b);
 			b = (byte)(this.isContinue?(b|0x40):b);
@@ -342,9 +325,9 @@ public class PDUTextRequest {
 			dos.write(this.LUN);
 			dos.write(this.InitiatorTaskTag);
 			dos.write(this.TargetTransferTag);
-			dos.write(this.CmdSN);
-			dos.write(this.ExpStatSN);
-			dos.write(new byte[]{0,0,0,0}); //Reserved
+			dos.write(this.StatSN);
+			dos.write(this.ExpCmdSN);
+			dos.write(this.MaxCmdSN);
 			dos.write(new byte[]{0,0,0,0}); //Reserved
 			dos.write(new byte[]{0,0,0,0}); //Reserved
 			dos.write(new byte[]{0,0,0,0}); //Reserved

@@ -1,19 +1,14 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
 
 import com.moviezone.util.ByteUtil;
-import com.pxe.iscsi.target.connection.SessionType;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -195,23 +190,71 @@ import com.pxe.iscsi.target.connection.SessionType;
  * 
  *
  */
-public class PDULogoutRequest {
+public class LogoutRequest {
+	public enum ReasonCode {
+
+ /**
+<pre>
+0 - close the session.  All commands associated with 
+    the session (if any) are terminated.
+</pre>
+ */
+		CloseSession((byte) 0x00),
+
+ /**
+<pre>
+1 - close the connection.  All commands associated with 
+    the connection (if any) are terminated.
+
+</pre>
+ */
+		CloseConn((byte) 0x01),
+	
+/**
+<pre>
+2 - remove the connection for recovery.  Connection is closed and
+    all commands associated with it, if any, are to be prepared
+    for a new allegiance.
+
+
+</pre>
+ */
+	RemoveConn((byte) 0x02);
+		
+	    private final byte value;
+	    private static Map<Byte , ReasonCode> mapping;
+	    static {
+	        ReasonCode.mapping = new HashMap<Byte , ReasonCode>();
+	        for (ReasonCode s : values()) {
+	            ReasonCode.mapping.put(s.value, s);
+	        }
+	    }
+	    private ReasonCode (final byte newValue) {
+	        value = newValue;
+	    }
+	    public final byte value () {
+	        return value;
+	    }
+	    public static final ReasonCode valueOf (final byte value) {
+	        return ReasonCode.mapping.get(value);
+	    }
+	}
 	
 	private boolean isImmediate;
-	private byte Opcode = 0x06;
+	private byte opcode = 0x06;
 	private boolean isFinal = true;
-	private byte ReasonCode; 
+	private byte reasonCode; 
 	private byte TotalAHSLength = 0;
 	private byte[] DataSegmentLength = new byte[3];
 	private byte[] InitiatorTaskTag = new byte[4];
 	private byte[] CID = new byte[2];
 	private byte[] CmdSN = new byte[4];
 	private byte[] ExpStatSN = new byte[4];
-	public PDULogoutRequest(){}
-	public PDULogoutRequest(byte[] BHS,byte[] DataSegment) throws Exception{
+	public LogoutRequest(){}
+	public LogoutRequest(byte[] BHS,byte[] DataSegment) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
 		isImmediate = (ByteUtil.getBit(BHS[0], 1)==1);
-		ReasonCode = (byte)(BHS[1] & 0x7F);
+		reasonCode = (byte)(BHS[1] & 0x7F);
 		TotalAHSLength = BHS[4];
 		System.arraycopy(BHS, 5, DataSegmentLength, 0, DataSegmentLength.length);
 		System.arraycopy(BHS, 16, InitiatorTaskTag, 0, InitiatorTaskTag.length);
@@ -220,8 +263,8 @@ public class PDULogoutRequest {
 		System.arraycopy(BHS, 28, ExpStatSN, 0, ExpStatSN.length);
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.LOGOUT_REQUEST;
+	public Opcode getOpcode() {
+		return Opcode.LOGOUT_REQUEST;
 	}
 	public boolean getImmediate() {
 		return isImmediate;
@@ -232,11 +275,11 @@ public class PDULogoutRequest {
 	public boolean getFinal() {
 		return isFinal;
 	}
-	public PDUReasonCodeEnum getReasonCode() {
-		return PDUReasonCodeEnum.valueOf(ReasonCode);
+	public ReasonCode getReasonCode() {
+		return ReasonCode.valueOf(reasonCode);
 	}
-	public void setReasonCode(PDUReasonCodeEnum reasonCode) {
-		ReasonCode = reasonCode.value();
+	public void setReasonCode(ReasonCode reasonCode) {
+		this.reasonCode = reasonCode.value();
 	}
 	public byte getTotalAHSLength() {
 		return TotalAHSLength;
@@ -272,10 +315,10 @@ public class PDULogoutRequest {
 	
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isImmediate : "+isImmediate);
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
-		build.append(System.getProperty("line.separator")+" ReasonCode : "+PDUReasonCodeEnum.valueOf(ReasonCode));
+		build.append(System.getProperty("line.separator")+" ReasonCode : "+ReasonCode.valueOf(this.reasonCode));
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
 		build.append(System.getProperty("line.separator")+" DataSegmentLength : "+this.getDataSegmentLength());
 		build.append(System.getProperty("line.separator")+" InitiatorTaskTag : "+ByteUtil.byteArrayToInt(InitiatorTaskTag));
@@ -287,9 +330,9 @@ public class PDULogoutRequest {
 	}
  	
 	public static void main(String[] args) throws Exception{
-		PDULogoutRequest original = new PDULogoutRequest();
+		LogoutRequest original = new LogoutRequest();
 		original.setImmediate(true);
-		original.setReasonCode(PDUReasonCodeEnum.removeConnection);
+		original.setReasonCode(ReasonCode.CloseConn);
 		original.setInitiatorTaskTag(10);
 		original.setCID((short)11);
 		original.setCmdSN(1);
@@ -300,7 +343,7 @@ public class PDULogoutRequest {
 		byte[] dataS = new byte[data.length-BHS.length];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
 		System.arraycopy(data, 48, dataS, 0, dataS.length);
-		PDULogoutRequest after = new PDULogoutRequest(BHS,dataS);
+		LogoutRequest after = new LogoutRequest(BHS,dataS);
 		System.out.println(after);
 		System.out.println(data.length);
 		byte[] b = ByteUtil.intToByteArray(-1);
@@ -313,7 +356,7 @@ public class PDULogoutRequest {
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
 			dos.writeByte(this.isImmediate?0x46:0x06); //Opcode
-			dos.writeByte(0x80|this.ReasonCode);
+			dos.writeByte(0x80|this.reasonCode);
 			dos.write(new byte[]{0,0});//Reserved
 			dos.writeByte(this.TotalAHSLength);
 			dos.write(this.DataSegmentLength); //This is the data segment payload length in bytes (excluding padding).

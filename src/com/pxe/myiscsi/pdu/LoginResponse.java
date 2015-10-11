@@ -1,19 +1,22 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
+
+
+
 
 import com.moviezone.util.ByteUtil;
-import com.pxe.iscsi.target.connection.SessionType;
+import com.pxe.myiscsi.ENUM.Opcode;
+import com.pxe.myiscsi.ENUM.SessionType;
+import com.pxe.myiscsi.ENUM.Stage;
 
 /**
 <pre>
@@ -258,9 +261,200 @@ import com.pxe.iscsi.target.connection.SessionType;
  * 
  *
  */
-public class PDULoginResponse {
+public class LoginResponse {
+	public enum StatusClassDetail {
+
+ /**
+<pre>
+0000 - Success 
+    indicates that the iSCSI target successfully
+    received, understood, and accepted the request.  The numbering
+    fields (StatSN, ExpCmdSN, MaxCmdSN) are only valid if
+    Status-Class is 0.
+</pre>
+ */
+		Success((short) 0x0000),
+
+ /**
+<pre>
+0101 - Target moved temporarily.  
+       The requested iSCSI Target Name (ITN) 
+       has temporarily moved to the address provided.
+
+</pre>
+ */
+	TargetMovedTemp((short) 0x0101),
 	
-	private byte Opcode = 0x23;
+/**
+<pre>
+0102 - Target moved permanently.
+       The requested ITN has permanently 
+       moved to the address provided.
+</pre>
+ */
+	TargetMovedPerm((short) 0x0102),
+
+/**
+<pre>
+0200 - Initiator error. 
+       Miscellaneous iSCSI initiator errors.
+</pre>
+ */
+	InitiatorError((short) 0x0200),
+
+/**
+<pre>
+0201 - Authentication failure.
+       The initiator could not be successfully authenticated or target authentication 
+       is not supported.
+
+</pre>
+ */
+		AuthFailure((short) 0x0201),
+
+/**
+<pre>
+0202 - Initiator Authentication failure.
+       The initiator is not allowed access to the given target
+
+</pre>
+ */
+		InitiatorAuthFailure((short) 0x0202),
+		
+/**
+<pre>
+0203 - Not found.
+       The requested ITN does not exist at this address.
+
+</pre>
+ */
+		NotFound((short) 0x0203),
+		
+/**
+<pre>
+0204 - Target removed.
+       The initiator could not be successfully authenticated or target authentication 
+       is not supported.
+
+</pre>
+ */
+		TargetRemoved((short) 0x0204),
+		
+/**
+<pre>
+0205 - Unsupported version.
+       The requested iSCSI version range is 
+       not supported by the target.
+
+</pre>
+ */
+		UnsupportedVersion((short) 0x0205),
+		
+/**
+<pre>
+0206 - Too many connections.
+       Too many connections on this SSID.
+
+</pre>
+ */
+		TooManyConn((short) 0x0206),
+
+/**
+<pre>
+0207 - Missing parameter.
+       Missing parameters (e.g., iSCSI Initiator and/or Target Name).
+
+</pre>
+ */
+		MissingParameter((short) 0x0207),
+
+/**
+<pre>
+0208 - Can't include in session.
+       Target does not support session
+       spanning to this connection (address).
+
+</pre>
+ */
+		CannotIncludeInSession((short) 0x0208),
+
+/**
+<pre>
+0209 - Session type not supported.
+       Target does not support this type of
+       session or not from this Initiator.
+
+</pre>
+ */
+		SessionTypeNotSupported((short) 0x0209),
+
+/**
+<pre>
+020a - Session does not exist.
+       Attempt to add a connection to a non-existent session.
+
+</pre>
+ */
+		SessionNotExist((short) 0x020a),
+
+/**
+<pre>
+020b - Invalid during login.
+       Invalid Request type during Login.
+
+</pre>
+ */
+		InvalidDuringLogin((short) 0x020b),
+
+/**
+<pre>
+0300 - Target error.
+       Target hardware or software error.
+
+</pre>
+ */
+		TargetError((short) 0x0300),
+		
+/**
+<pre>
+0301 - Service unavailable.
+       The iSCSI service or target is not currently operational.
+
+</pre>
+ */
+		ServiceUnavailable((short) 0x0301),
+		
+/**
+<pre>
+0302 - Out of resources.
+       The target has insufficient session,connection, or other resources.
+
+</pre>
+ */
+		OutOfResources((short) 0x0302);
+		
+		
+		
+	    private final short value;
+	    private static Map<Short , StatusClassDetail> mapping;
+	    static {
+	    	StatusClassDetail.mapping = new HashMap<Short , StatusClassDetail>();
+	        for (StatusClassDetail s : values()) {
+	        	StatusClassDetail.mapping.put(s.value, s);
+	        }
+	    }
+	    private StatusClassDetail (final short newValue) {
+	        value = newValue;
+	    }
+	    public final short value () {
+	        return value;
+	    }
+	    public static final StatusClassDetail valueOf (final short value) {
+	        return StatusClassDetail.mapping.get(value);
+	    }
+	}
+
+	private byte opcode = 0x23;
 	private boolean isTransit;
 	private boolean isContinue;
 	private byte CSG;
@@ -278,11 +472,11 @@ public class PDULoginResponse {
 	private byte StatusClass;  
 	private byte StatusDetail;
 	private Map<String,String> parameter = new LinkedHashMap<String,String>();
-	private SessionType sessionType = SessionType.NORMAL;
-	public PDULoginResponse(){
+	private SessionType sessionType = SessionType.Normal;
+	public LoginResponse(){
 		//parameter.put("SessionType", sessionType.toString());
 	}
-	public PDULoginResponse(byte[] BHS,byte[] DataSegment) throws Exception{
+	public LoginResponse(byte[] BHS,byte[] DataSegment) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
 		isTransit = (ByteUtil.getBit(BHS[1], 0)==1);
 		isContinue = (ByteUtil.getBit(BHS[1], 1)==1);
@@ -308,8 +502,8 @@ public class PDULoginResponse {
 		}
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.LOGIN_RESPONSE;
+	public Opcode getOpcode() {
+		return Opcode.LOGIN_RESPONSE;
 	}
 	public boolean getTransit() {
 		return isTransit;
@@ -323,16 +517,16 @@ public class PDULoginResponse {
 	public void setContinue(boolean isContinue) {
 		this.isContinue = isContinue;
 	}
-	public PDUStageEnum getCSG() {
-		return PDUStageEnum.valueOf(CSG);
+	public Stage getCSG() {
+		return Stage.valueOf(CSG);
 	}
-	public void setCSG(PDUStageEnum cSG) {
+	public void setCSG(Stage cSG) {
 		CSG = cSG.value();
 	}
-	public PDUStageEnum getNSG() {
-		return PDUStageEnum.valueOf(NSG);
+	public Stage getNSG() {
+		return Stage.valueOf(NSG);
 	}
-	public void setNSG(PDUStageEnum nSG) {
+	public void setNSG(Stage nSG) {
 		NSG = nSG.value();
 	}
 	public int getVersionMax() {
@@ -386,14 +580,14 @@ public class PDULoginResponse {
 	public void setMaxCmdSN(int maxCmdSN) {
 		MaxCmdSN = ByteUtil.intToByteArray(maxCmdSN);
 	}
-	public PDUStatusEnum getStatus() {
+	public StatusClassDetail getStatus() {
 		byte[] b = new byte[2];
 		b[0] = StatusClass;
 		b[1] = StatusDetail;
 		short s = ByteUtil.byteArrayToShort(b);
-		return PDUStatusEnum.valueOf(s);
+		return StatusClassDetail.valueOf(s);
 	}
-	public void setStatus(PDUStatusEnum statusClass) {
+	public void setStatus(StatusClassDetail statusClass) {
 		short s  = statusClass.value();
 		byte[] b = ByteUtil.shortToByteArray(s);
 		StatusClass = b[0];
@@ -436,11 +630,11 @@ public class PDULoginResponse {
 	
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isTransit : "+isTransit);
 		build.append(System.getProperty("line.separator")+" isContinue : "+isContinue);
-		build.append(System.getProperty("line.separator")+" CSG : "+PDUStageEnum.valueOf(CSG));
-		build.append(System.getProperty("line.separator")+" NSG : "+PDUStageEnum.valueOf(NSG));
+		build.append(System.getProperty("line.separator")+" CSG : "+Stage.valueOf(CSG));
+		build.append(System.getProperty("line.separator")+" NSG : "+Stage.valueOf(NSG));
 		build.append(System.getProperty("line.separator")+" Version-max : "+(short)VersionMax);
 		build.append(System.getProperty("line.separator")+" Version-active : "+(short)VersionActive);
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
@@ -461,9 +655,9 @@ public class PDULoginResponse {
 	}
  	
 	public static void main(String[] args) throws Exception{
-		PDULoginResponse original = new PDULoginResponse();
+		LoginResponse original = new LoginResponse();
 		original.setParameter("haha", "你好啊?你在干什么 韩非械");
-		original.setStatus(PDUStatusEnum.AUTHENTICATION_FAILURE);
+		original.setStatus(StatusClassDetail.CannotIncludeInSession);
 		original.setVersionMax(43);
 		System.out.println(original);
 		byte[] data = original.toByte();
@@ -471,7 +665,7 @@ public class PDULoginResponse {
 		byte[] dataS = new byte[data.length-BHS.length];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
 		System.arraycopy(data, 48, dataS, 0, dataS.length);
-		PDULoginResponse after = new PDULoginResponse(BHS,dataS);
+		LoginResponse after = new LoginResponse(BHS,dataS);
 		System.out.println(after);
 		System.out.println(data.length);
 		

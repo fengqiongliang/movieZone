@@ -1,10 +1,11 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 import com.moviezone.util.ByteUtil;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -95,10 +96,10 @@ import com.moviezone.util.ByteUtil;
  * 
  *
  */
-public class PDUNopOut {
+public class NopOut {
 	
 	private boolean isImmediate;
-	private byte Opcode = 0x00;
+	private byte opcode = 0x00;
 	private boolean isFinal = true;
 	private byte TotalAHSLength;
 	private byte[] DataSegmentLength = new byte[3];
@@ -108,8 +109,8 @@ public class PDUNopOut {
 	private byte[] CmdSN = new byte[4];
 	private byte[] ExpStatSN = new byte[4];
 	private byte[] PingData = new byte[0];
-	public PDUNopOut(){}
-	public PDUNopOut(byte[] BHS,byte[] DataSegment) throws Exception{
+	public NopOut(){}
+	public NopOut(byte[] BHS,byte[] DataSegment) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
 		isImmediate = (ByteUtil.getBit(BHS[0], 1)==1);
 		TotalAHSLength = BHS[4];
@@ -122,8 +123,8 @@ public class PDUNopOut {
 		PingData = DataSegment;
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.NOP_OUT;
+	public Opcode getOpcode() {
+		return Opcode.NOP_OUT;
 	}
 	public boolean getImmediate(){
 		return isImmediate;
@@ -179,7 +180,7 @@ public class PDUNopOut {
 
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isImmediate : "+isImmediate);
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
@@ -228,7 +229,7 @@ public class PDUNopOut {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		PDUNopOut original = new PDUNopOut();
+		NopOut original = new NopOut();
 		original.setImmediate(true);
 		original.setLUN(new byte[]{1});
 		original.setInitiatorTaskTag(1);
@@ -242,7 +243,7 @@ public class PDUNopOut {
 		byte[] dataS = new byte[data.length-BHS.length];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
 		System.arraycopy(data, 48, dataS, 0, dataS.length);
-		PDUNopOut after = new PDUNopOut(BHS,dataS);
+		NopOut after = new NopOut(BHS,dataS);
 		System.out.println(after);
 		System.out.println(data.length);
 		

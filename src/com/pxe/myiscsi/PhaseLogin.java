@@ -4,6 +4,10 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map.Entry;
 
+import com.pxe.myiscsi.ENUM.Stage;
+import com.pxe.myiscsi.pdu.LoginRequest;
+import com.pxe.myiscsi.pdu.LoginResponse;
+
 /**
  <pre>
  5.3.  Login Phase
@@ -302,12 +306,12 @@ public class PhaseLogin {
        responding to the Login KRB_AP_REP message).
 	 </pre> 
 	 */
-	public void execute(Socket socket,PDULoginRequest request){
+	public void execute(Socket socket,LoginRequest request){
 		try{
-			PDUStageEnum stage = request.getCSG();
-			if(stage == PDUStageEnum.SecurityNegotiation)SecurityNegotiation(socket,request);
-			if(stage == PDUStageEnum.LoginOperationalNegotiation)LoginOperationalNegotiation(socket,request);
-			if(stage == PDUStageEnum.FullFeaturePhase)FullFeaturePhase(socket,request);
+			Stage stage = request.getCSG();
+			if(stage == Stage.SecurityNegotiation)SecurityNegotiation(socket,request);
+			if(stage == Stage.LoginOperationalNegotiation)LoginOperationalNegotiation(socket,request);
+			if(stage == Stage.FullFeaturePhase)FullFeaturePhase(socket,request);
 		}catch(Exception ex){ex.printStackTrace();}
 	}
 	
@@ -354,13 +358,13 @@ public class PhaseLogin {
    direct the negotiation (propose options).
 	 </pre> 
 	 */
-	private void SecurityNegotiation(Socket socket,PDULoginRequest request) throws Exception{
+	private void SecurityNegotiation(Socket socket,LoginRequest request) throws Exception{
 		System.out.println(socket.getRemoteSocketAddress()+" --> SecurityNegotiation");
-		PDULoginResponse response = new PDULoginResponse();
+		LoginResponse response = new LoginResponse();
 		OutputStream os = socket.getOutputStream();
 		//do nothing just skip to login
 		response.setCSG(request.getCSG());
-		response.setNSG(PDUStageEnum.LoginOperationalNegotiation);
+		response.setNSG(Stage.LoginOperationalNegotiation);
 		response.setTransit(true);
 		response.setInitiatorTaskTag(request.getInitiatorTaskTag());
 		response.setVersionMax(request.getVersionMax());
@@ -376,13 +380,13 @@ public class PhaseLogin {
 		os.flush();
 	}
 	
-	private void LoginOperationalNegotiation(Socket socket,PDULoginRequest request)  throws Exception{
+	private void LoginOperationalNegotiation(Socket socket,LoginRequest request)  throws Exception{
 		System.out.println(socket.getRemoteSocketAddress()+" --> LoginOperationalNegotiation");
-		PDULoginResponse response = new PDULoginResponse();
+		LoginResponse response = new LoginResponse();
 		OutputStream os = socket.getOutputStream();
 		//do nothing just skip to login
 		response.setCSG(request.getCSG());
-		response.setNSG(PDUStageEnum.FullFeaturePhase);
+		response.setNSG(Stage.FullFeaturePhase);
 		response.setTransit(true);
 		response.setInitiatorTaskTag(request.getInitiatorTaskTag());
 		response.setVersionMax(request.getVersionMax());
@@ -402,7 +406,7 @@ public class PhaseLogin {
 		os.flush();
 	}
 	
-	private void FullFeaturePhase(Socket socket, PDULoginRequest request)  throws Exception{
+	private void FullFeaturePhase(Socket socket, LoginRequest request)  throws Exception{
 		System.out.println(socket.getRemoteSocketAddress()+" --> FullFeaturePhase");
 		
 	}

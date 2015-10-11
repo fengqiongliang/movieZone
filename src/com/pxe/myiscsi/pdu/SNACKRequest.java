@@ -1,10 +1,13 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.moviezone.util.ByteUtil;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -198,11 +201,65 @@ import com.moviezone.util.ByteUtil;
  * 
  *
  */
-public class PDUSNACKRequest {
+public class SNACKRequest {
+
+	public enum Type {
+
+ /**
+<pre>
+0 - Data/R2T SNACK
+    requesting retransmission of one or more Data-In or R2T PDUs.
+</pre>
+ */
+		R2TSNACK((byte) 0x00),
+
+ /**
+<pre>
+1 - Status SNACK 
+    requesting retransmission of one or more numbered responses.
+</pre>
+ */
+		StatusSNACK ((byte) 0x01),
 	
-	private byte Opcode = 0x10;
+/**
+<pre>
+2-DataACK
+  positively acknowledges Data-In PDUs.
+</pre>
+ */
+		DataACK((byte) 0x02),
+
+/**
+<pre>
+3-R-Data SNACK
+  requesting retransmission of Data-In PDUs with possible resegmentation and status tagging.
+</pre>
+ */
+		RDataSNACK((byte) 0x03);
+
+		
+	    private final byte value;
+	    private static Map<Byte , Type> mapping;
+	    static {
+	    	Type.mapping = new HashMap<Byte , Type>();
+	        for (Type s : values()) {
+	        	Type.mapping.put(s.value, s);
+	        }
+	    }
+	    private Type (final byte newValue) {
+	        value = newValue;
+	    }
+	    public final byte value () {
+	        return value;
+	    }
+	    public static final Type valueOf (final byte value) {
+	        return Type.mapping.get(value);
+	    }
+	}
+	
+	private byte opcode = 0x10;
 	private boolean isFinal = true;
-	private byte Type;
+	private byte type;
 	private byte TotalAHSLength = 0;
 	private byte[] DataSegmentLength = new byte[]{0,0,0};
 	private byte[] LUN = new byte[8];
@@ -211,10 +268,10 @@ public class PDUSNACKRequest {
 	private byte[] ExpStatSN = new byte[4];
 	private byte[] BegRun = new byte[4];
 	private byte[] RunLength = new byte[4];
-	public PDUSNACKRequest(){}
-	public PDUSNACKRequest(byte[] BHS) throws Exception{
+	public SNACKRequest(){}
+	public SNACKRequest(byte[] BHS) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
-		Type = (byte)(BHS[1] & 0x0f);
+		type = (byte)(BHS[1] & 0x0f);
 		System.arraycopy(BHS, 8, LUN, 0, LUN.length); 
 		System.arraycopy(BHS, 16, InitiatorTaskTag, 0, InitiatorTaskTag.length);
 		System.arraycopy(BHS, 20, TargetTransferTag, 0, TargetTransferTag.length);
@@ -223,17 +280,17 @@ public class PDUSNACKRequest {
 		System.arraycopy(BHS, 44, RunLength, 0, RunLength.length);
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.SNACK_REQUEST;
+	public Opcode getOpcode() {
+		return Opcode.SNACK_REQUEST;
 	}
 	public boolean getFinal(){
 		return isFinal;
 	}
-	public byte getType() {
-		return Type;
+	public Type getType() {
+		return Type.valueOf(this.type);
 	}
-	public void setType(byte type) {
-		Type =  (byte)(type & 0x0f);;
+	public void setType(Type type) {
+		this.type =  type.value;
 	}
 	public int getTotalAHSLength() {
 		return TotalAHSLength;
@@ -280,9 +337,9 @@ public class PDUSNACKRequest {
 
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
-		build.append(System.getProperty("line.separator")+" type : "+Type);
+		build.append(System.getProperty("line.separator")+" type : "+Type.valueOf(this.type));
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);
 		build.append(System.getProperty("line.separator")+" DataSegmentLength : "+ByteUtil.byteArrayToInt(DataSegmentLength));
 		build.append(System.getProperty("line.separator")+" LUN : 0x"+ByteUtil.toHex(LUN));
@@ -299,7 +356,7 @@ public class PDUSNACKRequest {
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
 			dos.writeByte(0x10); //Opcode
-			dos.writeByte(0x80|this.Type);
+			dos.writeByte(0x80|this.type);
 			dos.write(new byte[]{0,0}); //Reserved
 			dos.writeByte(this.TotalAHSLength);
 			dos.write(this.DataSegmentLength); //This is the data segment payload length in bytes (excluding padding).
@@ -323,8 +380,8 @@ public class PDUSNACKRequest {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		PDUSNACKRequest original = new PDUSNACKRequest();
-		original.setType((byte)0x01);
+		SNACKRequest original = new SNACKRequest();
+		original.setType(Type.RDataSNACK);
 		original.setLUN(new byte[]{0x0e});
 		original.setInitiatorTaskTag(2);
 		original.setTargetTransferTag(3);
@@ -335,7 +392,7 @@ public class PDUSNACKRequest {
 		byte[] data = original.toByte();
 		byte[] BHS   = new byte[48];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
-		PDUSNACKRequest after = new PDUSNACKRequest(BHS);
+		SNACKRequest after = new SNACKRequest(BHS);
 		System.out.println(after);
 		System.out.println(data.length);
 	}

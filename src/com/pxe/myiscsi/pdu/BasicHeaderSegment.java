@@ -1,6 +1,7 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import com.moviezone.util.ByteUtil;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -124,10 +125,10 @@ Target opcodes are:
  * 
  *
  */
-public class PDUBasicHeaderSegment {
+public class BasicHeaderSegment {
 	
 	private boolean isImmediate;
-	private byte Opcode;
+	private byte opcode;
 	private boolean isFinal;
 	private byte[] OpcodeSpecificFields1 = new byte[3];
 	private byte TotalAHSLength;
@@ -135,10 +136,10 @@ public class PDUBasicHeaderSegment {
 	private byte[] LUNorOpcodeSpecificFields = new byte[8];
 	private byte[] InitiatorTaskTag = new byte[4];
 	private byte[] OpcodeSpecificFields2 = new byte[28];
-	public PDUBasicHeaderSegment(byte[] BHS) throws Exception{
+	public BasicHeaderSegment(byte[] BHS) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
 		isImmediate = (ByteUtil.getBit(BHS[0], 1)==1);
-		Opcode = (byte)(BHS[0] & 0x3f);
+		opcode = (byte)(BHS[0] & 0x3f);
 		isFinal = (ByteUtil.getBit(BHS[1], 0)==1);
 		System.arraycopy(BHS, 1, OpcodeSpecificFields1, 0, OpcodeSpecificFields1.length);
 		TotalAHSLength = BHS[4];
@@ -158,14 +159,14 @@ public class PDUBasicHeaderSegment {
 		return ByteUtil.byteArrayToInt(DataSegmentLength);
 	}
 
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.valueOf(Opcode);
+	public Opcode getOpcode() {
+		return Opcode.valueOf(opcode);
 	}
 
 	public String toString(){
 		StringBuilder build = new StringBuilder();
 		build.append(System.getProperty("line.separator")+" isImmediate : "+isImmediate);
-		build.append(System.getProperty("line.separator")+" Opcode : 0x"+ByteUtil.toHex(new byte[]{Opcode}));
+		build.append(System.getProperty("line.separator")+" Opcode : 0x"+ByteUtil.toHex(new byte[]{opcode}));
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
 		build.append(System.getProperty("line.separator")+" OpcodeSpecificFields1 :  0x"+ByteUtil.toHex(OpcodeSpecificFields1));
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+(short)TotalAHSLength);

@@ -16,7 +16,7 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.ENUM;
 
 
 import java.util.HashMap;
@@ -72,7 +72,7 @@ import java.util.Map;
 </pre>
  * 
  */
-public enum PDUOpcodeEnum {
+public enum Opcode {
 
     // --------------------------------------------------------------------------
     // The initiator operation codes
@@ -316,16 +316,16 @@ public enum PDUOpcodeEnum {
 
     private final byte value;
 
-    private static Map<Byte , PDUOpcodeEnum> mapping;
+    private static Map<Byte , Opcode> mapping;
 
     static {
-        PDUOpcodeEnum.mapping = new HashMap<Byte , PDUOpcodeEnum>();
-        for (PDUOpcodeEnum s : values()) {
-            PDUOpcodeEnum.mapping.put(s.value, s);
+        Opcode.mapping = new HashMap<Byte , Opcode>();
+        for (Opcode s : values()) {
+            Opcode.mapping.put(s.value, s);
         }
     }
 
-    private PDUOpcodeEnum (final byte newValue) {
+    private Opcode (final byte newValue) {
 
         value = newValue;
     }
@@ -347,9 +347,9 @@ public enum PDUOpcodeEnum {
      * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not defined
      *         by this enumeration.
      */
-    public static final PDUOpcodeEnum valueOf (final byte value) {
+    public static final Opcode valueOf (final byte value) {
 
-        return PDUOpcodeEnum.mapping.get(value);
+        return Opcode.mapping.get(value);
     }
 
     // --------------------------------------------------------------------------

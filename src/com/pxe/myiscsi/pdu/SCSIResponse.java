@@ -1,19 +1,14 @@
-package com.pxe.myiscsi;
+package com.pxe.myiscsi.pdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
 
 import com.moviezone.util.ByteUtil;
-import com.pxe.iscsi.target.connection.SessionType;
+import com.pxe.myiscsi.ENUM.Opcode;
 
 /**
 <pre>
@@ -294,16 +289,128 @@ import com.pxe.iscsi.target.connection.SessionType;
  * 
  *
  */
-public class PDUSCSIResponse {
+public class SCSIResponse {
+	public enum Status {
+
+ /**
+<pre>
+0x00 - GOOD
+</pre>
+ */
+		GOOD((byte) 0x00),
+
+ /**
+<pre>
+0x02 - CHECK CONDITION
+</pre>
+ */
+		CheckCondition((byte) 0x02),
 	
-	private byte Opcode = 0x21;
+/**
+<pre>
+0x08 - BUSY
+</pre>
+ */
+		BUSY((byte) 0x08),
+
+/**
+<pre>
+0x18 - RESERVATION CONFLICT
+</pre>
+ */
+		ReservationConflict((byte) 0x18),
+
+/**
+<pre>
+0x28 - TASK SET FULL
+</pre>
+ */
+		TaskSetFull((byte) 0x28),
+
+/**
+<pre>
+0x30 - ACA ACTIVE
+</pre>
+ */
+		AcaActive((byte) 0x30),
+
+/**
+<pre>
+0x40 - TASK ABORTED
+</pre>
+ */
+		TaskAborted((byte) 0x40);
+		
+	    private final byte value;
+	    private static Map<Byte , Status> mapping;
+	    static {
+	    	Status.mapping = new HashMap<Byte , Status>();
+	        for (Status s : values()) {
+	        	Status.mapping.put(s.value, s);
+	        }
+	    }
+	    private Status (final byte newValue) {
+	        value = newValue;
+	    }
+	    public final byte value () {
+	        return value;
+	    }
+	    public static final Status valueOf (final byte value) {
+	        return Status.mapping.get(value);
+	    }
+	}
+
+	public enum Response {
+
+ /**
+<pre>
+0x00 - Command Completed at Target
+</pre>
+ */
+		CommandComplete((byte) 0x00),
+
+ /**
+<pre>
+0x01 - Target Failure
+</pre>
+ */
+		TargetFailure((byte) 0x01),
+	
+/**
+<pre>
+0x80-0xff - Vendor specific
+</pre>
+ */
+		VendorSpecific((byte) 0x80);
+
+		
+	    private final byte value;
+	    private static Map<Byte , Response> mapping;
+	    static {
+	    	Response.mapping = new HashMap<Byte , Response>();
+	        for (Response s : values()) {
+	        	Response.mapping.put(s.value, s);
+	        }
+	    }
+	    private Response (final byte newValue) {
+	        value = newValue;
+	    }
+	    public final byte value () {
+	        return value;
+	    }
+	    public static final Response valueOf (final byte value) {
+	        return Response.mapping.get(value);
+	    }
+	}
+	
+	private byte opcode = 0x21;
 	private boolean isFinal = true;
 	private boolean isReadResidualOverflow;
 	private boolean isReadResidualUnderflow;
 	private boolean isResidualOverflow;
 	private boolean isResidualUnderflow;
-	private byte Response;
-	private byte Status;
+	private byte response;
+	private byte status;
 	private byte TotalAHSLength;
 	private byte[] DataSegmentLength = new byte[3];
 	private byte[] InitiatorTaskTag = new byte[4];
@@ -314,15 +421,15 @@ public class PDUSCSIResponse {
 	private byte[] ExpDataSN = new byte[4];
 	private byte[] BReadResidualCount = new byte[4];
 	private byte[] ResidualCount = new byte[4];
-	public PDUSCSIResponse(){}
-	public PDUSCSIResponse(byte[] BHS,byte[] DataSegment) throws Exception{
+	public SCSIResponse(){}
+	public SCSIResponse(byte[] BHS,byte[] DataSegment) throws Exception{
 		if(BHS.length!=48)throw new Exception("illegic Basic Header Segment Size , the proper length is 48");
 		isReadResidualOverflow = (ByteUtil.getBit(BHS[1], 3)==1);
 		isReadResidualUnderflow = (ByteUtil.getBit(BHS[1], 4)==1);
 		isResidualOverflow = (ByteUtil.getBit(BHS[1], 5)==1);
 		isResidualUnderflow = (ByteUtil.getBit(BHS[1], 6)==1);
-		Response = BHS[2];
-		Status = BHS[3];
+		response = BHS[2];
+		status = BHS[3];
 		TotalAHSLength = BHS[4];
 		System.arraycopy(BHS, 5, DataSegmentLength, 0, DataSegmentLength.length);
 		System.arraycopy(BHS, 16, InitiatorTaskTag, 0, InitiatorTaskTag.length);
@@ -335,8 +442,8 @@ public class PDUSCSIResponse {
 		System.arraycopy(BHS, 44, ResidualCount, 0, ResidualCount.length);
 	}
 	
-	public PDUOpcodeEnum getOpcode() {
-		return PDUOpcodeEnum.SCSI_RESPONSE;
+	public Opcode getOpcode() {
+		return Opcode.SCSI_RESPONSE;
 	}
 	public boolean getReadResidualOverflow() {
 		return isReadResidualOverflow;
@@ -362,17 +469,17 @@ public class PDUSCSIResponse {
 	public void setResidualUnderflow(boolean isResidualUnderflow) {
 		this.isResidualUnderflow = isResidualUnderflow;
 	}
-	public byte getResponse() {
-		return Response;
+	public Response getResponse() {
+		return Response.valueOf(this.response);
 	}
-	public void setResponse(byte response) {
-		Response = response;
+	public void setResponse(Response response) {
+		this.response = response.value;
 	}
-	public byte getStatus() {
-		return Status;
+	public Status getStatus() {
+		return Status.valueOf(this.status);
 	}
-	public void setStatus(byte status) {
-		Status = status;
+	public void setStatus(Status status) {
+		this.status = status.value;
 	}
 	public byte getTotalAHSLength() {
 		return TotalAHSLength;
@@ -431,14 +538,14 @@ public class PDUSCSIResponse {
 	
 	public String toString(){
 		StringBuilder build = new StringBuilder();
-		build.append(System.getProperty("line.separator")+" Opcode : "+PDUOpcodeEnum.valueOf(Opcode));
+		build.append(System.getProperty("line.separator")+" Opcode : "+Opcode.valueOf(opcode));
 		build.append(System.getProperty("line.separator")+" isFinal : "+isFinal);
 		build.append(System.getProperty("line.separator")+" isReadResidualOverflow : "+isReadResidualOverflow);
 		build.append(System.getProperty("line.separator")+" isReadResidualUnderflow : "+isReadResidualUnderflow);
 		build.append(System.getProperty("line.separator")+" isResidualOverflow : "+isResidualOverflow);
 		build.append(System.getProperty("line.separator")+" isResidualUnderflow : "+isResidualUnderflow);
-		build.append(System.getProperty("line.separator")+" Response : "+Response);
-		build.append(System.getProperty("line.separator")+" Status : "+Status);
+		build.append(System.getProperty("line.separator")+" Response : "+Response.valueOf(this.response));
+		build.append(System.getProperty("line.separator")+" Status : "+Status.valueOf(this.status));
 		build.append(System.getProperty("line.separator")+" TotalAHSLength : "+TotalAHSLength);
 		build.append(System.getProperty("line.separator")+" DataSegmentLength : "+this.getDataSegmentLength());
 		build.append(System.getProperty("line.separator")+" InitiatorTaskTag : "+ByteUtil.byteArrayToInt(InitiatorTaskTag));
@@ -454,13 +561,13 @@ public class PDUSCSIResponse {
 	}
  	
 	public static void main(String[] args) throws Exception{
-		PDUSCSIResponse original = new PDUSCSIResponse();
+		SCSIResponse original = new SCSIResponse();
 		original.setReadResidualOverflow(false);
 		original.setReadResidualUnderflow(true);
 		original.setResidualOverflow(false);
 		original.setResidualUnderflow(true);
-		original.setResponse((byte)1);
-		original.setStatus((byte)2);
+		original.setResponse(Response.TargetFailure);
+		original.setStatus(Status.CheckCondition);
 		original.setInitiatorTaskTag(3);
 		original.setSNACKTag(new byte[]{0x04,0,0});
 		original.setStatSN(5);
@@ -475,7 +582,7 @@ public class PDUSCSIResponse {
 		byte[] dataS = new byte[data.length-BHS.length];
 		System.arraycopy(data, 0, BHS, 0, BHS.length);
 		System.arraycopy(data, 48, dataS, 0, dataS.length);
-		PDUSCSIResponse after = new PDUSCSIResponse(BHS,dataS);
+		SCSIResponse after = new SCSIResponse(BHS,dataS);
 		System.out.println(after);
 		System.out.println(data.length);
 		
@@ -492,8 +599,8 @@ public class PDUSCSIResponse {
 			b = (byte)(this.isResidualOverflow?(b|0x4):b);
 			b = (byte)(this.isResidualUnderflow?(b|0x2):b);
 			dos.writeByte(b);
-			dos.writeByte(this.Response);
-			dos.writeByte(this.Status);
+			dos.writeByte(this.response);
+			dos.writeByte(this.status);
 			dos.writeByte(this.TotalAHSLength);
 			dos.write(this.DataSegmentLength); //This is the data segment payload length in bytes (excluding padding).
 			dos.write(new byte[]{0,0,0,0}); //Reserved
