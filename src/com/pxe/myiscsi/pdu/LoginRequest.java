@@ -363,11 +363,11 @@ public class LoginRequest {
 	public void setInitiatorTaskTag(int initiatorTaskTag) {
 		InitiatorTaskTag = ByteUtil.intToByteArray(initiatorTaskTag);
 	}
-	public byte[] getCID() {
-		return CID;
+	public short getCID() {
+		return ByteUtil.byteArrayToShort(this.CID);
 	}
-	public void setCID(byte[] CID) {
-		System.arraycopy(CID, 0, this.CID, 0, Math.min(CID.length, this.CID.length));
+	public void setCID(short CID) {
+		this.CID = ByteUtil.shortToByteArray(CID);
 	}
 	public int getCmdSN() {
 		return ByteUtil.byteArrayToInt(CmdSN);

@@ -4,9 +4,20 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map.Entry;
 
+import com.pxe.myiscsi.ENUM.CDBOpcode;
+import com.pxe.myiscsi.cdb16.Inquiry;
+import com.pxe.myiscsi.cdb16.InquiryStandardData;
+import com.pxe.myiscsi.cdb16.InquiryStandardData.PeripheralDeviceType;
+import com.pxe.myiscsi.cdb16.InquiryStandardData.PeripheralQualifer;
+import com.pxe.myiscsi.cdb16.InquiryStandardData.TPGS;
+import com.pxe.myiscsi.cdb16.InquiryStandardData.Version;
+import com.pxe.myiscsi.cdb16.LUN;
+import com.pxe.myiscsi.cdb16.ReportLUN;
+import com.pxe.myiscsi.cdb16.ReportLUNParam;
 import com.pxe.myiscsi.pdu.LogoutRequest;
 import com.pxe.myiscsi.pdu.LogoutResponse;
 import com.pxe.myiscsi.pdu.SCSICommand;
+import com.pxe.myiscsi.pdu.SCSIDataIn;
 import com.pxe.myiscsi.pdu.TextRequest;
 import com.pxe.myiscsi.pdu.TextResponse;
 
@@ -290,23 +301,70 @@ public class PhaseFullFeature {
 	}
 
 
-	public void scsiCommand(Socket socket, SCSICommand scsiCommand) {
+	public void scsiCommand(Socket socket, SCSICommand scsiCommand) throws Exception{
 		System.out.println(socket.getRemoteSocketAddress()+" --> scsi command");
-		/*
-		LogoutResponse response = new LogoutResponse();
-		OutputStream os = socket.getOutputStream();
-		response.setInitiatorTaskTag(request.getInitiatorTaskTag());
-		response.setResponse(LogoutResponse.Response.SUCCESS);
-		response.setStatSN(request.getExpStatSN());
-		response.setExpCmdSN(request.getCmdSN());
-		response.setMaxCmdSN(response.getExpCmdSN());
-		response.setTime2Retain((short)2);
-		System.out.println(response);
-		os.write(response.toByte());
-		os.close();
-		socket.close();
-		*/
+		byte[] CDB = scsiCommand.getCDB();
+		if(CDB[0] == CDBOpcode.ReportLUN.value())SCSI_ReportLUN(socket,scsiCommand);
+		if(CDB[0] == CDBOpcode.Inquiry.value())SCSI_Inquiry(socket,scsiCommand);
+		
 	}
 	
+	private void SCSI_ReportLUN(Socket socket, SCSICommand scsiCommand) throws Exception{
+		System.out.println(socket.getRemoteSocketAddress()+" --> scsi report luns");
+		ReportLUN command = new ReportLUN(scsiCommand.getCDB());
+		System.out.println(command);
+		OutputStream os = socket.getOutputStream();
+		SCSIDataIn dataIn = new SCSIDataIn();
+		dataIn.setInitiatorTaskTag(scsiCommand.getInitiatorTaskTag());
+		dataIn.setTargetTransferTag(-1);
+		dataIn.setFinal(true);
+		dataIn.setStatus(true);
+		dataIn.setStatSN(scsiCommand.getExpStatSN());
+		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		ReportLUNParam param = new ReportLUNParam();
+		param.setLUN(new LUN(0));
+		dataIn.setDataSegment(param.toByte());
+		os.write(dataIn.toByte());
+		os.flush();
+	}
+	
+	private void SCSI_Inquiry(Socket socket, SCSICommand scsiCommand) throws Exception{
+		System.out.println(socket.getRemoteSocketAddress()+" --> scsi inquiry");
+		Inquiry command = new Inquiry(scsiCommand.getCDB());
+		System.out.println(command);
+		OutputStream os = socket.getOutputStream();
+		SCSIDataIn dataIn = new SCSIDataIn();
+		dataIn.setInitiatorTaskTag(scsiCommand.getInitiatorTaskTag());
+		dataIn.setTargetTransferTag(-1);
+		dataIn.setFinal(true);
+		dataIn.setStatus(true);
+		dataIn.setStatSN(scsiCommand.getExpStatSN());
+		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		dataIn.setLUN(scsiCommand.getLUN());
+		byte[] dataSegment=new byte[0];
+		
+		if(!command.getEVPD()){
+			//standard inquiry format
+			InquiryStandardData param = new InquiryStandardData();
+			param.setPeripheralQulifer(PeripheralQualifer.connected);
+			param.setPeripheralType(PeripheralDeviceType.DirectBlockDevice);
+			param.setVersion(Version.ANSI_INCITS_408_2005);
+			param.setTPGS(TPGS.noAsyAccess);
+			param.setT10VendorID("disyUKon");
+			param.setProductID("ahone SCSI");
+			param.setProductRevisionLevel("1.00");
+			dataSegment = param.toByte();
+		}else{
+			//vital product data
+			
+			
+		}
+		
+		dataIn.setDataSegment(dataSegment);
+		os.write(dataIn.toByte());
+		os.flush();
+	}
 	
 }

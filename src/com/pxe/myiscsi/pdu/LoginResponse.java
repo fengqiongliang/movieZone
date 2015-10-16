@@ -562,8 +562,8 @@ public class LoginResponse {
 	public void setInitiatorTaskTag(int initiatorTaskTag) {
 		InitiatorTaskTag = ByteUtil.intToByteArray(initiatorTaskTag);
 	}
-	public byte[] getStatSN() {
-		return StatSN;
+	public int getStatSN() {
+		return ByteUtil.byteArrayToInt(this.StatSN);
 	}
 	public void setStatSN(int statSN) {
 		StatSN = ByteUtil.intToByteArray(statSN);
