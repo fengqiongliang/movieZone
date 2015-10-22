@@ -9,6 +9,7 @@ import java.net.SocketAddress;
 import com.pxe.myiscsi.ENUM.Stage;
 import com.pxe.myiscsi.cdb16.Inquiry;
 import com.pxe.myiscsi.cdb16.InquiryStandardData;
+import com.pxe.myiscsi.cdb16.InquirySupportedVPD;
 import com.pxe.myiscsi.cdb16.ReportLUN;
 import com.pxe.myiscsi.cdb16.ReportLUN.SelectReport;
 import com.pxe.myiscsi.cdb16.ReportLUNParam;
@@ -39,7 +40,7 @@ public class Test {
 		loginReq1.setExpStatSN(1);
 		loginReq1.setParameter("InitiatorName", "iqn.1991-05.com.microsoft:ahone-outer-pc");
 		loginReq1.setParameter("SessionType", "Normal");
-		loginReq1.setParameter("TargetName", "iqn.2007-08.name.dns.target.my:iscsiboot");
+		loginReq1.setParameter("TargetName", "iqn.2007-08.name.dns.target.my:iscsiboot3260");
 		loginReq1.setParameter("AuthMethod", "None");
 		System.out.println(loginReq1);
 		writeStream.write(loginReq1.toByte());
@@ -145,7 +146,10 @@ public class Test {
 		System.arraycopy(buf, 0, BHS, 0, BHS.length);
 		System.arraycopy(buf, 48, DataSegment, 0, DataSegment.length);
 		System.out.println("scsi size : "+size+" opcode : "+BHS[0]+"  is DataIn  --> "+(BHS[0]==0x25)+" dataSegSize --> "+DataSegment.length);
-		
+		in = new SCSIDataIn(BHS,DataSegment);
+		InquirySupportedVPD param2 = new InquirySupportedVPD(in.getDataSegment());
+		System.out.println(in);
+		System.out.println(param2);
 		
 		socket.close();
 		

@@ -6,12 +6,22 @@ import java.util.Map.Entry;
 
 import com.pxe.myiscsi.ENUM.CDBOpcode;
 import com.pxe.myiscsi.cdb16.Inquiry;
+import com.pxe.myiscsi.cdb16.Inquiry.PageCode;
+import com.pxe.myiscsi.cdb16.InquiryDeviceID;
+import com.pxe.myiscsi.cdb16.InquiryDeviceIDDescr;
+import com.pxe.myiscsi.cdb16.InquiryDeviceIDDescr.Association;
+import com.pxe.myiscsi.cdb16.InquiryDeviceIDDescr.CodeSet;
+import com.pxe.myiscsi.cdb16.InquiryDeviceIDDescr.IDType;
+import com.pxe.myiscsi.cdb16.InquiryDeviceIDDescr.ProtocolID;
 import com.pxe.myiscsi.cdb16.InquiryStandardData;
 import com.pxe.myiscsi.cdb16.InquiryStandardData.PeripheralDeviceType;
 import com.pxe.myiscsi.cdb16.InquiryStandardData.PeripheralQualifer;
 import com.pxe.myiscsi.cdb16.InquiryStandardData.TPGS;
 import com.pxe.myiscsi.cdb16.InquiryStandardData.Version;
+import com.pxe.myiscsi.cdb16.InquirySupportedVPD;
 import com.pxe.myiscsi.cdb16.LUN;
+import com.pxe.myiscsi.cdb16.ReadCapacity;
+import com.pxe.myiscsi.cdb16.ReadCapacityParam;
 import com.pxe.myiscsi.cdb16.ReportLUN;
 import com.pxe.myiscsi.cdb16.ReportLUNParam;
 import com.pxe.myiscsi.pdu.LogoutRequest;
@@ -251,7 +261,7 @@ public class PhaseFullFeature {
 		response.setContinue(false);
 		response.setInitiatorTaskTag(request.getInitiatorTaskTag());
 		response.setTargetTransferTag(-1);
-		response.setParameter("TargetName", "iqn.2007-08.name.dns.target.my:iscsiboot");
+		response.setParameter("TargetName", "iqn.2007-08.name.dns.target.my:iscsiboot3261");
 		response.setParameter("TargetAddress", socket.getLocalSocketAddress().toString().replace("/", "")+",1");
 		response.setStatSN(request.getExpStatSN());
 		response.setExpCmdSN(request.getCmdSN()+1);
@@ -306,7 +316,8 @@ public class PhaseFullFeature {
 		byte[] CDB = scsiCommand.getCDB();
 		if(CDB[0] == CDBOpcode.ReportLUN.value())SCSI_ReportLUN(socket,scsiCommand);
 		if(CDB[0] == CDBOpcode.Inquiry.value())SCSI_Inquiry(socket,scsiCommand);
-		
+		if(CDB[0] == CDBOpcode.ReadCapacity10.value())SCSI_ReadCapacity(socket,scsiCommand);
+		if(CDB[0] == CDBOpcode.Read10.value())SCSI_Read(socket,scsiCommand);
 	}
 	
 	private void SCSI_ReportLUN(Socket socket, SCSICommand scsiCommand) throws Exception{
@@ -344,8 +355,9 @@ public class PhaseFullFeature {
 		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
 		dataIn.setLUN(scsiCommand.getLUN());
 		byte[] dataSegment=new byte[0];
+		boolean EVPD = command.getEVPD();
 		
-		if(!command.getEVPD()){
+		if(!EVPD){
 			//standard inquiry format
 			InquiryStandardData param = new InquiryStandardData();
 			param.setPeripheralQulifer(PeripheralQualifer.connected);
@@ -356,15 +368,88 @@ public class PhaseFullFeature {
 			param.setProductID("ahone SCSI");
 			param.setProductRevisionLevel("1.00");
 			dataSegment = param.toByte();
-		}else{
-			//vital product data
-			
+			System.out.println(param);
+		}
+		if(EVPD && command.getPageCode() == PageCode.SupportedVPD){
+			//support inquiry Device support
+			InquirySupportedVPD param = new InquirySupportedVPD();
+			param.setPeripheralQulifer(PeripheralQualifer.connected);
+			param.setPeripheralType(PeripheralDeviceType.DirectBlockDevice);
+			param.setSupportedPageList(PageCode.SupportedVPD);
+			param.setSupportedPageList(PageCode.DeviceID);
+			dataSegment = param.toByte();
+		}
+		if(EVPD && command.getPageCode() == PageCode.DeviceID){
+			//Device Identification 
+			InquiryDeviceID param = new InquiryDeviceID();
+			param.setPeripheralQulifer(PeripheralQualifer.connected);
+			param.setPeripheralType(PeripheralDeviceType.DirectBlockDevice);
+			InquiryDeviceIDDescr descr1 = new InquiryDeviceIDDescr();
+			descr1.setPIV(true);
+			descr1.setProtocolID(ProtocolID.ISCSI);
+			descr1.setCodeSet(CodeSet.UTF8);
+			descr1.setAssociation(Association.SCSITarget);
+			descr1.setIDType(IDType.ScsiNameString);
+			descr1.setId("ahoneSCSITarget");
+			param.setIDDescList(descr1);
+			dataSegment = param.toByte();
 			
 		}
 		
 		dataIn.setDataSegment(dataSegment);
+		byte[] data = dataIn.toByte();
+		System.out.println(dataIn);
+		os.write(data);
+		os.flush();
+	}
+	
+	private void SCSI_ReadCapacity(Socket socket, SCSICommand scsiCommand) throws Exception{
+		System.out.println(socket.getRemoteSocketAddress()+" --> scsi ReadCapacity 10");
+		ReadCapacity command = new ReadCapacity(scsiCommand.getCDB());
+		System.out.println(command);
+		OutputStream os = socket.getOutputStream();
+		SCSIDataIn dataIn = new SCSIDataIn();
+		dataIn.setInitiatorTaskTag(scsiCommand.getInitiatorTaskTag());
+		dataIn.setTargetTransferTag(-1);
+		dataIn.setFinal(true);
+		dataIn.setStatus(true);
+		dataIn.setStatSN(scsiCommand.getExpStatSN());
+		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		dataIn.setLUN(scsiCommand.getLUN());
+		ReadCapacityParam param = new ReadCapacityParam();
+		param.setReturnLBA(1024*1024*2);
+		param.setBlockLength(512);
+		//total size is 1024*1024*2*512 B = 1024*2*512KB = 2*512MB=1GB
+		dataIn.setDataSegment(param.toByte());
+		System.out.println(dataIn);
 		os.write(dataIn.toByte());
 		os.flush();
+	}
+	
+	private void SCSI_Read(Socket socket, SCSICommand scsiCommand) throws Exception{
+		System.out.println(socket.getRemoteSocketAddress()+" --> scsi Read 10");
+		/*
+		ReadCapacity command = new ReadCapacity(scsiCommand.getCDB());
+		System.out.println(command);
+		OutputStream os = socket.getOutputStream();
+		SCSIDataIn dataIn = new SCSIDataIn();
+		dataIn.setInitiatorTaskTag(scsiCommand.getInitiatorTaskTag());
+		dataIn.setTargetTransferTag(-1);
+		dataIn.setFinal(true);
+		dataIn.setStatus(true);
+		dataIn.setStatSN(scsiCommand.getExpStatSN());
+		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		dataIn.setLUN(scsiCommand.getLUN());
+		ReadCapacityParam param = new ReadCapacityParam();
+		param.setReturnLBA(command.getLBA());
+		param.setBlockLength(1024*1024*512); //512M
+		dataIn.setDataSegment(param.toByte());
+		System.out.println(dataIn);
+		os.write(dataIn.toByte());
+		os.flush();
+		*/
 	}
 	
 }

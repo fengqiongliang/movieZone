@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -18,11 +20,18 @@ import com.pxe.myiscsi.pdu.TextRequest;
 public class ISCSIServer {
 
 	public static void main(String[] args) throws Exception {
+		ExecutorService pool = Executors.newFixedThreadPool(20);
+		
 		ServerSocket serverSocket = new ServerSocket();
 		serverSocket.bind(new InetSocketAddress("192.168.43.50",3261));
 		while(true){
-			Socket socket = serverSocket.accept();
-			execute(socket);
+			final Socket socket = serverSocket.accept();
+			pool.execute(new Runnable(){
+				@Override
+				public void run() {
+					try{execute(socket);}catch(Exception ex){ex.printStackTrace();}
+				}
+			});
 		}
 	}
 	

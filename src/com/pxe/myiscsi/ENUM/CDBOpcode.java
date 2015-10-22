@@ -64,9 +64,34 @@ public enum CDBOpcode {
     SendDiagnostic((byte) 0x1d),
     
     /**
+     * READ_CAPACITY_10 command
+     */
+    ReadCapacity10((byte) 0x25),
+    
+    /**
      * READ_CAPACITY_16 command
      */
-    ReadCapacity((byte) 0x9e);
+    ReadCapacity16((byte) 0x9e),
+    
+    /**
+     * READ_6 command
+     */
+    Read6((byte) 0x08),
+    
+    /**
+     * READ_10 command
+     */
+    Read10((byte) 0x28),
+    
+    /**
+     * WRITE_6 command
+     */
+    Write6((byte) 0x0a),
+    
+    /**
+     * WRITE_10 command
+     */
+    Write10((byte) 0x2a);
     
     private final byte value;
 
