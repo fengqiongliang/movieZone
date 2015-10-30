@@ -74,6 +74,11 @@ public enum CDBOpcode {
     ReadCapacity16((byte) 0x9e),
     
     /**
+     * MODE_SENSE_6 command
+     */
+    ModeSense6((byte) 0x1a),
+    
+    /**
      * READ_6 command
      */
     Read6((byte) 0x08),

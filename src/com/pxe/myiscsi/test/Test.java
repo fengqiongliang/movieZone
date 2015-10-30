@@ -2,7 +2,9 @@ package com.pxe.myiscsi.test;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 
@@ -10,6 +12,11 @@ import com.pxe.myiscsi.ENUM.Stage;
 import com.pxe.myiscsi.cdb16.Inquiry;
 import com.pxe.myiscsi.cdb16.InquiryStandardData;
 import com.pxe.myiscsi.cdb16.InquirySupportedVPD;
+import com.pxe.myiscsi.cdb16.ModeSense6;
+import com.pxe.myiscsi.cdb16.ModeSense6.PC;
+import com.pxe.myiscsi.cdb16.Read10;
+import com.pxe.myiscsi.cdb16.ReadCapacity;
+import com.pxe.myiscsi.cdb16.ReadCapacityParam;
 import com.pxe.myiscsi.cdb16.ReportLUN;
 import com.pxe.myiscsi.cdb16.ReportLUN.SelectReport;
 import com.pxe.myiscsi.cdb16.ReportLUNParam;
@@ -23,8 +30,20 @@ public class Test {
 
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
+		SocketAddress LocalIpPort      = new InetSocketAddress("192.168.86.1",3345);
+		SocketAddress RemoteIpPort1 = new InetSocketAddress("192.168.86.125",3260);
+		SocketAddress RemoteIpPort2 = new InetSocketAddress("192.168.86.126",3260);
+		
 		Socket socket = new Socket();
-		socket.connect(new InetSocketAddress("192.168.43.50",3260));
+		socket.setSoLinger(true, 0); //设置强制关闭
+		socket.setReuseAddress(true);
+		socket.bind(LocalIpPort);
+		socket.connect(RemoteIpPort1);
+		
+		
+		
+		
+		
 		InputStream   readStream = socket.getInputStream();
 		OutputStream writeStream = socket.getOutputStream();
 		byte[] buf = new byte[1024];
@@ -40,7 +59,7 @@ public class Test {
 		loginReq1.setExpStatSN(1);
 		loginReq1.setParameter("InitiatorName", "iqn.1991-05.com.microsoft:ahone-outer-pc");
 		loginReq1.setParameter("SessionType", "Normal");
-		loginReq1.setParameter("TargetName", "iqn.2007-08.name.dns.target.my:iscsiboot3260");
+		loginReq1.setParameter("TargetName", "iqn.2007-08.name.dns.target.my:iscsiboot125");
 		loginReq1.setParameter("AuthMethod", "None");
 		System.out.println(loginReq1);
 		writeStream.write(loginReq1.toByte());
@@ -101,10 +120,10 @@ public class Test {
 		cmmdReq.setWrite(false);
 		cmmdReq.setATTR(Attr.Untagged);
 		cmmdReq.setInitiatorTaskTag(1);
-		cmmdReq.setExpDataTransferLen(36);
+		cmmdReq.setExpDataTransferLen(8);
 		cmmdReq.setCmdSN(1);
 		cmmdReq.setExpStatSN(2);
-		Inquiry cdb = new Inquiry();
+		Read10 cdb = new Read10();
 		cmmdReq.setCDB(cdb.toByte());
 		System.out.println(cmmdReq);
 		writeStream.write(cmmdReq.toByte());
@@ -119,9 +138,7 @@ public class Test {
 		System.out.println("scsi size : "+size+" opcode : "+BHS[0]+"  is DataIn  --> "+(BHS[0]==0x25)+" dataSegSize --> "+DataSegment.length);
 		
 		SCSIDataIn in = new SCSIDataIn(BHS,DataSegment);
-		InquiryStandardData param = new InquiryStandardData(in.getDataSegment());
 		System.out.println(in);
-		System.out.println(param);
 		
 		SCSICommand cmmdReq2= new SCSICommand();
 		cmmdReq2.setImmediate(false);
@@ -130,12 +147,13 @@ public class Test {
 		cmmdReq2.setWrite(false);
 		cmmdReq2.setATTR(Attr.Untagged);
 		cmmdReq2.setInitiatorTaskTag(1);
-		cmmdReq2.setExpDataTransferLen(255);
+		cmmdReq2.setExpDataTransferLen(12);
 		cmmdReq2.setCmdSN(2);
 		cmmdReq2.setExpStatSN(3);
-		Inquiry cdb2 = new Inquiry();
-		cdb2.setEVPD(true);
-		cdb2.setAllocateLength((byte)255);
+		ModeSense6 cdb2 = new ModeSense6();
+		cdb2.setPC(PC.CurrentValues);
+		cdb2.setPageCode((byte)28);
+		cdb2.setSubPageCode((byte)-64);
 		cmmdReq2.setCDB(cdb2.toByte());
 		System.out.println(cmmdReq2);
 		writeStream.write(cmmdReq2.toByte());
@@ -151,7 +169,21 @@ public class Test {
 		System.out.println(in);
 		System.out.println(param2);
 		
+		
 		socket.close();
+		
+		Socket socket2 = new Socket();
+		socket2.setReuseAddress(true);
+		socket2.setSoLinger(true, 0); //设置强制关闭时
+		socket2.bind(LocalIpPort);
+		socket2.connect(RemoteIpPort2);
+		
+		InputStream   readStream2 = socket2.getInputStream();
+		OutputStream writeStream2 = socket2.getOutputStream();
+		writeStream2.write(150);
+		System.out.println("ok");
+		
+		socket2.close();
 		
 	}
 

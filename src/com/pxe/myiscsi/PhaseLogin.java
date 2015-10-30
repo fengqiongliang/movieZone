@@ -399,7 +399,8 @@ public class PhaseLogin {
 		response.setParameter("HeaderDigest", "None");
 		response.setParameter("DataDigest", "None");
 		response.setParameter("MaxRecvDataSegmentLength", request.getParameter("MaxRecvDataSegmentLength"));
-		response.setParameter("DefaultTime2Wait", "0");
+		//response.setParameter("DefaultTime2Wait", "0");
+		response.setParameter("MaxConnections", "4");
 		response.setParameter("DefaultTime2Retain", request.getParameter("DefaultTime2Retain"));
 		System.out.println(response);
 		os.write(response.toByte());

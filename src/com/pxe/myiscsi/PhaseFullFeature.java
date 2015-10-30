@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map.Entry;
 
+import com.moviezone.util.ByteUtil;
 import com.pxe.myiscsi.ENUM.CDBOpcode;
 import com.pxe.myiscsi.cdb16.Inquiry;
 import com.pxe.myiscsi.cdb16.Inquiry.PageCode;
@@ -20,6 +21,8 @@ import com.pxe.myiscsi.cdb16.InquiryStandardData.TPGS;
 import com.pxe.myiscsi.cdb16.InquiryStandardData.Version;
 import com.pxe.myiscsi.cdb16.InquirySupportedVPD;
 import com.pxe.myiscsi.cdb16.LUN;
+import com.pxe.myiscsi.cdb16.ModeSense6;
+import com.pxe.myiscsi.cdb16.Read10;
 import com.pxe.myiscsi.cdb16.ReadCapacity;
 import com.pxe.myiscsi.cdb16.ReadCapacityParam;
 import com.pxe.myiscsi.cdb16.ReportLUN;
@@ -28,6 +31,9 @@ import com.pxe.myiscsi.pdu.LogoutRequest;
 import com.pxe.myiscsi.pdu.LogoutResponse;
 import com.pxe.myiscsi.pdu.SCSICommand;
 import com.pxe.myiscsi.pdu.SCSIDataIn;
+import com.pxe.myiscsi.pdu.SCSIResponse;
+import com.pxe.myiscsi.pdu.SCSIResponse.Response;
+import com.pxe.myiscsi.pdu.SCSIResponse.Status;
 import com.pxe.myiscsi.pdu.TextRequest;
 import com.pxe.myiscsi.pdu.TextResponse;
 
@@ -318,6 +324,8 @@ public class PhaseFullFeature {
 		if(CDB[0] == CDBOpcode.Inquiry.value())SCSI_Inquiry(socket,scsiCommand);
 		if(CDB[0] == CDBOpcode.ReadCapacity10.value())SCSI_ReadCapacity(socket,scsiCommand);
 		if(CDB[0] == CDBOpcode.Read10.value())SCSI_Read(socket,scsiCommand);
+		if(CDB[0] == CDBOpcode.ModeSense6.value())SCSI_ModeSense(socket,scsiCommand);
+		if(CDB[0] == CDBOpcode.TestUnitReady.value())SCSI_TestUnitReady(socket,scsiCommand);
 	}
 	
 	private void SCSI_ReportLUN(Socket socket, SCSICommand scsiCommand) throws Exception{
@@ -429,8 +437,7 @@ public class PhaseFullFeature {
 	
 	private void SCSI_Read(Socket socket, SCSICommand scsiCommand) throws Exception{
 		System.out.println(socket.getRemoteSocketAddress()+" --> scsi Read 10");
-		/*
-		ReadCapacity command = new ReadCapacity(scsiCommand.getCDB());
+		Read10 command = new Read10(scsiCommand.getCDB());
 		System.out.println(command);
 		OutputStream os = socket.getOutputStream();
 		SCSIDataIn dataIn = new SCSIDataIn();
@@ -442,14 +449,46 @@ public class PhaseFullFeature {
 		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
 		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
 		dataIn.setLUN(scsiCommand.getLUN());
-		ReadCapacityParam param = new ReadCapacityParam();
-		param.setReturnLBA(command.getLBA());
-		param.setBlockLength(1024*1024*512); //512M
-		dataIn.setDataSegment(param.toByte());
+		dataIn.setDataSegment(new byte[scsiCommand.getExpDataTransferLen()]);
 		System.out.println(dataIn);
 		os.write(dataIn.toByte());
 		os.flush();
-		*/
+		
 	}
+	
+	private void SCSI_ModeSense(Socket socket, SCSICommand scsiCommand) throws Exception{
+		System.out.println(socket.getRemoteSocketAddress()+" --> scsi ModeSense 6");
+		ModeSense6 command = new ModeSense6(scsiCommand.getCDB());
+		System.out.println(command);
+		OutputStream os = socket.getOutputStream();
+		SCSIDataIn dataIn = new SCSIDataIn();
+		dataIn.setInitiatorTaskTag(scsiCommand.getInitiatorTaskTag());
+		dataIn.setTargetTransferTag(-1);
+		dataIn.setFinal(true);
+		dataIn.setStatus(true);
+		dataIn.setStatSN(scsiCommand.getExpStatSN());
+		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		dataIn.setLUN(scsiCommand.getLUN());
+		byte[] d = ByteUtil.toByte("0b0000080040000000000200");
+		dataIn.setDataSegment(d);
+		System.out.println(dataIn);
+		os.write(dataIn.toByte());
+		os.flush();
+	}
+	
+	private void SCSI_TestUnitReady(Socket socket, SCSICommand scsiCommand) throws Exception{
+		System.out.println(socket.getRemoteSocketAddress()+" --> scsi TestUnitReady ");
+		OutputStream os = socket.getOutputStream();
+		SCSIResponse response = new SCSIResponse();
+		response.setInitiatorTaskTag(scsiCommand.getInitiatorTaskTag());
+		response.setResponse(Response.CommandComplete);
+		response.setStatus(Status.GOOD);
+		System.out.println(response);
+		os.write(response.toByte());
+		os.flush();
+	}
+	
+	
 	
 }
