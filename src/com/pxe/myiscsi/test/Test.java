@@ -10,8 +10,10 @@ import java.net.SocketAddress;
 
 import com.pxe.myiscsi.ENUM.Stage;
 import com.pxe.myiscsi.cdb16.Inquiry;
+import com.pxe.myiscsi.cdb16.Inquiry.PageCode;
 import com.pxe.myiscsi.cdb16.InquiryStandardData;
 import com.pxe.myiscsi.cdb16.InquirySupportedVPD;
+import com.pxe.myiscsi.cdb16.LUN;
 import com.pxe.myiscsi.cdb16.ModeSense6;
 import com.pxe.myiscsi.cdb16.ModeSense6.PC;
 import com.pxe.myiscsi.cdb16.Read10;
@@ -53,7 +55,7 @@ public class Test {
 		loginReq1.setCSG(Stage.SecurityNegotiation);
 		loginReq1.setNSG(Stage.LoginOperationalNegotiation);
 		loginReq1.setISID(ISID);
-		loginReq1.setInitiatorTaskTag(3);
+		loginReq1.setInitiatorTaskTag(1);
 		loginReq1.setCID((short)1);
 		loginReq1.setCmdSN(1);
 		loginReq1.setExpStatSN(1);
@@ -81,12 +83,12 @@ public class Test {
 		loginReq2.setNSG(Stage.FullFeaturePhase);
 		loginReq2.setISID(ISID);
 		loginReq2.setTSIH(response.getTSIH());
-		loginReq2.setInitiatorTaskTag(3);
+		loginReq2.setInitiatorTaskTag(1);
 		loginReq2.setCID((short)1);
-		loginReq2.setCmdSN(response.getExpCmdSN());
+		loginReq2.setCmdSN(1);
 		loginReq2.setExpStatSN(2);
-		loginReq2.setParameter("HeaderDigest", "None,CRC32C");
-		loginReq2.setParameter("DataDigest", "None,CRC32C");
+		loginReq2.setParameter("HeaderDigest", "None");
+		loginReq2.setParameter("DataDigest", "None");
 		loginReq2.setParameter("ErrorRecoveryLevel", "2");
 		loginReq2.setParameter("InitialR2T", "No");
 		loginReq2.setParameter("ImmediateData", "Yes");
@@ -120,10 +122,11 @@ public class Test {
 		cmmdReq.setWrite(false);
 		cmmdReq.setATTR(Attr.Untagged);
 		cmmdReq.setInitiatorTaskTag(1);
-		cmmdReq.setExpDataTransferLen(8);
-		cmmdReq.setCmdSN(1);
-		cmmdReq.setExpStatSN(2);
-		Read10 cdb = new Read10();
+		cmmdReq.setExpDataTransferLen(16);
+		cmmdReq.setCmdSN(2);
+		cmmdReq.setExpStatSN(3);
+		ReportLUN cdb = new ReportLUN();
+		cdb.setAllocateLength(16);
 		cmmdReq.setCDB(cdb.toByte());
 		System.out.println(cmmdReq);
 		writeStream.write(cmmdReq.toByte());
@@ -136,6 +139,9 @@ public class Test {
 		System.arraycopy(buf, 0, BHS, 0, BHS.length);
 		System.arraycopy(buf, 48, DataSegment, 0, DataSegment.length);
 		System.out.println("scsi size : "+size+" opcode : "+BHS[0]+"  is DataIn  --> "+(BHS[0]==0x25)+" dataSegSize --> "+DataSegment.length);
+		ReportLUNParam param = new ReportLUNParam(DataSegment);
+		System.out.println(param);
+		
 		
 		SCSIDataIn in = new SCSIDataIn(BHS,DataSegment);
 		System.out.println(in);
@@ -146,14 +152,14 @@ public class Test {
 		cmmdReq2.setRead(true);
 		cmmdReq2.setWrite(false);
 		cmmdReq2.setATTR(Attr.Untagged);
-		cmmdReq2.setInitiatorTaskTag(1);
-		cmmdReq2.setExpDataTransferLen(12);
-		cmmdReq2.setCmdSN(2);
-		cmmdReq2.setExpStatSN(3);
-		ModeSense6 cdb2 = new ModeSense6();
-		cdb2.setPC(PC.CurrentValues);
-		cdb2.setPageCode((byte)28);
-		cdb2.setSubPageCode((byte)-64);
+		cmmdReq2.setInitiatorTaskTag(2);
+		cmmdReq2.setExpDataTransferLen(36);
+		cmmdReq2.setCmdSN(3);
+		cmmdReq2.setExpStatSN(4);
+		
+		Inquiry cdb2 = new Inquiry();
+		cdb2.setPageCode(PageCode.SupportedVPD);
+		cdb2.setAllocateLength((short)36);
 		cmmdReq2.setCDB(cdb2.toByte());
 		System.out.println(cmmdReq2);
 		writeStream.write(cmmdReq2.toByte());
@@ -165,9 +171,47 @@ public class Test {
 		System.arraycopy(buf, 48, DataSegment, 0, DataSegment.length);
 		System.out.println("scsi size : "+size+" opcode : "+BHS[0]+"  is DataIn  --> "+(BHS[0]==0x25)+" dataSegSize --> "+DataSegment.length);
 		in = new SCSIDataIn(BHS,DataSegment);
-		InquirySupportedVPD param2 = new InquirySupportedVPD(in.getDataSegment());
+		InquiryStandardData param2 = new InquiryStandardData(in.getDataSegment());
 		System.out.println(in);
 		System.out.println(param2);
+		
+		
+		SCSICommand cmmdReq3= new SCSICommand();
+		cmmdReq3.setImmediate(false);
+		cmmdReq3.setFinal(true);
+		cmmdReq3.setRead(true);
+		cmmdReq3.setWrite(false);
+		cmmdReq3.setATTR(Attr.Untagged);
+		cmmdReq3.setInitiatorTaskTag(3);
+		cmmdReq3.setExpDataTransferLen(255);
+		cmmdReq3.setCmdSN(4);
+		cmmdReq3.setExpStatSN(5);
+		
+		Inquiry cdb3 = new Inquiry();
+		cdb3.setPageCode(PageCode.SupportedVPD);
+		cdb3.setAllocateLength((short)255);
+		cmmdReq3.setCDB(cdb3.toByte());
+		System.out.println(cmmdReq3);
+		writeStream.write(cmmdReq3.toByte());
+		writeStream.flush();
+		
+		size = readStream.read(buf);
+		DataSegment = new byte[size-48];
+		System.arraycopy(buf, 0, BHS, 0, BHS.length);
+		System.arraycopy(buf, 48, DataSegment, 0, DataSegment.length);
+		System.out.println("scsi size : "+size+" opcode : "+BHS[0]+"  is DataIn  --> "+(BHS[0]==0x25)+" dataSegSize --> "+DataSegment.length);
+		in = new SCSIDataIn(BHS,DataSegment);
+		InquirySupportedVPD param3 = new InquirySupportedVPD(in.getDataSegment());
+		System.out.println(in);
+		System.out.println(param3);
+		
+		System.out.println("===========================");
+		size = readStream.read(buf);
+		System.out.println("-------------------------------------------------");
+		DataSegment = new byte[size-48];
+		System.arraycopy(buf, 0, BHS, 0, BHS.length);
+		System.arraycopy(buf, 48, DataSegment, 0, DataSegment.length);
+		System.out.println("scsi size : "+size+" opcode : "+BHS[0]+"  is DataIn  --> "+(BHS[0]==0x25)+" dataSegSize --> "+DataSegment.length);
 		
 		
 		socket.close();

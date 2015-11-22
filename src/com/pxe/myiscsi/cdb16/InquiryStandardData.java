@@ -1140,7 +1140,7 @@ public class InquiryStandardData {
 	private boolean NORMACA;
 	private boolean HISUP;
 	private byte responseDataFormat = 0x02;
-	private byte additionalLength = 31;
+	private byte additionalLength = 91;
 	private boolean SCCS;
 	private boolean ACC;
 	private byte tpgs;

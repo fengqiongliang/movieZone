@@ -15,15 +15,17 @@ import com.pxe.myiscsi.pdu.LoginRequest;
 import com.pxe.myiscsi.pdu.LogoutRequest;
 import com.pxe.myiscsi.pdu.BasicHeaderSegment;
 import com.pxe.myiscsi.pdu.SCSICommand;
+import com.pxe.myiscsi.pdu.TMRequest;
 import com.pxe.myiscsi.pdu.TextRequest;
 
 public class ISCSIServer {
-
+	private static PhaseLogin loginPhase = new PhaseLogin();
+	private static PhaseFullFeature featurePhase = new PhaseFullFeature();
 	public static void main(String[] args) throws Exception {
 		ExecutorService pool = Executors.newFixedThreadPool(20);
 		
 		ServerSocket serverSocket = new ServerSocket();
-		serverSocket.bind(new InetSocketAddress("192.168.43.50",3261));
+		serverSocket.bind(new InetSocketAddress("192.168.98.1",3261));
 		while(true){
 			final Socket socket = serverSocket.accept();
 			pool.execute(new Runnable(){
@@ -36,6 +38,9 @@ public class ISCSIServer {
 	}
 	
 	public static void execute(Socket socket) throws Exception {
+		System.out.println("******************************************************************");
+		System.out.println(socket.getRemoteSocketAddress());
+		System.out.println("******************************************************************");
 		socket.setSoTimeout(0);
 		InputStream is = socket.getInputStream();
 		byte[] BHS = new byte[48];
@@ -70,8 +75,7 @@ public class ISCSIServer {
 			byte[] dataSegmentPadding = new byte[DataSegment.length % 4== 0 ? 0:(4 - DataSegment.length % 4)];
 			is.read(dataSegmentPadding);
 			is.read(DataDigest);
-			PhaseLogin loginPhase = new PhaseLogin();
-			PhaseFullFeature featurePhase = new PhaseFullFeature();
+			
 			if(basicHead.getOpcode()==Opcode.LOGIN_REQUEST){
 				LoginRequest loginRequest = new LoginRequest(BHS,DataSegment);
 				System.out.println(loginRequest);
@@ -88,6 +92,10 @@ public class ISCSIServer {
 				SCSICommand scsiCommand = new SCSICommand(BHS,DataSegment);
 				System.out.println(scsiCommand);
 				featurePhase.scsiCommand(socket, scsiCommand);
+			}else if(basicHead.getOpcode()==Opcode.SCSI_TM_REQUEST){
+				TMRequest tmRequest = new TMRequest(BHS);
+				System.out.println(tmRequest);
+				//featurePhase.scsiCommand(socket, scsiCommand);
 			}else{
 				System.out.println(basicHead);
 			}

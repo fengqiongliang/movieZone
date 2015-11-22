@@ -21,6 +21,12 @@ import com.pxe.myiscsi.cdb16.InquiryStandardData.TPGS;
 import com.pxe.myiscsi.cdb16.InquiryStandardData.Version;
 import com.pxe.myiscsi.cdb16.InquirySupportedVPD;
 import com.pxe.myiscsi.cdb16.LUN;
+import com.pxe.myiscsi.cdb16.ModeParam6;
+import com.pxe.myiscsi.cdb16.ModeParam6.CachingParam;
+import com.pxe.myiscsi.cdb16.ModeParam6.InfoExceptionControl;
+import com.pxe.myiscsi.cdb16.ModeParam6.ModePage;
+import com.pxe.myiscsi.cdb16.ModeParam6.ModeParamHead;
+import com.pxe.myiscsi.cdb16.ModeParam6.ShortBlockDescr;
 import com.pxe.myiscsi.cdb16.ModeSense6;
 import com.pxe.myiscsi.cdb16.Read10;
 import com.pxe.myiscsi.cdb16.ReadCapacity;
@@ -270,8 +276,8 @@ public class PhaseFullFeature {
 		response.setParameter("TargetName", "iqn.2007-08.name.dns.target.my:iscsiboot3261");
 		response.setParameter("TargetAddress", socket.getLocalSocketAddress().toString().replace("/", "")+",1");
 		response.setStatSN(request.getExpStatSN());
-		response.setExpCmdSN(request.getCmdSN()+1);
-		response.setMaxCmdSN(response.getExpCmdSN());
+		response.setExpCmdSN(request.getCmdSN());
+		response.setMaxCmdSN(response.getExpCmdSN()+1);
 		System.out.println(response);
 		os.write(response.toByte());
 		os.flush();
@@ -308,7 +314,7 @@ public class PhaseFullFeature {
 		response.setResponse(LogoutResponse.Response.SUCCESS);
 		response.setStatSN(request.getExpStatSN());
 		response.setExpCmdSN(request.getCmdSN());
-		response.setMaxCmdSN(response.getExpCmdSN());
+		response.setMaxCmdSN(response.getExpCmdSN()+1);
 		response.setTime2Retain((short)2);
 		System.out.println(response);
 		os.write(response.toByte());
@@ -340,10 +346,13 @@ public class PhaseFullFeature {
 		dataIn.setStatus(true);
 		dataIn.setStatSN(scsiCommand.getExpStatSN());
 		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
-		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN()+30);
 		ReportLUNParam param = new ReportLUNParam();
 		param.setLUN(new LUN(0));
 		dataIn.setDataSegment(param.toByte());
+		dataIn.setResidualCount(dataIn.getDataSegmentLength()-scsiCommand.getExpDataTransferLen());
+		System.out.println(param);
+		System.out.println(dataIn);
 		os.write(dataIn.toByte());
 		os.flush();
 	}
@@ -360,7 +369,7 @@ public class PhaseFullFeature {
 		dataIn.setStatus(true);
 		dataIn.setStatSN(scsiCommand.getExpStatSN());
 		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
-		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN()+30);
 		dataIn.setLUN(scsiCommand.getLUN());
 		byte[] dataSegment=new byte[0];
 		boolean EVPD = command.getEVPD();
@@ -405,6 +414,7 @@ public class PhaseFullFeature {
 		}
 		
 		dataIn.setDataSegment(dataSegment);
+		dataIn.setResidualCount(dataIn.getDataSegmentLength()-scsiCommand.getExpDataTransferLen());
 		byte[] data = dataIn.toByte();
 		System.out.println(dataIn);
 		os.write(data);
@@ -423,13 +433,14 @@ public class PhaseFullFeature {
 		dataIn.setStatus(true);
 		dataIn.setStatSN(scsiCommand.getExpStatSN());
 		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
-		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN()+30);
 		dataIn.setLUN(scsiCommand.getLUN());
 		ReadCapacityParam param = new ReadCapacityParam();
 		param.setReturnLBA(1024*1024*2);
 		param.setBlockLength(512);
 		//total size is 1024*1024*2*512 B = 1024*2*512KB = 2*512MB=1GB
 		dataIn.setDataSegment(param.toByte());
+		dataIn.setResidualCount(dataIn.getDataSegmentLength()-scsiCommand.getExpDataTransferLen());
 		System.out.println(dataIn);
 		os.write(dataIn.toByte());
 		os.flush();
@@ -447,9 +458,10 @@ public class PhaseFullFeature {
 		dataIn.setStatus(true);
 		dataIn.setStatSN(scsiCommand.getExpStatSN());
 		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
-		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN()+30);
 		dataIn.setLUN(scsiCommand.getLUN());
 		dataIn.setDataSegment(new byte[scsiCommand.getExpDataTransferLen()]);
+		dataIn.setResidualCount(dataIn.getDataSegmentLength()-scsiCommand.getExpDataTransferLen());
 		System.out.println(dataIn);
 		os.write(dataIn.toByte());
 		os.flush();
@@ -468,10 +480,64 @@ public class PhaseFullFeature {
 		dataIn.setStatus(true);
 		dataIn.setStatSN(scsiCommand.getExpStatSN());
 		dataIn.setExpCmdSN(scsiCommand.getCmdSN()+1);
-		dataIn.setMaxCmdSN(dataIn.getExpCmdSN());
+		dataIn.setMaxCmdSN(dataIn.getExpCmdSN()+30);
 		dataIn.setLUN(scsiCommand.getLUN());
+		
+		ModeParam6 param = new ModeParam6();
+		/**----------------------- Mode Parameter Header  -----------------------------------------*/
+		//param.getHeader().setModeDataLengh((byte)123); //donnot need to set here,this value will be set by ModeParam6.setDescript(),setModePage()
+		param.getHeader().setWP(false); //write-protected
+		
+		
+		/**----------------------- Block Descriptors --------------------------------------------------*/
+		ShortBlockDescr descriptor = param.new ShortBlockDescr();
+		descriptor.setNumOfLogicalBlock(1024*1024*2);
+		descriptor.setLogicalBlockLength(512);
+		//total size is 1024*1024*2*512 B = 1024*2*512KB = 2*512MB=1GB
+		param.setDescriptors(descriptor);
+		
+		/**----------------------- Mode Page ----------------------------------------------------------*/
+		//INFORMATIONAL_EXCEPTIONS_CONTROL_MODE_PAGE
+		if(command.getPageCode()==0x1c && command.getSubPageCode()==0x00){
+			InfoExceptionControl infoModePage = param.new InfoExceptionControl();
+			infoModePage.setDEXCPT(true);  //disableExceptionControl
+			param.setPages(infoModePage);
+		}
+		//CACHING_MODE_PAGE
+		if(command.getPageCode()==0x08 && command.getSubPageCode()==0x00){
+			CachingParam cachModePage = param.new CachingParam();
+			cachModePage.setABPF(true); // abortPrefetch
+			cachModePage.setSIZE(true); // sizeEnable
+			cachModePage.setRCD(true); // readCacheDisable
+			cachModePage.setMAXIMUM_PREFETCH((short)65535);
+			cachModePage.setMAXIMUM_PREFETCH_CEILING((short)65535);
+			cachModePage.setFSW(true);// forceSequentialWrite
+			cachModePage.setNUMBER_OF_CACHE_SEGMENTS((byte)20);// numberOfCacheSegments
+			cachModePage.setCACHE_SEGMENT_SIZE((short)0); // cacheSegmentSize
+			param.setPages(cachModePage);
+		}
+		//RETURN_ALL_MODE_PAGES_ONLY
+		if(command.getPageCode()==0x3f && command.getSubPageCode()==0x00){
+			InfoExceptionControl infoModePage = param.new InfoExceptionControl();
+			infoModePage.setDEXCPT(true);  //disableExceptionControl
+			param.setPages(infoModePage);
+			
+			CachingParam cachModePage = param.new CachingParam();
+			cachModePage.setABPF(true); // abortPrefetch
+			cachModePage.setSIZE(true); // sizeEnable
+			cachModePage.setRCD(true); // readCacheDisable
+			cachModePage.setMAXIMUM_PREFETCH((short)65535);
+			cachModePage.setMAXIMUM_PREFETCH_CEILING((short)65535);
+			cachModePage.setFSW(true);// forceSequentialWrite
+			cachModePage.setNUMBER_OF_CACHE_SEGMENTS((byte)20);// numberOfCacheSegments
+			cachModePage.setCACHE_SEGMENT_SIZE((short)0); // cacheSegmentSize
+			param.setPages(cachModePage);
+		}
+		
+		
 		byte[] d = ByteUtil.toByte("0b0000080040000000000200");
-		dataIn.setDataSegment(d);
+		dataIn.setDataSegment(param.toByte());
+		dataIn.setResidualCount(dataIn.getDataSegmentLength()-scsiCommand.getExpDataTransferLen());
 		System.out.println(dataIn);
 		os.write(dataIn.toByte());
 		os.flush();
@@ -482,12 +548,14 @@ public class PhaseFullFeature {
 		OutputStream os = socket.getOutputStream();
 		SCSIResponse response = new SCSIResponse();
 		response.setInitiatorTaskTag(scsiCommand.getInitiatorTaskTag());
+		response.setExpCmdSN(scsiCommand.getCmdSN()+1);
+		response.setMaxCmdSN(response.getExpCmdSN()+30);
 		response.setResponse(Response.CommandComplete);
 		response.setStatus(Status.GOOD);
 		System.out.println(response);
 		os.write(response.toByte());
 		os.flush();
-	}
+	} 
 	
 	
 	

@@ -273,14 +273,8 @@ public class SCSIDataIn {
 	public boolean getResidualOverflow() {
 		return isResidualOverflow;
 	}
-	public void setResidualOverflow(boolean isResidualOverflow) {
-		this.isResidualOverflow = isResidualOverflow;
-	}
 	public boolean getResidualUnderflow() {
 		return isResidualUnderflow;
-	}
-	public void setResidualUnderflow(boolean isResidualUnderflow) {
-		this.isResidualUnderflow = isResidualUnderflow;
 	}
 	public boolean getStatus() {
 		return isStatus;
@@ -352,7 +346,9 @@ public class SCSIDataIn {
 		return ByteUtil.byteArrayToInt(ResidualCount);
 	}
 	public void setResidualCount(int ResidualCount) {
-		this.ResidualCount = ByteUtil.intToByteArray(ResidualCount);
+		if(ResidualCount<0)this.isResidualUnderflow = true;
+		if(ResidualCount>0)this.isResidualOverflow = true;
+		this.ResidualCount = ByteUtil.intToByteArray(Math.abs(ResidualCount));
 	}
 	public byte[] getDataSegment() {
 		return DataSegment;
@@ -416,7 +412,7 @@ public class SCSIDataIn {
 			dos.write(this.DataSegment);
 			//write (All PDU segments and digests are padded to the closest integer number of four byte words.)
 			int count = this.DataSegment.length % 4 == 0?0:(4-this.DataSegment.length % 4);
-			for(int i=0;i<count;i++){
+			for(int i=0;i<count && !this.isFinal;i++){
 				dos.writeByte(0);
 			}  
 			byte[] result = bos.toByteArray();
@@ -433,8 +429,6 @@ public class SCSIDataIn {
 		SCSIDataIn original = new SCSIDataIn();
 		original.setFinal(true);
 		original.setAck(false);
-		original.setResidualOverflow(false);
-		original.setResidualUnderflow(true);
 		original.setStatus(true);
 		original.setStatusorRsvd((byte)100);
 		original.setLUN(new byte[]{1});
@@ -445,7 +439,7 @@ public class SCSIDataIn {
 		original.setMaxCmdSN(5);
 		original.setDataSN(6);
 		original.setBufferOffset(7);
-		original.setResidualCount(8);
+		original.setResidualCount(-8);
 		original.setDataSegment("hfdsakfdlsajfldsa".getBytes());
 		System.out.println(original);
 		byte[] data = original.toByte();
