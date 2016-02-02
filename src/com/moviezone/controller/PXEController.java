@@ -58,7 +58,7 @@ public class PXEController extends BaseController{
 						 						  HttpSession session)throws Exception{
 		response.setContentType("text/plain");
 		response.getWriter().write("#!gpxe\n"); 
-		response.getWriter().write("sanboot iscsi:192.168.86.6::::iqn.2007-08.name.dns.target.my:iscsiboot\n");
+		response.getWriter().write("sanboot iscsi:192.168.98.1::::iqn.2007-08.name.dns.target.my:iscsiboot\n");
 	}
 	
 }
