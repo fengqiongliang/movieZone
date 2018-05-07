@@ -8,7 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+ 
 public class ByteUtil {
 	private static final Logger logger = LoggerFactory.getLogger(ByteUtil.class);
 	public static String nullStr = String.valueOf((char)0); 
