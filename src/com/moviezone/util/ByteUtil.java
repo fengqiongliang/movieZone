@@ -174,4 +174,12 @@ public class ByteUtil {
 		return strbuf.toString();
 	}
 	
+	/**
+	 * 将byte 作为无符号进行转换
+	 * @param b
+	 * @return
+	 */
+	public static short toUnsignedByte(byte b){
+		return (short)(b>=0?b:b+256);
+	}
 }
