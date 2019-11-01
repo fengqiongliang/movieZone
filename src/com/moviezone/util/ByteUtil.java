@@ -84,7 +84,11 @@ public class ByteUtil {
 		int i1 = (int)((b[1] & 0xff) << 0);
 		return (short)(i0+i1); 
 	}
-	
+	public static int byteArrayToUnsignedShort(byte[] b){
+		int i0 = (int)((b[0] & 0xff) << 8);
+		int i1 = (int)((b[1] & 0xff) << 0);
+		return i0+i1; 
+	}
 	public static String toString(byte b){
 		StringBuilder build = new StringBuilder();
 		try{
